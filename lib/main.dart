@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:hrms/utils/Screens/splashScrren.dart'; // Ensure correct file name
+import 'package:hrms/utils/Screens/splashScrren.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +21,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SplashScreen(), // Ensure SplashScreen is implemented correctly
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

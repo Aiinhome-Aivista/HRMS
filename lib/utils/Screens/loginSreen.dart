@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:hrms/utils/Screens/activityScreen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hrms/utils/Widget/bottamNavigationWidget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,11 +16,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  
 
   @override
   Widget build(BuildContext context) {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
       statusBarIconBrightness: Brightness.light,
     ));
     return Scaffold(
@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 labelText: 'USER NAME',
-                 labelStyle: const TextStyle(
+                labelStyle: const TextStyle(
                   color: Color.fromRGBO(143, 181, 255, 0.5),
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
@@ -164,7 +164,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Activityscreen()),
+                        builder: (context) => const BottamnavigationBar()),
+                    //Activityscreen()),
                   );
                 } catch (e) {
                   print("Error fetching location: $e");
