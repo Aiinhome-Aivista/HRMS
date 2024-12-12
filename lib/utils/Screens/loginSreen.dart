@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:hrms/utils/Screens/activityScreen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hrms/utils/Screens/locationFillScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,13 +16,14 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  
+  bool _isButtonPressed = false;
 
   @override
   Widget build(BuildContext context) {
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
       statusBarIconBrightness: Brightness.light,
     ));
+
     return Scaffold(
       backgroundColor: Color.fromRGBO(8, 12, 17, 1),
       body: Padding(
@@ -36,15 +38,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 'assets/images/login.svg',
               ),
             ),
+            const SizedBox(height: 70.0),
 
-            SizedBox(height: 70.0),
             // Email TextField
             TextField(
               controller: _emailController,
+              style: const TextStyle(
+                color: Color.fromRGBO(143, 181, 255, 1),
+              ),
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 labelText: 'USER NAME',
-                 labelStyle: const TextStyle(
+                labelStyle: const TextStyle(
                   color: Color.fromRGBO(143, 181, 255, 0.5),
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
@@ -55,9 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Color.fromRGBO(143, 181, 255, 0.5),
                 ),
                 contentPadding: const EdgeInsets.symmetric(
-                    vertical: 15.0,
-                    horizontal: 20.0), // Adjusts the padding inside the field
-
+                    vertical: 15.0, horizontal: 20.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
@@ -76,12 +79,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
 
             // Password TextField
             TextField(
               controller: _passwordController,
+              style: const TextStyle(
+                color: Color.fromRGBO(143, 181, 255, 1),
+              ),
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'PASSWORD',
@@ -90,16 +95,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                 ),
-
                 prefixIcon: const Icon(
                   size: 23,
                   Icons.privacy_tip,
                   color: Color.fromRGBO(143, 181, 255, 0.5),
                 ),
                 contentPadding: const EdgeInsets.symmetric(
-                    vertical: 15.0,
-                    horizontal: 20.0), // Adjusts the padding inside the field
-
+                    vertical: 15.0, horizontal: 20.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
@@ -118,66 +120,83 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 24.0),
+            const SizedBox(height: 24.0),
 
-            // Login Button
-            ElevatedButton(
-              onPressed: () async {
-                try {
-                  // Check and request location permission
-                  LocationPermission permission =
-                      await Geolocator.checkPermission();
-                  if (permission == LocationPermission.denied) {
-                    permission = await Geolocator.requestPermission();
+            // Animated Login Button
+            AnimatedOpacity(
+              opacity: _isButtonPressed ? 0.7 : 1.0,
+              duration: const Duration(milliseconds: 200), // Animation duration
+              child: ElevatedButton(
+                onPressed: () async {
+                  setState(() {
+                    _isButtonPressed = true; // When button is pressed
+                  });
+
+                  // Print the values of the text fields
+                  print("Email: ${_emailController.text}");
+                  print("Password: ${_passwordController.text}");
+
+                  try {
+                    // Check and request location permission
+                    LocationPermission permission =
+                        await Geolocator.checkPermission();
+                    if (permission == LocationPermission.denied) {
+                      permission = await Geolocator.requestPermission();
+                    }
+
+                    if (permission == LocationPermission.deniedForever) {
+                      print("Location permissions are permanently denied.");
+                      return;
+                    }
+
+                    // Get the current position
+                    Position position = await Geolocator.getCurrentPosition(
+                      desiredAccuracy: LocationAccuracy.high,
+                    );
+
+                    // Get the address from latitude and longitude
+                    List<Placemark> placemarks = await placemarkFromCoordinates(
+                      position.latitude,
+                      position.longitude,
+                    );
+
+                    if (placemarks.isNotEmpty) {
+                      Placemark place = placemarks.first;
+
+                      String address = """
+                      ${place.name}, 
+                      ${place.locality}, 
+                      ${place.administrativeArea}, 
+                      ${place.country}""";
+
+                      print(
+                          "User's Location: $address, Latitude = ${position.latitude}, Longitude = ${position.longitude}");
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Locationfillscreen()),
+                    );
+                  } catch (e) {
+                    print("Error fetching location: $e");
                   }
 
-                  if (permission == LocationPermission.deniedForever) {
-                    print("Location permissions are permanently denied.");
-                    return;
-                  }
-
-                  // Get the current position
-                  Position position = await Geolocator.getCurrentPosition(
-                    desiredAccuracy: LocationAccuracy.high,
-                  );
-
-                  // Get the address from latitude and longitude
-                  List<Placemark> placemarks = await placemarkFromCoordinates(
-                    position.latitude,
-                    position.longitude,
-                  );
-
-                  if (placemarks.isNotEmpty) {
-                    Placemark place = placemarks.first;
-
-                    String address = """
-        ${place.name}, 
-        ${place.locality}, 
-        ${place.administrativeArea}, 
-        ${place.country}""";
-
-                    print(
-                        "User's Location: $address, Latitude = ${position.latitude}, Longitude = ${position.longitude}");
-                  }
-
-                  // Navigate to the next page
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Activityscreen()),
-                  );
-                } catch (e) {
-                  print("Error fetching location: $e");
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromRGBO(143, 181, 255, 1),
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-              ),
-              child: const Text(
-                'LOGIN',
-                style: TextStyle(
-                  color: Color.fromRGBO(8, 12, 17, 1),
+                  Future.delayed(const Duration(milliseconds: 300), () {
+                    setState(() {
+                      _isButtonPressed = false;
+                    });
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromRGBO(143, 181, 255, 1),
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                ),
+                child: const Text(
+                  'LOGIN',
+                  style: TextStyle(
+                    color: Color.fromRGBO(8, 12, 17, 1),
+                  ),
                 ),
               ),
             ),
