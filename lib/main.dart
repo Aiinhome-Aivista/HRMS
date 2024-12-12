@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SplashScreen(), // Ensure SplashScreen is implemented correctly
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
