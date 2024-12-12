@@ -29,7 +29,7 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
           },
         ),
         title: const Text(
-          'Location Info',
+          'Select location',
           style: TextStyle(
             color: Color.fromRGBO(143, 181, 255, 1),
             fontWeight: FontWeight.w600,
