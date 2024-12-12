@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrms/utils/Component/CustomButton.dart';
 import 'package:hrms/utils/Component/CustomTextField.dart';
 import 'package:hrms/utils/Screens/locationFillScreen.dart';
-import 'package:hrms/utils/Widget/bottamNavigationWidget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -106,14 +105,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     );
                   }
-
-                  // Navigate to the next page
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const BottamnavigationBar()),
-                    //Activityscreen()),
-                  );
                 } catch (e) {
                   print("Error fetching location: $e");
                 }

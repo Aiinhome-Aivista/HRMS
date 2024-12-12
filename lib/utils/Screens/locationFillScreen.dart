@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hrms/utils/Component/CustomButton.dart';
 import 'package:hrms/utils/Component/CustomTextField.dart';
-import 'package:hrms/utils/Screens/activityScreen.dart';
+import 'package:hrms/utils/Widget/bottamNavigationWidget.dart';
 
 class Locationfillscreen extends StatefulWidget {
   final String city;
@@ -120,8 +120,8 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Activityscreen(),
-                  ),
+                      builder: (context) => const BottamnavigationBar()),
+                  //Activityscreen()),
                 );
               },
             )

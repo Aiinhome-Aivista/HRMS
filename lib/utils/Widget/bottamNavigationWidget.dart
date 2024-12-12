@@ -56,56 +56,57 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
+@override
+Widget build(BuildContext context) {
+  final double screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      bottomNavigationBar: Container(
-        height: screenHeight * 0.08,
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(143, 181, 255, 1),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+  return Scaffold(
+    bottomNavigationBar: Container(
+      height: screenHeight * 0.08,
+      decoration: BoxDecoration(
+        color: Colors.red, // Change this to your desired background color
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            offset: const Offset(2, 0),
+            blurRadius: 5,
+            spreadRadius: 2,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              offset: const Offset(2, 0),
-              blurRadius: 5,
-              spreadRadius: 2,
-            ),
-          ],
-        ),
-        child: NavigationBar(
-          selectedIndex: _currentPage,
-          onDestinationSelected: _pageChanges,
-          indicatorColor: Color.fromRGBO(143, 181, 255, 1),
-          backgroundColor: Colors.white,
-          destinations: [
-            _buildNavItem(
-              iconPath: 'assets/images/add_notes.svg',
-              screenHeight: screenHeight,
-            ),
-            _buildNavItem(
-              iconPath: 'assets/images/account_balance_wallet.svg',
-              screenHeight: screenHeight,
-            ),
-            _buildNavItem(
-              iconPath: 'assets/images/attendance.svg',
-              screenHeight: screenHeight,
-            ),
-            _buildNavItem(
-              iconPath: 'assets/images/logout.svg',
-              screenHeight: screenHeight,
-            ),
-          ],
-        ),
+        ],
       ),
-      body: _pages[_currentPage],
-    );
-  }
+      child: NavigationBar(
+        selectedIndex: _currentPage,
+        onDestinationSelected: _pageChanges,
+        indicatorColor: Color.fromRGBO(143, 181, 255, 1),
+        backgroundColor: Colors.white,
+        destinations: [
+          _buildNavItem(
+            iconPath: 'assets/images/add_notes.svg',
+            screenHeight: screenHeight,
+          ),
+          _buildNavItem(
+            iconPath: 'assets/images/account_balance_wallet.svg',
+            screenHeight: screenHeight,
+          ),
+          _buildNavItem(
+            iconPath: 'assets/images/attendance.svg',
+            screenHeight: screenHeight,
+          ),
+          _buildNavItem(
+            iconPath: 'assets/images/logout.svg',
+            screenHeight: screenHeight,
+          ),
+        ],
+      ),
+    ),
+    body: _pages[_currentPage],
+  );
+}
+
 
   Widget _buildNavItem({
     required String iconPath,

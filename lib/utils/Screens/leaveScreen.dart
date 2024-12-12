@@ -28,9 +28,9 @@ class _LeaveScreenState extends State<LeaveScreen> {
             style: TextStyle(color: Color.fromRGBO(143, 181, 255, 1)),
           ),
         ),
-        backgroundColor: Colors.black,
+         backgroundColor: Color.fromRGBO(8, 12, 17, 1),
       ),
-      backgroundColor: Colors.black,
+       backgroundColor: Color.fromRGBO(8, 12, 17, 1),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 40, left: 16, right: 16),
@@ -230,7 +230,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value,
-                            style: const TextStyle(color: Colors.white)),
+                            style: const TextStyle( color: Color.fromRGBO(143, 181, 255, 1))),
                       );
                     }).toList(),
                     onChanged: (newValue) {
