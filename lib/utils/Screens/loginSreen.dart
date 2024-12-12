@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:hrms/utils/Screens/activityScreen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hrms/utils/Widget/bottamNavigationWidget.dart';
+import 'package:hrms/utils/Component/CustomButton.dart';
+import 'package:hrms/utils/Component/CustomTextField.dart';
+import 'package:hrms/utils/Screens/locationFillScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
       statusBarIconBrightness: Brightness.light,
     ));
+
     return Scaffold(
       backgroundColor: Color.fromRGBO(8, 12, 17, 1),
       body: Padding(
@@ -36,94 +38,35 @@ class _LoginScreenState extends State<LoginScreen> {
                 'assets/images/login.svg',
               ),
             ),
+            const SizedBox(height: 70.0),
 
-            SizedBox(height: 70.0),
             // Email TextField
-            TextField(
+            CustomTextField(
               controller: _emailController,
+              labelText: 'USER NAME',
+              prefixIcon: Icons.person,
               keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                labelText: 'USER NAME',
-                labelStyle: const TextStyle(
-                  color: Color.fromRGBO(143, 181, 255, 0.5),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-                prefixIcon: const Icon(
-                  size: 25,
-                  Icons.person,
-                  color: Color.fromRGBO(143, 181, 255, 0.5),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 15.0,
-                    horizontal: 20.0), // Adjusts the padding inside the field
-
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: const BorderSide(
-                    color: Color.fromRGBO(143, 181, 255, 1),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: const BorderSide(
-                    color: Color.fromRGBO(143, 181, 255, 1),
-                    width: 2.0,
-                  ),
-                ),
-              ),
             ),
-
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
 
             // Password TextField
-            TextField(
+            CustomTextField(
               controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'PASSWORD',
-                labelStyle: const TextStyle(
-                  color: Color.fromRGBO(143, 181, 255, 0.5),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-
-                prefixIcon: const Icon(
-                  size: 23,
-                  Icons.privacy_tip,
-                  color: Color.fromRGBO(143, 181, 255, 0.5),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 15.0,
-                    horizontal: 20.0), // Adjusts the padding inside the field
-
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: const BorderSide(
-                    color: Color.fromRGBO(143, 181, 255, 1),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: const BorderSide(
-                    color: Color.fromRGBO(143, 181, 255, 1),
-                    width: 2.0,
-                  ),
-                ),
-              ),
+              labelText: 'PASSWORD',
+              prefixIcon: Icons.privacy_tip,
+              isPassword: true,
             ),
-            SizedBox(height: 24.0),
+            const SizedBox(height: 24.0),
 
-            // Login Button
-            ElevatedButton(
+            // Animated Login Button
+            CustomButton(
+              buttonText: 'LOGIN',
               onPressed: () async {
                 try {
+                  // Print the values of the text fields
+                  print("Email: ${_emailController.text}");
+                  print("Password: ${_passwordController.text}");
+
                   // Check and request location permission
                   LocationPermission permission =
                       await Geolocator.checkPermission();
@@ -149,15 +92,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   if (placemarks.isNotEmpty) {
                     Placemark place = placemarks.first;
+                    print('City is: ${place.locality}');
+                    print('State is:  ${place.administrativeArea}');
 
-                    String address = """
-        ${place.name}, 
-        ${place.locality}, 
-        ${place.administrativeArea}, 
-        ${place.country}""";
-
-                    print(
-                        "User's Location: $address, Latitude = ${position.latitude}, Longitude = ${position.longitude}");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Locationfillscreen(
+                          city: place.locality ?? '',
+                          state: place.administrativeArea ?? '',
+                        ),
+                      ),
+                    );
                   }
 
                   // Navigate to the next page
@@ -171,17 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   print("Error fetching location: $e");
                 }
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromRGBO(143, 181, 255, 1),
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-              ),
-              child: const Text(
-                'LOGIN',
-                style: TextStyle(
-                  color: Color.fromRGBO(8, 12, 17, 1),
-                ),
-              ),
-            ),
+            )
           ],
         ),
       ),
