@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hrms/utils/Component/CustomButton.dart';
+import 'package:hrms/utils/Component/CustomTextField.dart';
 import 'package:hrms/utils/Screens/activityScreen.dart';
 
 class Locationfillscreen extends StatefulWidget {
-  const Locationfillscreen({super.key});
+  final String city;
+  final String state;
+
+  const Locationfillscreen({Key? key, required this.city, required this.state})
+      : super(key: key);
 
   @override
   State<Locationfillscreen> createState() => _LocationfillscreenState();
@@ -15,10 +21,27 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
   final TextEditingController _pincodeController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    // Set the initial values of city and state in the respective controllers
+    _cityController.text = widget.city;
+    _stateController.text = widget.state;
+  }
+
+  @override
+  void dispose() {
+    // Dispose controllers when widget is removed to avoid memory leaks
+    _stateController.dispose();
+    _cityController.dispose();
+    _pincodeController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(8, 12, 17, 1),
+        backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
@@ -38,141 +61,55 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
         ),
         titleSpacing: 0,
       ),
-      backgroundColor: Color.fromRGBO(8, 12, 17, 1),
+      backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
       body: Padding(
-        padding: const EdgeInsets.all(50.0),
+        padding: const EdgeInsets.fromLTRB(50, 0, 50, 50),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // City TextField
-            TextField(
+            Container(
+              padding: const EdgeInsets.only(bottom: 50),
+              child: const Icon(
+                size: 155,
+                Icons.location_on,
+                color: Color.fromRGBO(143, 181, 255, 0.5),
+              ),
+            ),
+
+            // City TextField (replaced with CustomTextField)
+            CustomTextField(
               controller: _cityController,
-              style: const TextStyle(
-                color: Color.fromRGBO(143, 181, 255, 1),
-              ),
-              decoration: InputDecoration(
-                labelText: 'CITY',
-                labelStyle: const TextStyle(
-                  color: Color.fromRGBO(143, 181, 255, 0.5),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-                prefixIcon: const Icon(
-                  size: 25,
-                  Icons.location_city,
-                  color: Color.fromRGBO(143, 181, 255, 0.5),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 15.0, horizontal: 20.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: const BorderSide(
-                    color: Color.fromRGBO(143, 181, 255, 1),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: const BorderSide(
-                    color: Color.fromRGBO(143, 181, 255, 1),
-                    width: 2.0,
-                  ),
-                ),
-              ),
+              labelText: 'CITY',
+              prefixIcon: Icons.location_city,
             ),
-            SizedBox(height: 20.0),
 
-            // State (Country) TextField
-            TextField(
+            const SizedBox(height: 20.0),
+
+            // State (Country) TextField (replaced with CustomTextField)
+            CustomTextField(
               controller: _stateController,
-              style: const TextStyle(
-                color: Color.fromRGBO(143, 181, 255, 1),
-              ),
-              decoration: InputDecoration(
-                labelText: 'STATE',
-                labelStyle: const TextStyle(
-                  color: Color.fromRGBO(143, 181, 255, 0.5),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-                prefixIcon: const Icon(
-                  size: 25,
-                  Icons.flag,
-                  color: Color.fromRGBO(143, 181, 255, 0.5),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 15.0, horizontal: 20.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: const BorderSide(
-                    color: Color.fromRGBO(143, 181, 255, 1),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: const BorderSide(
-                    color: Color.fromRGBO(143, 181, 255, 1),
-                    width: 2.0,
-                  ),
-                ),
-              ),
+              labelText: 'STATE',
+              prefixIcon: Icons.flag,
             ),
-            SizedBox(height: 20.0),
 
-            // Pincode TextField
-            TextField(
+            const SizedBox(height: 20.0),
+
+            // Pincode TextField (replaced with CustomTextField)
+            CustomTextField(
               controller: _pincodeController,
-              style: const TextStyle(
-                color: Color.fromRGBO(143, 181, 255, 1),
-              ),
+              labelText: 'PINCODE',
+              prefixIcon: Icons.location_on,
               keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              decoration: InputDecoration(
-                labelText: 'PINCODE',
-                labelStyle: const TextStyle(
-                  color: Color.fromRGBO(143, 181, 255, 0.5),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-                prefixIcon: const Icon(
-                  size: 25,
-                  Icons.location_on,
-                  color: Color.fromRGBO(143, 181, 255, 0.5),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 15.0, horizontal: 20.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: const BorderSide(
-                    color: Color.fromRGBO(143, 181, 255, 1),
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: const BorderSide(
-                    color: Color.fromRGBO(143, 181, 255, 1),
-                    width: 2.0,
-                  ),
-                ),
-              ),
             ),
-            SizedBox(height: 20.0),
+
+            const SizedBox(height: 40.0),
 
             // Submit Button
-            ElevatedButton(
-              onPressed: () {
-                // You can handle form submission logic here
+            CustomButton(
+              buttonText: 'SAVE',
+              onPressed: () async {
+                // Handle form submission logic here
                 String city = _cityController.text;
                 String state = _stateController.text;
                 String pincode = _pincodeController.text;
@@ -183,20 +120,11 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const Activityscreen()),
+                    builder: (context) => const Activityscreen(),
+                  ),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromRGBO(143, 181, 255, 1),
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-              ),
-              child: const Text(
-                'SAVE',
-                style: TextStyle(
-                  color: Color.fromRGBO(8, 12, 17, 1),
-                ),
-              ),
-            ),
+            )
           ],
         ),
       ),
