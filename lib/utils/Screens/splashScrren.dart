@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:flutter_svg/flutter_svg.dart'; // For SVG support
 
 import 'package:hrms/utils/Screens/loginSreen.dart';
 
@@ -12,7 +13,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
+    // Navigate to the LoginScreen after 3 seconds
+    Timer(const Duration(seconds: 6), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -22,41 +24,58 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blue, Colors.purple],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+      backgroundColor: Colors.black,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 90, left: 30, right: 30),
+            child: Column(
+              children: [
+                Text(
+                  'Welcome to',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 50,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  'HRMS',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromRGBO(143, 181, 255, 1),
+                  ),
+                ),
+                SizedBox(height: 40),
+                Text(
+                  'Attendance made simple, time made yours',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    color: Color.fromRGBO(143, 181, 255, 1),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // App Logo
-            CircleAvatar(
-              radius: 60,
-              backgroundColor: Colors.white,
-              child: Image.asset(
-                'assets/logo.png',
-                height: 80,
-                width: 80,
-              ),
+          const SizedBox(
+            height: 20,
+          ),
+          Container(
+            child: Image.asset(
+              'assets/images/Splash.png',
+              fit: BoxFit.contain,
             ),
-            SizedBox(height: 20),
-            // App Name or Tagline
-            const Text(
-              'HRMS',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(height: 30),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
