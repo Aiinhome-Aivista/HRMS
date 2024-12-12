@@ -7,7 +7,8 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _scaleAnimation;
@@ -25,11 +26,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     // Slide Animation (Slide from the bottom)
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 1), // Start from below the screen
-      end: Offset.zero,           // End at the original position
+      end: Offset.zero, // End at the original position
     ).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: Curves.easeOut,    
+        curve: Curves.easeOut,
       ),
     );
 
@@ -37,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: Curves.easeOut,    
+        curve: Curves.easeOut,
       ),
     );
 
