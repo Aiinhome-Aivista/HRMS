@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hrms/textStyle.dart';
 import 'package:hrms/utils/Widget/dateDisplay.dart';
 
 class Attandancescreen extends StatefulWidget {
@@ -128,14 +129,10 @@ class _AttandancescreenState extends State<Attandancescreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Center(
+                    Center(
                       child: Text(
                         'Attendance',
-                        style: TextStyle(
-                          color: Color.fromRGBO(143, 181, 255, 1),
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: HeaderFontStyle.style,
                       ),
                     ),
 
@@ -146,8 +143,6 @@ class _AttandancescreenState extends State<Attandancescreen> {
                 ),
               ),
             ),
-
-          
           ],
         ),
       ),
