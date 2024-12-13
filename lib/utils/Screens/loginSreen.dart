@@ -107,6 +107,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
                 } catch (e) {
                   print("Error fetching location: $e");
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => Locationfillscreen(city: '', state: '',),
+                  //   ),
+                  // );
                 }
               },
             )
