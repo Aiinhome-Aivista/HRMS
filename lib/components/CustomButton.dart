@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hrms/styleColor.dart';
 
 class CustomButton extends StatefulWidget {
-  final VoidCallback onPressed; // Function to be called when the button is pressed
-  final String buttonText; // Button label text
-  final Color backgroundColor; // Background color of the button
-  final Color textColor; // Text color of the button
-  final EdgeInsets padding; // Padding for button content
-  final Duration animationDuration; // Duration for opacity animation
+  final VoidCallback onPressed;
+  final String buttonText;
+  final Color backgroundColor;
+  final Color textColor;
+  final EdgeInsets padding;
+  final Duration animationDuration;
 
   const CustomButton({
     Key? key,
     required this.onPressed,
     required this.buttonText,
-    this.backgroundColor = const Color.fromRGBO(143, 181, 255, 1),
+    this.backgroundColor = AppColors.lightblue,
     this.textColor = const Color.fromRGBO(8, 12, 17, 1),
     this.padding = const EdgeInsets.symmetric(vertical: 16.0),
     this.animationDuration = const Duration(milliseconds: 200),
@@ -33,7 +34,7 @@ class _CustomButtonState extends State<CustomButton> {
       child: ElevatedButton(
         onPressed: () async {
           setState(() {
-            _isButtonPressed = true; // Button pressed state
+            _isButtonPressed = true;
           });
 
           // Call the onPressed callback
@@ -42,7 +43,7 @@ class _CustomButtonState extends State<CustomButton> {
           });
 
           setState(() {
-            _isButtonPressed = false; // Reset the button state
+            _isButtonPressed = false;
           });
         },
         style: ElevatedButton.styleFrom(

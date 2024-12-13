@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hrms/utils/Screens/activityScreen.dart';
+import 'package:hrms/styleColor.dart';
+import 'package:hrms/utils/Screens/documentArchiveScreen.dart';
 import 'package:hrms/utils/Screens/attandanceScreen.dart';
 import 'package:hrms/utils/Screens/leaveScreen.dart';
 
@@ -15,7 +16,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
   int _currentPage = 0;
 
   final List<Widget> _pages = [
-    const Center(child: Activityscreen()),
+    Center(child: DocumentArchiveScreen()),
     const Center(child: Attandancescreen()),
     Center(child: LeaveScreen()),
     const Center(child: Text('Logout')),
@@ -61,10 +62,11 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
     final double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: AppColors.blackShade,
       bottomNavigationBar: Container(
         height: screenHeight * 0.08,
         decoration: BoxDecoration(
-          color: Color.fromRGBO(143, 181, 255, 1),
+          color: AppColors.lightblue,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
@@ -114,13 +116,21 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
     required double screenHeight,
   }) {
     return Padding(
-      padding: EdgeInsets.only(top: screenHeight * 0.005),
+      padding: EdgeInsets.only(top: screenHeight * 0.019),
       child: NavigationDestination(
-        selectedIcon: SvgPicture.asset(iconPath, height: 22, width: 22),
+        selectedIcon: Container(
+          width: 40,
+          height: 40,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white,
+          ),
+          child: SvgPicture.asset(iconPath, height: 25, width: 25),
+        ),
         icon: SvgPicture.asset(
           iconPath,
-          height: 20,
-          width: 20,
+          height: 30,
+          width: 30,
           color: Colors.black,
         ),
         label: '',
