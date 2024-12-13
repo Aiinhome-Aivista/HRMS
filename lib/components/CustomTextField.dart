@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hrms/styleColor.dart';
+import 'package:hrms/textStyle.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -21,17 +23,13 @@ class CustomTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       style: const TextStyle(
-        color: Color.fromRGBO(143, 181, 255, 1),
+        color: AppColors.lightblue,
       ),
       obscureText: isPassword,
       keyboardType: keyboardType,
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: const TextStyle(
-          color: Color.fromRGBO(143, 181, 255, 0.5),
-          fontSize: 14,
-          fontWeight: FontWeight.w700,
-        ),
+        labelStyle: leaveFontStyle.style,
         prefixIcon: Icon(
           prefixIcon,
           size: 25,
@@ -47,13 +45,13 @@ class CustomTextField extends StatelessWidget {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
           borderSide: const BorderSide(
-            color: Color.fromRGBO(143, 181, 255, 1),
+            color: AppColors.lightblue,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
           borderSide: const BorderSide(
-            color: Color.fromRGBO(143, 181, 255, 1),
+            color: AppColors.lightblue,
             width: 2.0,
           ),
         ),

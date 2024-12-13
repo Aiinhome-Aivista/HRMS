@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hrms/components/CustomFloatingButton.dart';
+import 'package:hrms/styleColor.dart';
+import 'package:hrms/textStyle.dart';
 import 'package:intl/intl.dart';
 
 class LeaveScreen extends StatefulWidget {
@@ -21,16 +24,16 @@ class _LeaveScreenState extends State<LeaveScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title: const Padding(
-          padding: EdgeInsets.only(top: 20),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 20),
           child: Text(
             'Leave',
-            style: TextStyle(color: Color.fromRGBO(143, 181, 255, 1)),
+            style: HeaderFontStyle.style,
           ),
         ),
-         backgroundColor: Color.fromRGBO(8, 12, 17, 1),
+        backgroundColor: AppColors.backgroundColor,
       ),
-       backgroundColor: Color.fromRGBO(8, 12, 17, 1),
+      backgroundColor: AppColors.backgroundColor,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 40, left: 16, right: 16),
@@ -82,7 +85,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
                     // Action to be taken on applying
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromRGBO(143, 181, 255, 1),
+                    backgroundColor: AppColors.lightblue,
                     minimumSize: Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -101,6 +104,12 @@ class _LeaveScreenState extends State<LeaveScreen> {
           ),
         ),
       ),
+      floatingActionButton: CustomFloatingActionButton(
+        onPressed: () {
+          print("FAB Pressed");
+        },
+        icon: Icons.add,
+      ),
     );
   }
 
@@ -116,7 +125,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
           color: Colors.black,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: const Color.fromRGBO(143, 181, 255, 1),
+            color: AppColors.lightblue,
             width: 1,
           ),
         ),
@@ -126,7 +135,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
               width: 45,
               height: 45,
               decoration: BoxDecoration(
-                color: const Color.fromRGBO(143, 181, 255, 1),
+                color: AppColors.lightblue,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -140,8 +149,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
                 readOnly: true,
                 decoration: InputDecoration(
                   hintText: hintText,
-                  hintStyle:
-                      const TextStyle(color: Color.fromRGBO(143, 181, 255, 1)),
+                  hintStyle: leaveFontStyle.style,
                   border: InputBorder.none,
                 ),
               ),
@@ -188,7 +196,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
     bool isDropdown = false,
     bool isReadOnly = false,
     int maxLines = 1,
-    Color borderColor = const Color.fromRGBO(143, 181, 255, 1),
+    Color borderColor = AppColors.lightblue,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -206,7 +214,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
               width: 45,
               height: 45,
               decoration: BoxDecoration(
-                color: const Color.fromRGBO(143, 181, 255, 1),
+                color: AppColors.lightblue,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -221,16 +229,17 @@ class _LeaveScreenState extends State<LeaveScreen> {
                 ? DropdownButtonFormField<String>(
                     decoration: InputDecoration(
                       hintText: hintText,
-                      hintStyle: const TextStyle(
-                          color: Color.fromRGBO(143, 181, 255, 1)),
+                      hintStyle: leaveFontStyle.style,
                       border: InputBorder.none,
                     ),
                     value: selectedLeaveType,
                     items: <String>['Half day', 'Full day'].map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value,
-                            style: const TextStyle( color: Color.fromRGBO(143, 181, 255, 1))),
+                        child: Text(
+                          value,
+                          style: leaveFontStyle.style,
+                        ),
                       );
                     }).toList(),
                     onChanged: (newValue) {
@@ -244,8 +253,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
                     maxLines: hintText == 'Causes...' ? 4 : maxLines,
                     decoration: InputDecoration(
                       hintText: hintText,
-                      hintStyle: const TextStyle(
-                          color: Color.fromRGBO(143, 181, 255, 1)),
+                      hintStyle: leaveFontStyle.style,
                       border: InputBorder.none,
                     ),
                   ),

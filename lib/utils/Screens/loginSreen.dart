@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hrms/utils/Component/CustomButton.dart';
-import 'package:hrms/utils/Component/CustomTextField.dart';
+import 'package:hrms/components/CustomButton.dart';
+import 'package:hrms/components/CustomTextField.dart';
 import 'package:hrms/utils/Screens/locationFillScreen.dart';
 
 class LoginScreen extends StatefulWidget {

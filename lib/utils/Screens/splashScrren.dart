@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrms/styleColor.dart';
 import 'dart:async';
 import 'package:hrms/utils/Screens/loginSreen.dart';
 
@@ -100,7 +101,7 @@ class _SplashScreenState extends State<SplashScreen>
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromRGBO(143, 181, 255, 1),
+                        color: AppColors.lightblue,
                       ),
                     ),
                   ),
@@ -117,7 +118,7 @@ class _SplashScreenState extends State<SplashScreen>
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.normal,
-                        color: Color.fromRGBO(143, 181, 255, 1),
+                        color: AppColors.lightblue,
                       ),
                     ),
                   ),

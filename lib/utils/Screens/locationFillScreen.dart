@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hrms/utils/Component/CustomButton.dart';
-import 'package:hrms/utils/Component/CustomTextField.dart';
+import 'package:hrms/styleColor.dart';
+import 'package:hrms/components/CustomButton.dart';
+import 'package:hrms/components/CustomTextField.dart';
 import 'package:hrms/utils/Widget/bottamNavigationWidget.dart';
 
 class Locationfillscreen extends StatefulWidget {
@@ -45,7 +46,7 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
-            color: Color.fromRGBO(143, 181, 255, 1),
+            color: AppColors.lightblue,
           ),
           onPressed: () {
             Navigator.pop(context); // Navigate back to the previous screen
@@ -54,7 +55,7 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
         title: const Text(
           'Select location',
           style: TextStyle(
-            color: Color.fromRGBO(143, 181, 255, 1),
+            color: AppColors.lightblue,
             fontWeight: FontWeight.w600,
             fontSize: 20,
           ),
