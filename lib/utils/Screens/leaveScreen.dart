@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hrms/components/CustomFloatingButton.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
+import 'package:hrms/utils/Screens/attandanceScreen.dart';
 import 'package:intl/intl.dart';
 
 class LeaveScreen extends StatefulWidget {
@@ -106,7 +107,10 @@ class _LeaveScreenState extends State<LeaveScreen> {
       ),
       floatingActionButton: CustomFloatingActionButton(
         onPressed: () {
-          print("FAB Pressed");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Attandancescreen()),
+          );
         },
         icon: Icons.add,
       ),

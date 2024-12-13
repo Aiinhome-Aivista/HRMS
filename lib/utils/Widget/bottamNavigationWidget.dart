@@ -24,7 +24,10 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
 
   void _pageChanges(int index) {
     setState(() {
-      if (index == 3) {
+      if (index == 1) {
+        // Do nothing if it's the second tab
+        return;
+      } else if (index == 3) {
         _showLogoutDialog();
       } else {
         _currentPage = index;
