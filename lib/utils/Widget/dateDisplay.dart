@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrms/styleColor.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -65,7 +66,7 @@ class _DateDisplayState extends State<DateDisplay> {
                     Text(
                       '${widget.selectedDay.day}',
                       style: const TextStyle(
-                        fontSize: 50,
+                        fontSize: 40,
                         fontWeight: FontWeight.w700,
                         color: Color.fromRGBO(143, 181, 255, 1),
                       ),
@@ -73,7 +74,7 @@ class _DateDisplayState extends State<DateDisplay> {
                     Text(
                       getDaySuffix(widget.selectedDay.day),
                       style: const TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Color.fromRGBO(143, 181, 255, 1),
                       ),
@@ -81,10 +82,9 @@ class _DateDisplayState extends State<DateDisplay> {
                   ],
                 ),
                 Text(
-                  DateFormat('MMMM').format(
-                      widget.selectedDay), // Formats the month as the full name
+                  DateFormat('MMMM').format(widget.selectedDay),
                   style: const TextStyle(
-                    fontSize: 21,
+                    fontSize: 18,
                     fontWeight: FontWeight.w300,
                     color: Color.fromRGBO(143, 181, 255, 1),
                   ),
@@ -124,47 +124,39 @@ class _DateDisplayState extends State<DateDisplay> {
               _focusedDay = focusedDay;
             });
           },
-          firstDay: DateTime.utc(2020, 1, 1), // Start of calendar range
-          lastDay: DateTime.utc(2030, 12, 31), // End of calendar range
+          firstDay: DateTime.utc(2000, 1, 1),
+          lastDay: DateTime.utc(2101, 12, 31),
           calendarStyle: const CalendarStyle(
             todayTextStyle: TextStyle(
-              color: Colors.white, // Color of today's date
+              color: Colors.white,
             ),
             selectedTextStyle: TextStyle(
-              color: Colors.white, // Color of selected day
+              color: Colors.white,
             ),
             selectedDecoration: BoxDecoration(
-              color: Colors.blue, // Background color of selected day
+              color: Colors.blue,
               shape: BoxShape.circle,
             ),
             todayDecoration: BoxDecoration(
-              color: Color.fromRGBO(
-                  143, 181, 255, 1), // Background color for today's date
+              color: AppColors.lightblue,
               shape: BoxShape.circle,
             ),
-            defaultTextStyle: TextStyle(
-                color: Color.fromRGBO(143, 181, 255,
-                    1) // Color of all default dates (not selected, not today)
-                ),
-            weekendTextStyle: TextStyle(
-                color: Color.fromRGBO(143, 181, 255,
-                    1) // Color of weekend days (Saturday and Sunday)
-                ),
-            outsideTextStyle: TextStyle(
-                color: Color.fromRGBO(143, 181, 255,
-                    1) // Color of the days outside the current month
-                ),
+            defaultTextStyle: TextStyle(color: AppColors.lightblue),
+            weekendTextStyle: TextStyle(color: AppColors.lightblue),
+            outsideTextStyle: TextStyle(color: AppColors.lightblue),
+            outsideDaysVisible: false,
           ),
-          daysOfWeekStyle: const DaysOfWeekStyle(
-            weekdayStyle: TextStyle(
-              color: Color.fromRGBO(
-                  143, 181, 255, 1), // Color of weekdays (Mon-Fri)
-            ),
-            weekendStyle: TextStyle(
-                color: Color.fromRGBO(
-                    143, 181, 255, 1) // Color of weekend days (Sat, Sun)
-                ),
+          daysOfWeekStyle: DaysOfWeekStyle(
+            dowTextFormatter: (date, locale) =>
+                DateFormat.E(locale).format(date)[0],
+            weekdayStyle: const TextStyle(color: AppColors.lightblue),
+            weekendStyle: const TextStyle(color: AppColors.lightblue),
           ),
+          headerStyle: const HeaderStyle(
+            formatButtonVisible: false,
+            titleCentered: true,
+          ),
+          rowHeight: 38.0,
         )
       ],
     );
