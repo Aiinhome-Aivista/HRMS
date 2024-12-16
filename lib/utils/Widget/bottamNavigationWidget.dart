@@ -17,17 +17,19 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
 
   final List<Widget> _pages = [
     Center(child: DocumentArchiveScreen()),
-    const Center(child: Attandancescreen()),
+    // const Center(child: Attandancescreen()),
     Center(child: LeaveScreen()),
     const Center(child: Text('Logout')),
   ];
 
   void _pageChanges(int index) {
     setState(() {
-      if (index == 1) {
-        // Do nothing if it's the second tab
-        return;
-      } else if (index == 3) {
+      // if (index == 1) {
+      //   // Do nothing if it's the second tab
+      //   return;
+      // } else
+      // if (index == 3) {
+      if (index == 2) {
         _showLogoutDialog();
       } else {
         _currentPage = index;
@@ -95,10 +97,10 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
               iconPath: 'assets/images/add_notes.svg',
               screenHeight: screenHeight,
             ),
-            _buildNavItem(
-              iconPath: 'assets/images/account_balance_wallet.svg',
-              screenHeight: screenHeight,
-            ),
+            // _buildNavItem(
+            //   iconPath: 'assets/images/account_balance_wallet.svg',
+            //   screenHeight: screenHeight,
+            // ),
             _buildNavItem(
               iconPath: 'assets/images/attendance.svg',
               screenHeight: screenHeight,
@@ -132,7 +134,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
         ),
         icon: SvgPicture.asset(
           iconPath,
-          height:28,
+          height: 28,
           width: 28,
           color: Colors.black,
         ),
