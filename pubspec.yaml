@@ -37,6 +37,9 @@ dependencies:
   flutter_svg: ^1.1.5
   intl: ^0.18.0
   table_calendar: ^3.0.0 
+  shared_preferences: ^2.1.0
+  flutter_secure_storage: ^5.0.2
+
 
 dev_dependencies:
   flutter_test:
