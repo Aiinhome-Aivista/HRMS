@@ -17,6 +17,16 @@ class _DateDisplayState extends State<DateDisplay> {
   late DateTime _selectedDay;
   late DateTime _focusedDay;
 
+  // Sample JSON list of dates to highlight (YYYY-MM-DD format)
+  final List<Map<String, String>> _highlightedDates = [
+    {'date': '2024-12-07', 'time': '10:05'},
+    {'date': '2024-12-08', 'time': '10:15'},
+    {'date': '2024-12-09', 'time': '10:20'},
+    {'date': '2024-12-10', 'time': '10:29'},
+    {'date': '2024-12-11', 'time': '10:30'},
+    {'date': '2024-12-12', 'time': '10:45'},
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -27,7 +37,7 @@ class _DateDisplayState extends State<DateDisplay> {
   // Function to get the suffix for the day
   String getDaySuffix(int day) {
     if (day >= 11 && day <= 13) {
-      return 'th'; // Special case for 11th, 12th, and 13th
+      return 'th';
     }
     switch (day % 10) {
       case 1:
@@ -39,6 +49,51 @@ class _DateDisplayState extends State<DateDisplay> {
       default:
         return 'th';
     }
+  }
+
+  // Check if the given day should be highlighted
+  bool isHighlighted(DateTime day) {
+    String formattedDate = DateFormat('yyyy-MM-dd').format(day);
+    return _highlightedDates.contains(formattedDate);
+  }
+
+  // Check if the given day should be highlighted and return its color
+  Color? getHighlightColor(DateTime day) {
+    String formattedDate = DateFormat('yyyy-MM-dd').format(day);
+
+    final matchingEntry = _highlightedDates.firstWhere(
+      (entry) => entry['date'] == formattedDate,
+      orElse: () => {},
+    );
+
+    // If no matching date, return null (no color)
+    if (matchingEntry.isEmpty) return null;
+
+    String time = matchingEntry['time'] ?? '00:00';
+
+    DateTime parsedTime = DateFormat('HH:mm').parse(time);
+
+    DateTime greenStart = DateFormat('HH:mm:ss').parse('10:00:00');
+    DateTime greenEnd = DateFormat('HH:mm:ss').parse('10:14:59');
+    DateTime yellowStart = DateFormat('HH:mm:ss').parse('10:15:00');
+    DateTime yellowEnd = DateFormat('HH:mm:ss').parse('10:29:59');
+    DateTime redStart = DateFormat('HH:mm:ss').parse('10:30:00');
+
+    // Determine the color based on the time range
+    if ((parsedTime.isAtSameMomentAs(greenStart) ||
+            parsedTime.isAfter(greenStart)) &&
+        parsedTime.isBefore(greenEnd.add(const Duration(seconds: 1)))) {
+      return const Color.fromARGB(195, 139, 248, 143);
+    } else if ((parsedTime.isAtSameMomentAs(yellowStart) ||
+            parsedTime.isAfter(yellowStart)) &&
+        parsedTime.isBefore(yellowEnd.add(const Duration(seconds: 1)))) {
+      return const Color.fromARGB(195, 255, 240, 110);
+    } else if (parsedTime.isAtSameMomentAs(redStart) ||
+        parsedTime.isAfter(redStart)) {
+      return const Color.fromARGB(192, 245, 102, 92);
+    }
+
+    return null;
   }
 
   @override
@@ -92,6 +147,7 @@ class _DateDisplayState extends State<DateDisplay> {
               ],
             ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
                   '${widget.selectedDay.year}',
@@ -114,7 +170,7 @@ class _DateDisplayState extends State<DateDisplay> {
           ],
         ),
 
-        //For display calendar
+        // For display calendar
         TableCalendar(
           focusedDay: _focusedDay,
           selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
@@ -145,18 +201,57 @@ class _DateDisplayState extends State<DateDisplay> {
             weekendTextStyle: TextStyle(color: AppColors.lightblue),
             outsideTextStyle: TextStyle(color: AppColors.lightblue),
             outsideDaysVisible: false,
+            markerDecoration: BoxDecoration(
+              color: Colors.yellow,
+              shape: BoxShape.circle,
+            ),
           ),
           daysOfWeekStyle: DaysOfWeekStyle(
             dowTextFormatter: (date, locale) =>
                 DateFormat.E(locale).format(date)[0],
-            weekdayStyle: const TextStyle(color: AppColors.lightblue),
-            weekendStyle: const TextStyle(color: AppColors.lightblue),
+            weekdayStyle: const TextStyle(
+                color: AppColors.lightblue, fontWeight: FontWeight.w700),
+            weekendStyle: const TextStyle(
+                color: AppColors.lightblue, fontWeight: FontWeight.w700),
           ),
           headerStyle: const HeaderStyle(
             formatButtonVisible: false,
             titleCentered: true,
+            titleTextStyle: TextStyle(
+                color: AppColors.lightblue, fontWeight: FontWeight.w500),
+            leftChevronIcon: Icon(
+              Icons.chevron_left,
+              color: AppColors.lightblue,
+            ),
+            rightChevronIcon: Icon(
+              Icons.chevron_right,
+              color: AppColors.lightblue,
+            ),
           ),
           rowHeight: 38.0,
+          // Custom dayBuilder to highlight specific dates
+          calendarBuilders: CalendarBuilders(
+            defaultBuilder: (context, day, focusedDay) {
+              Color? highlightColor = getHighlightColor(day);
+              if (highlightColor != null) {
+                return Container(
+                  margin: const EdgeInsets.all(6.0),
+                  decoration: BoxDecoration(
+                    color: highlightColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${day.day}',
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  ),
+                );
+              } else {
+                return null;
+              }
+            },
+          ),
         )
       ],
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:hrms/utils/Widget/dateDisplay.dart';
 
@@ -25,6 +26,7 @@ class _AttandancescreenState extends State<Attandancescreen> {
   double _rightLimit = 0;
   double _topLimit = 0;
   double _bottomLimit = 0;
+  late String _swipeDirectionIS = '';
 
   // Calendar-related variables
   late DateTime _selectedDay;
@@ -103,14 +105,27 @@ class _AttandancescreenState extends State<Attandancescreen> {
             if (_xOffset.abs() > _yOffset.abs()) {
               if (_xOffset > 0) {
                 print('Swiped OFFICE');
+                setState(() {
+                  _swipeDirectionIS = 'office';
+                });
+                print('_swipeDirectionIS : $_swipeDirectionIS');
               } else {
                 print('Swiped HOME');
+                setState(() {
+                  _swipeDirectionIS = 'home';
+                });
               }
             } else {
               if (_yOffset > 0) {
                 print('Swiped CLIENT');
+                setState(() {
+                  _swipeDirectionIS = 'client';
+                });
               } else {
                 print('Swiped PWC');
+                setState(() {
+                  _swipeDirectionIS = 'pwc';
+                });
               }
             }
           }
@@ -125,7 +140,7 @@ class _AttandancescreenState extends State<Attandancescreen> {
               left: 0,
               right: 0,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 30, 16, 16),
+                padding: const EdgeInsets.fromLTRB(16, 45, 16, 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -143,7 +158,72 @@ class _AttandancescreenState extends State<Attandancescreen> {
                 ),
               ),
             ),
+
+            // Up icon
+            _buildIcon(
+              top: screenHeight * 0.55,
+              left: (screenWidth / 2) - 55,
+              iconPath: 'assets/images/pwc.svg',
+              isHighlighted: _swipeDirectionIS == 'pwc',
+            ),
+            // Down icon
+            _buildIcon(
+              bottom: screenHeight * 0.07,
+              left: (screenWidth / 2) - 50,
+              iconPath: 'assets/images/client.svg',
+              isHighlighted: _swipeDirectionIS == 'client',
+            ),
+            // Left icon
+            _buildIcon(
+              left: screenWidth * 0.05,
+              top: (screenHeight / 2) + 155,
+              iconPath: 'assets/images/home.svg',
+              isHighlighted: _swipeDirectionIS == 'home',
+            ),
+            // Right icon
+            _buildIcon(
+              right: screenWidth * 0.05,
+              top: (screenHeight / 2) + 155,
+              iconPath: 'assets/images/office.svg',
+              isHighlighted: _swipeDirectionIS == 'office',
+            ), // The actual swipe button
+            Padding(
+              padding: const EdgeInsets.only(top: 420),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                transform: Matrix4.translationValues(_xOffset, _yOffset, 0),
+                alignment: Alignment.center,
+                child: SvgPicture.asset(
+                  'assets/images/swip.svg',
+                ),
+              ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIcon({
+    double? top,
+    double? bottom,
+    double? left,
+    double? right,
+    required String iconPath,
+    required bool isHighlighted,
+  }) {
+    return Positioned(
+      top: top,
+      bottom: bottom,
+      left: left,
+      right: right,
+      child: ColorFiltered(
+        colorFilter: ColorFilter.mode(
+          isHighlighted ? Colors.white : AppColors.greyShade2,
+          BlendMode.srcIn,
+        ),
+        child: SvgPicture.asset(
+          iconPath,
         ),
       ),
     );
