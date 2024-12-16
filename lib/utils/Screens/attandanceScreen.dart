@@ -66,6 +66,18 @@ class _AttandancescreenState extends State<Attandancescreen> {
         buttonSize * 1.5; // Bottom limit based on the down icon
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.close,
+            color: AppColors.lightblue,
+          ),
+          onPressed: () {
+            Navigator.pop(context); // Navigate back to the previous screen
+          },
+        ),
+      ),
       backgroundColor: Colors.black.withOpacity(0.5),
       // backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
       body: GestureDetector(
@@ -137,7 +149,7 @@ class _AttandancescreenState extends State<Attandancescreen> {
           children: [
             // Upper section with Text and Calendar
             Positioned(
-              top: 30,
+              top: 0,
               left: 0,
               right: 0,
               child: Padding(
