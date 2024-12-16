@@ -180,14 +180,14 @@ class _AttandancescreenState extends State<Attandancescreen> {
 
             // Up icon
             _buildIcon(
-              top: screenHeight * 0.55,
+              top: screenHeight * 0.59,
               left: (screenWidth / 2) - 55,
               iconPath: 'assets/images/pwc.svg',
               isHighlighted: _swipeDirectionIS == 'pwc',
             ),
             // Down icon
             _buildIcon(
-              bottom: screenHeight * 0.07,
+              bottom: screenHeight * 0.11,
               left: (screenWidth / 2) - 50,
               iconPath: 'assets/images/client.svg',
               isHighlighted: _swipeDirectionIS == 'client',
@@ -195,17 +195,18 @@ class _AttandancescreenState extends State<Attandancescreen> {
             // Left icon
             _buildIcon(
               left: screenWidth * 0.05,
-              top: (screenHeight / 2) + 155,
+              top: (screenHeight / 2) + 190,
               iconPath: 'assets/images/home.svg',
               isHighlighted: _swipeDirectionIS == 'home',
             ),
             // Right icon
             _buildIcon(
               right: screenWidth * 0.05,
-              top: (screenHeight / 2) + 155,
+              top: (screenHeight / 2) + 190,
               iconPath: 'assets/images/office.svg',
               isHighlighted: _swipeDirectionIS == 'office',
-            ), // The actual swipe button
+            ),
+            // The actual swipe button
             Padding(
               padding: const EdgeInsets.only(top: 420),
               child: AnimatedContainer(

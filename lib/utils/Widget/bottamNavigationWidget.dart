@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/utils/Screens/documentArchiveScreen.dart';
-import 'package:hrms/utils/Screens/attandanceScreen.dart';
 import 'package:hrms/utils/Screens/leaveScreen.dart';
 
 class BottamnavigationBar extends StatefulWidget {
@@ -69,7 +68,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
     return Scaffold(
       backgroundColor: AppColors.blackShade,
       bottomNavigationBar: Container(
-        height: screenHeight * 0.08,
+        height: screenHeight * 0.07,
         decoration: BoxDecoration(
           color: AppColors.lightblue,
           borderRadius: const BorderRadius.only(
