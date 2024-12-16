@@ -66,18 +66,6 @@ class _AttandancescreenState extends State<Attandancescreen> {
         buttonSize * 1.5; // Bottom limit based on the down icon
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.close,
-            color: AppColors.lightblue,
-          ),
-          onPressed: () {
-            Navigator.pop(context); // Navigate back to the previous screen
-          },
-        ),
-      ),
       backgroundColor: Colors.black.withOpacity(0.5),
       // backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
       body: GestureDetector(
@@ -155,18 +143,36 @@ class _AttandancescreenState extends State<Attandancescreen> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 45, 16, 16),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Center(
-                      child: Text(
-                        'Attendance',
-                        style: HeaderFontStyle.style,
-                      ),
-                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Center "Attendance" text
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              'Attendance',
+                              style: HeaderFontStyle.style,
+                            ),
+                          ),
+                        ),
 
-                    //For display date
+                        IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                            color: AppColors.lightblue,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    // DateDisplay below the Row
                     DateDisplay(selectedDay: _selectedDay),
-                    const SizedBox(height: 20),
                   ],
                 ),
               ),
