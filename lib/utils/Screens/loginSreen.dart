@@ -22,20 +22,66 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    loginUser();
+  }
+
+  Future<void> loginAndFetchLocation() async {
+    try {
+      // Check and request location permission
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        print("Location permissions are permanently denied.");
+        return;
+      }
+
+      // Get the current position
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      // Get the address from latitude and longitude
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks.first;
+        String city = place.locality ?? 'Unknown';
+        String state = place.administrativeArea ?? 'Unknown';
+
+        print('City is: $city');
+        print('State is: $state');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Locationfillscreen(
+              city: place.locality ?? '',
+              state: place.administrativeArea ?? '',
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      print("Error fetching location: $e");
+    }
   }
 
   void loginUser() async {
     POST_API postApi = POST_API();
     Map<String, dynamic> response = await postApi.login(
-      'test@example.com',
-      'password123',
+      _emailController.text,
+      _passwordController.text,
     );
 
     if (response['status'] == true) {
-      print('Login Successful: ${response['data']}');
+      loginAndFetchLocation();
+      print('Login Successful: ${response['user']}');
     } else {
-      print('Login Failed: ${response['message']}');
+      print('Login Failed: ${response['msg']}');
     }
   }
 
@@ -83,58 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
             CustomButton(
               buttonText: 'LOGIN',
               onPressed: () async {
-                try {
-                  // Print the values of the text fields
-                  print("Email: ${_emailController.text}");
-                  print("Password: ${_passwordController.text}");
-
-                  // Check and request location permission
-                  LocationPermission permission =
-                      await Geolocator.checkPermission();
-                  if (permission == LocationPermission.denied) {
-                    permission = await Geolocator.requestPermission();
-                  }
-
-                  if (permission == LocationPermission.deniedForever) {
-                    print("Location permissions are permanently denied.");
-                    return;
-                  }
-
-                  // Get the current position
-                  Position position = await Geolocator.getCurrentPosition(
-                    desiredAccuracy: LocationAccuracy.high,
-                  );
-
-                  // Get the address from latitude and longitude
-                  List<Placemark> placemarks = await placemarkFromCoordinates(
-                    position.latitude,
-                    position.longitude,
-                  );
-
-                  if (placemarks.isNotEmpty) {
-                    Placemark place = placemarks.first;
-                    print('City is: ${place.locality}');
-                    print('State is:  ${place.administrativeArea}');
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Locationfillscreen(
-                          city: place.locality ?? '',
-                          state: place.administrativeArea ?? '',
-                        ),
-                      ),
-                    );
-                  }
-                } catch (e) {
-                  print("Error fetching location: $e");
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => Locationfillscreen(city: '', state: '',),
-                  //   ),
-                  // );
-                }
+                loginUser();
               },
             )
           ],
