@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/CustomButton.dart';
 import 'package:hrms/components/CustomTextField.dart';
 import 'package:hrms/utils/Screens/locationFillScreen.dart';
@@ -17,6 +18,26 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    loginUser();
+  }
+
+  void loginUser() async {
+    POST_API postApi = POST_API();
+    Map<String, dynamic> response = await postApi.login(
+      'test@example.com',
+      'password123',
+    );
+
+    if (response['status'] == true) {
+      print('Login Successful: ${response['data']}');
+    } else {
+      print('Login Failed: ${response['message']}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
