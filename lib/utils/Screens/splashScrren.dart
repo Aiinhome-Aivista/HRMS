@@ -14,6 +14,8 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<Offset> _slideAnimation;
   late Animation<double> _scaleAnimation;
 
+  bool showContent = false;
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +35,6 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
-    // Scale Animation (Small to Large text)
     _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
@@ -41,10 +42,14 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
-    // Start the animations
-    _animationController.forward();
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        showContent = true;
+      });
+      _animationController.forward();
+    });
 
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -62,58 +67,92 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 90, left: 30, right: 30),
+      body: Stack(
+        children: [
+          AnimatedOpacity(
+            opacity: showContent ? 0.0 : 1.0,
+            duration: const Duration(seconds: 1),
+            child: Container(
+              color: Colors.black,
+              child: Image.asset(
+                'assets/images/Splash02.png',
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              ),
+            ),
+          ),
+          Visibility(
+            visible: showContent,
+            child: SingleChildScrollView(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SlideTransition(
-                    position: _slideAnimation,
-                    child: ScaleTransition(
-                      scale: _scaleAnimation,
-                      child: const Text(
-                        'Welcome to',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 50,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 90, left: 30, right: 30),
+                    child: Column(
+                      children: [
+                        SlideTransition(
+                          position: _slideAnimation,
+                          child: ScaleTransition(
+                            scale: _scaleAnimation,
+                            child: const Text(
+                              'Welcome to',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 50,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        const SizedBox(height: 10),
+                        SlideTransition(
+                          position: _slideAnimation,
+                          child: ScaleTransition(
+                            scale: _scaleAnimation,
+                            child: const Text(
+                              'HRMS',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.lightblue,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        SlideTransition(
+                          position: _slideAnimation,
+                          child: ScaleTransition(
+                            scale: _scaleAnimation,
+                            child: const Text(
+                              'Attendance made simple, time made yours',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                                color: AppColors.lightblue,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   SlideTransition(
                     position: _slideAnimation,
                     child: ScaleTransition(
                       scale: _scaleAnimation,
-                      child: const Text(
-                        'HRMS',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.lightblue,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  SlideTransition(
-                    position: _slideAnimation,
-                    child: ScaleTransition(
-                      scale: _scaleAnimation,
-                      child: const Text(
-                        'Attendance made simple, time made yours',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                          color: AppColors.lightblue,
+                      child: Container(
+                        child: Image.asset(
+                          'assets/images/Splash.png',
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ),
@@ -121,22 +160,8 @@ class _SplashScreenState extends State<SplashScreen>
                 ],
               ),
             ),
-            const SizedBox(height: 20),
-            // Slide and Scale Transition for Image
-            SlideTransition(
-              position: _slideAnimation,
-              child: ScaleTransition(
-                scale: _scaleAnimation,
-                child: Container(
-                  child: Image.asset(
-                    'assets/images/Splash.png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

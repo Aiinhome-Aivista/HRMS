@@ -35,7 +35,7 @@ class _AttandancescreenState extends State<Attandancescreen> {
     _selectedDay = DateTime.now();
   }
 
-  // Method to reset position
+  // Method to reset positionn
   void _resetPosition() {
     setState(() {
       _xOffset = 0;
@@ -64,7 +64,8 @@ class _AttandancescreenState extends State<Attandancescreen> {
         buttonSize * 1.5; // Bottom limit based on the down icon
 
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
+      backgroundColor: Colors.black.withOpacity(0.5),
+      // backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
       body: GestureDetector(
         onPanStart: (details) {
           _swipeDirection = null; // Reset swipe direction on new swipe
@@ -121,7 +122,7 @@ class _AttandancescreenState extends State<Attandancescreen> {
           children: [
             // Upper section with Text and Calendar
             Positioned(
-              top: 0,
+              top: 30,
               left: 0,
               right: 0,
               child: Padding(

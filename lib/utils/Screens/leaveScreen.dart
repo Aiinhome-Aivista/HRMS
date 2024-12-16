@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hrms/components/CustomFloatingButton.dart';
+import 'package:hrms/components/TransparentPageRoute.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:hrms/utils/Screens/attandanceScreen.dart';
@@ -47,14 +48,12 @@ class _LeaveScreenState extends State<LeaveScreen> {
                 isReadOnly: true,
               ),
               SizedBox(height: 20),
-
               _buildInputField(
                 icon: Icons.hotel,
                 hintText: 'Leave type',
                 isDropdown: true,
               ),
               SizedBox(height: 20),
-
               _buildDateField(
                 icon: Icons.calendar_month,
                 hintText: startDate == null
@@ -63,7 +62,6 @@ class _LeaveScreenState extends State<LeaveScreen> {
                 onTap: _selectStartDate,
               ),
               SizedBox(height: 20),
-
               _buildDateField(
                 icon: Icons.calendar_month,
                 hintText: endDate == null
@@ -72,19 +70,14 @@ class _LeaveScreenState extends State<LeaveScreen> {
                 onTap: _selectEndDate,
               ),
               SizedBox(height: 20),
-
               _buildInputField(
                 hintText: '     Causes...',
                 maxLines: 4,
               ),
               SizedBox(height: 20),
-
-              // Apply Button
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Action to be taken on applying
-                  },
+                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.lightblue,
                     minimumSize: Size(double.infinity, 50),
@@ -107,9 +100,8 @@ class _LeaveScreenState extends State<LeaveScreen> {
       ),
       floatingActionButton: CustomFloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const Attandancescreen()),
+          Navigator.of(context).push(
+            TransparentPageRoute.create(const Attandancescreen()),
           );
         },
         icon: Icons.add,
