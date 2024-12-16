@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hrms/components/CustomFloatingButton.dart';
+import 'package:hrms/components/TransparentPageRoute.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
+import 'package:hrms/utils/Screens/attandanceScreen.dart';
 
 class DocumentArchiveScreen extends StatelessWidget {
   @override
@@ -111,7 +113,9 @@ class DocumentArchiveScreen extends StatelessWidget {
       ),
       floatingActionButton: CustomFloatingActionButton(
         onPressed: () {
-          print("FAB Pressed");
+          Navigator.of(context).push(
+            TransparentPageRoute.create(const Attandancescreen()),
+          );
         },
         icon: Icons.add,
       ),
