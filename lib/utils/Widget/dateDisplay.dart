@@ -7,7 +7,7 @@ class DateDisplay extends StatefulWidget {
   final DateTime selectedDay;
 
   // Constructor to accept the selectedDay
-  const DateDisplay({required this.selectedDay, Key? key}) : super(key: key);
+  const DateDisplay({required this.selectedDay, super.key});
 
   @override
   State<DateDisplay> createState() => _DateDisplayState();
