@@ -4,6 +4,7 @@ import 'package:hrms/styleColor.dart';
 import 'package:hrms/utils/Screens/documentArchiveScreen.dart';
 import 'package:hrms/utils/Screens/leaveScreen.dart';
 import 'package:hrms/utils/Screens/loginSreen.dart';
+import 'package:hrms/utils/Widget/logoutWidget.dart';
 
 class BottamnavigationBar extends StatefulWidget {
   const BottamnavigationBar({super.key});
@@ -40,27 +41,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
   void _showLogoutDialog() {
     showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are you sure you want to log out?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                );
-              },
-              child: const Text('Logout'),
-            ),
-          ],
-        );
-      },
+      builder: (context) => const LogoutDialog(),
     );
   }
 
