@@ -89,7 +89,11 @@ class _LeaveScreenState extends State<LeaveScreen> {
                 width: double.infinity,
                 child: CustomButton(
                   buttonText: 'Apply',
-                  onPressed: isFormValid ? () {} : () {},
+                  onPressed: isFormValid
+                      ? () {
+                          print("apply leave");
+                        }
+                      : () {},
                   backgroundColor:
                       isFormValid ? AppColors.lightblue : AppColors.greyShade2,
                 ),
@@ -248,13 +252,10 @@ class _LeaveScreenState extends State<LeaveScreen> {
                 : TextField(
                     controller: causesController,
                     readOnly: isReadOnly,
-                    maxLines: hintText == 'Causes...'
-                        ? 4
-                        : maxLines, // Ensure multi-line works
+                    maxLines: hintText == 'Causes...' ? 4 : maxLines,
                     style: const TextStyle(color: AppColors.lightblue),
-                    textInputAction:
-                        TextInputAction.done, // Set input action to "Done"
-                    keyboardType: TextInputType.text, // Standard keyboard
+                    textInputAction: TextInputAction.done,
+                    keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       hintText: hintText,
                       hintStyle: leaveFontStyle.style,
