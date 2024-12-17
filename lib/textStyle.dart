@@ -1,3 +1,4 @@
+// ignore_for_file: camel_case_types, file_names
 import 'package:flutter/material.dart';
 import 'package:hrms/styleColor.dart';
 
