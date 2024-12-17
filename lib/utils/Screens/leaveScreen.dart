@@ -175,7 +175,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
                 ? DropdownButtonFormField<String>(
                     decoration: InputDecoration(
                       hintText: hintText,
-                      hintStyle: leaveFontStyle.style,
+                      hintStyle: LeaveFontStyle.style,
                       border: InputBorder.none,
                     ),
                     value: selectedLeaveType,
@@ -184,7 +184,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
                         value: value,
                         child: Text(
                           value,
-                          style: leaveFontStyle.style,
+                          style: LeaveFontStyle.style,
                         ),
                       );
                     }).toList(),
@@ -203,7 +203,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       hintText: hintText,
-                      hintStyle: leaveFontStyle.style,
+                      hintStyle: LeaveFontStyle.style,
                       border: InputBorder.none,
                     ),
                     onChanged: (value) {

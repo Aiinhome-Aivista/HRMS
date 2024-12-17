@@ -8,7 +8,9 @@
         "Attandancescreen",
         "Bottamnavigation",
         "consectetur",
+        "cupertino",
         "elit",
+        "geolocator",
         "hrms",
         "Khula",
         "Locationfillscreen",
@@ -20,6 +22,5 @@
         "Scrren",
         "Sreen",
         "swip"
-        
-    ]
+]
 }

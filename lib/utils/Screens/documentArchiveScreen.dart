@@ -66,7 +66,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                 children: [
                   const Icon(Icons.person,
                       size: 50, color: AppColors.lightblue),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     userName,
                     style: const TextStyle(
@@ -90,7 +90,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             Container(
               padding: const EdgeInsets.all(16),
@@ -103,7 +103,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                 children: [
                   Text(
                     'From admin',
-                    style: leaveFontStyle.style,
+                    style: LeaveFontStyle.style,
                   ),
                   const SizedBox(height: 8),
                   Text(

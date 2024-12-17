@@ -71,7 +71,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
                 selectedDate == null
                     ? widget.label
                     : DateFormat('dd/MM/yyyy').format(selectedDate!),
-                style: leaveFontStyle.style,
+                style: LeaveFontStyle.style,
               ),
             ),
           ],

@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen>
     Timer(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
     });
   }
@@ -150,11 +150,9 @@ class _SplashScreenState extends State<SplashScreen>
                     position: _slideAnimation,
                     child: ScaleTransition(
                       scale: _scaleAnimation,
-                      child: Container(
-                        child: Image.asset(
-                          'assets/images/Splash.png',
-                          fit: BoxFit.contain,
-                        ),
+                      child: Image.asset(
+                        'assets/images/Splash.png',
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),

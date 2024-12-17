@@ -36,7 +36,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       keyboardType: widget.keyboardType,
       decoration: InputDecoration(
         labelText: widget.labelText,
-        labelStyle: leaveFontStyle.style,
+        labelStyle: LeaveFontStyle.style,
         prefixIcon: Icon(
           widget.prefixIcon,
           size: 25,

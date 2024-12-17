@@ -12,7 +12,7 @@ class HeaderFontStyle {
   }
 }
 
-class leaveFontStyle {
+class LeaveFontStyle {
   static TextStyle get style {
     return const TextStyle(
       fontSize: 16.0,
