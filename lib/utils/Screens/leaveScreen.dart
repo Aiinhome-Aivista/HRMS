@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hrms/components/CustomButton.dart';
 import 'package:hrms/components/CustomFloatingButton.dart';
+import 'package:hrms/components/DatePickerField.dart';
 import 'package:hrms/components/TransparentPageRoute.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
@@ -63,20 +64,24 @@ class _LeaveScreenState extends State<LeaveScreen> {
                 isDropdown: true,
               ),
               SizedBox(height: 20),
-              _buildDateField(
+              DatePickerField(
                 icon: Icons.calendar_month,
-                hintText: startDate == null
-                    ? 'Leave start'
-                    : DateFormat('dd/MM/yyyy').format(startDate!),
-                onTap: _selectStartDate,
+                label: 'Leave start',
+                onDateSelected: (date) {
+                  setState(() {
+                    startDate = date;
+                  });
+                },
               ),
               SizedBox(height: 20),
-              _buildDateField(
+              DatePickerField(
                 icon: Icons.calendar_month,
-                hintText: endDate == null
-                    ? 'Leave end'
-                    : DateFormat('dd/MM/yyyy').format(endDate!),
-                onTap: _selectEndDate,
+                label: 'Leave end',
+                onDateSelected: (date) {
+                  setState(() {
+                    endDate = date;
+                  });
+                },
               ),
               SizedBox(height: 20),
               _buildInputField(
@@ -111,83 +116,6 @@ class _LeaveScreenState extends State<LeaveScreen> {
         icon: Icons.add,
       ),
     );
-  }
-
-  Widget _buildDateField({
-    required IconData icon,
-    required String hintText,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: AppColors.lightblue,
-            width: 1,
-          ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 45,
-              height: 45,
-              decoration: BoxDecoration(
-                color: AppColors.lightblue,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                icon,
-                color: Colors.black,
-              ),
-            ),
-            SizedBox(width: 12),
-            Expanded(
-              child: TextField(
-                readOnly: true,
-                decoration: InputDecoration(
-                  hintText: hintText,
-                  hintStyle: leaveFontStyle.style,
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> _selectStartDate() async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: startDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-
-    if (picked != null && picked != startDate) {
-      setState(() {
-        startDate = picked;
-      });
-    }
-  }
-
-  Future<void> _selectEndDate() async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: endDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-
-    if (picked != null && picked != endDate) {
-      setState(() {
-        endDate = picked;
-      });
-    }
   }
 
   Widget _buildInputField({

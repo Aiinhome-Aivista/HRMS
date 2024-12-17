@@ -126,13 +126,13 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
       padding: EdgeInsets.only(top: screenHeight * 0.019),
       child: NavigationDestination(
         selectedIcon: Container(
-          width: 35,
-          height: 35,
+          width: 25,
+          height: 25,
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.white,
           ),
-          child: SvgPicture.asset(iconPath, height: 20, width: 20),
+          child: SvgPicture.asset(iconPath),
         ),
         icon: SvgPicture.asset(
           iconPath,
