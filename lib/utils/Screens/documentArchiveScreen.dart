@@ -7,6 +7,8 @@ import 'package:hrms/utils/Screens/attandanceScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DocumentArchiveScreen extends StatefulWidget {
+  const DocumentArchiveScreen({super.key});
+
   @override
   State<DocumentArchiveScreen> createState() => _DocumentArchiveScreenState();
 }
@@ -67,7 +69,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                   SizedBox(height: 8),
                   Text(
                     userName,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: AppColors.lightblue,
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
@@ -76,7 +78,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                     userEmail,
                     style: docArchiveFontStyle.style,
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
