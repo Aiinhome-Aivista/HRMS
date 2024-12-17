@@ -8,6 +8,7 @@ import 'package:hrms/components/CustomButton.dart';
 import 'package:hrms/components/CustomTextField.dart';
 import 'package:hrms/components/loading_spinner.dart';
 import 'package:hrms/components/showToast.dart';
+import 'package:hrms/styleColor.dart';
 import 'package:hrms/utils/Screens/locationFillScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -25,7 +26,23 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    _updateButtonState();
   }
+
+  // Function to update the button state
+  void _updateButtonState() {
+    _emailController.addListener(() {
+      setState(() {});
+    });
+
+    _passwordController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  // Function to check if the email and password fields are not empty
+  bool get _isButtonEnabled =>
+      _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
   Future<void> fetchLocation() async {
     try {
@@ -147,9 +164,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Animated Login Button
                   CustomButton(
                     buttonText: 'LOGIN',
-                    onPressed: () async {
-                      loginUser();
-                    },
+                    onPressed: _isButtonEnabled ? loginUser : () {},
+                    backgroundColor: _isButtonEnabled
+                        ? AppColors.lightblue
+                        : AppColors.greyShade2,
                   )
                 ],
               ),

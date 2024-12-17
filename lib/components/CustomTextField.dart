@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
   final IconData prefixIcon;
@@ -19,21 +19,28 @@ class CustomTextField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _CustomTextFieldState createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  bool _isPasswordVisible = false;
+
+  @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: controller,
+      controller: widget.controller,
       style: const TextStyle(
         color: AppColors.lightblue,
       ),
-      obscureText: isPassword,
-      keyboardType: keyboardType,
+      obscureText: widget.isPassword && !_isPasswordVisible,
+      keyboardType: widget.keyboardType,
       decoration: InputDecoration(
-        labelText: labelText,
+        labelText: widget.labelText,
         labelStyle: leaveFontStyle.style,
         prefixIcon: Icon(
-          prefixIcon,
+          widget.prefixIcon,
           size: 25,
-          color: const Color.fromRGBO(143, 181, 255, 0.5),
+          color: AppColors.greyShade2,
         ),
         contentPadding: const EdgeInsets.symmetric(
           vertical: 15.0,
@@ -55,6 +62,20 @@ class CustomTextField extends StatelessWidget {
             width: 2.0,
           ),
         ),
+        suffixIcon: widget.isPassword
+            ? IconButton(
+                icon: Icon(
+                    _isPasswordVisible
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                    color: AppColors.greyShade2),
+                onPressed: () {
+                  setState(() {
+                    _isPasswordVisible = !_isPasswordVisible;
+                  });
+                },
+              )
+            : null,
       ),
     );
   }

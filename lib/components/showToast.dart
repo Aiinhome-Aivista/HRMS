@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrms/styleColor.dart';
 
 class CustomToast {
   static void show(BuildContext context, String message) {
@@ -13,12 +14,13 @@ class CustomToast {
           child: Container(
             padding:
                 const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-            decoration: const BoxDecoration(
-              color: Colors.grey,
+            decoration: BoxDecoration(
+              color: AppColors.greyShade2,
+              borderRadius: BorderRadius.circular(30.0),
             ),
             child: Text(
               message,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black),
               textAlign: TextAlign.center,
             ),
           ),
