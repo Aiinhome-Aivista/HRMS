@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/utils/Screens/documentArchiveScreen.dart';
 import 'package:hrms/utils/Screens/leaveScreen.dart';
-import 'package:hrms/utils/Screens/loginSreen.dart';
 
 class BottamnavigationBar extends StatefulWidget {
   const BottamnavigationBar({Key? key}) : super(key: key);
@@ -51,10 +50,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
-                );
+                Navigator.of(context).pop();
                 // Implement logout logic here
               },
               child: const Text('Logout'),
