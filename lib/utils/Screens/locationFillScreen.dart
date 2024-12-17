@@ -41,27 +41,27 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: AppColors.lightblue,
-          ),
-          onPressed: () {
-            Navigator.pop(context); // Navigate back to the previous screen
-          },
-        ),
-        title: const Text(
-          'Select location',
-          style: TextStyle(
-            color: AppColors.lightblue,
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-          ),
-        ),
-        titleSpacing: 0,
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
+      //   leading: IconButton(
+      //     icon: const Icon(
+      //       Icons.arrow_back,
+      //       color: AppColors.lightblue,
+      //     ),
+      //     onPressed: () {
+      //       Navigator.pop(context); // Navigate back to the previous screen
+      //     },
+      //   ),
+      //   title: const Text(
+      //     'Select location',
+      //     style: TextStyle(
+      //       color: AppColors.lightblue,
+      //       fontWeight: FontWeight.w600,
+      //       fontSize: 20,
+      //     ),
+      //   ),
+      //   titleSpacing: 0,
+      // ),
       backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(50, 0, 50, 50),
@@ -125,7 +125,23 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
                   //Activityscreen()),
                 );
               },
-            )
+            ),
+            const SizedBox(height: 20.0),
+
+           GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Back to Login',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: AppColors.lightblue,
+                  
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
           ],
         ),
       ),

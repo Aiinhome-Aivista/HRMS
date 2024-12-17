@@ -9,6 +9,7 @@ import 'package:hrms/components/CustomTextField.dart';
 import 'package:hrms/components/loading_spinner.dart';
 import 'package:hrms/components/showToast.dart';
 import 'package:hrms/styleColor.dart';
+import 'package:hrms/utils/Screens/forgotPassword.dart';
 import 'package:hrms/utils/Screens/locationFillScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -185,7 +186,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ForgotPassword(),
+                          ),
+                        );
+                      },
                       child: const Padding(
                         padding: EdgeInsets.only(right: 10),
                         child: Text(
@@ -199,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 const SizedBox(height: 10.0),
-                
+
                 // Login Button
                 CustomButton(
                   buttonText: 'LOGIN',
