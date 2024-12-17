@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hrms/components/CustomButton.dart';
 import 'package:hrms/components/CustomFloatingButton.dart';
 import 'package:hrms/components/TransparentPageRoute.dart';
 import 'package:hrms/styleColor.dart';
@@ -16,6 +17,14 @@ class _LeaveScreenState extends State<LeaveScreen> {
   String? selectedLeaveType;
   DateTime? startDate;
   DateTime? endDate;
+  TextEditingController causesController = TextEditingController();
+
+  bool get isFormValid {
+    return selectedLeaveType != null &&
+        startDate != null &&
+        endDate != null &&
+        causesController.text.isNotEmpty;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,25 +82,16 @@ class _LeaveScreenState extends State<LeaveScreen> {
               _buildInputField(
                 hintText: '     Causes...',
                 maxLines: 4,
+                causesController: causesController,
               ),
               SizedBox(height: 20),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.lightblue,
-                    minimumSize: Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text(
-                    'Apply',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
+              SizedBox(
+                width: double.infinity,
+                child: CustomButton(
+                  buttonText: 'Apply',
+                  onPressed: isFormValid ? () {} : () {},
+                  backgroundColor:
+                      isFormValid ? AppColors.lightblue : AppColors.greyShade2,
                 ),
               ),
             ],
@@ -193,6 +193,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
     bool isReadOnly = false,
     int maxLines = 1,
     Color borderColor = AppColors.lightblue,
+    TextEditingController? causesController,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -245,13 +246,23 @@ class _LeaveScreenState extends State<LeaveScreen> {
                     },
                   )
                 : TextField(
+                    controller: causesController,
                     readOnly: isReadOnly,
-                    maxLines: hintText == 'Causes...' ? 4 : maxLines,
+                    maxLines: hintText == 'Causes...'
+                        ? 4
+                        : maxLines, // Ensure multi-line works
+                    style: const TextStyle(color: AppColors.lightblue),
+                    textInputAction:
+                        TextInputAction.done, // Set input action to "Done"
+                    keyboardType: TextInputType.text, // Standard keyboard
                     decoration: InputDecoration(
                       hintText: hintText,
                       hintStyle: leaveFontStyle.style,
                       border: InputBorder.none,
                     ),
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                   ),
           ),
         ],

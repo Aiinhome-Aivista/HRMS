@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
-  bool _rememberMe = false; // For Remember Me Checkbox
+  bool _rememberMe = false;
 
   @override
   void initState() {
@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(50.0),
+            padding: const EdgeInsets.all(45.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -164,6 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   isPassword: true,
                 ),
 
+                const SizedBox(height: 20),
                 // Row for Remember Me Checkbox and Forgot Password
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -219,7 +220,15 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-          if (_isLoading) const LoadingSpinner(),
+          if (_isLoading)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const Center(
+                  child: LoadingSpinner(),
+                ),
+              ),
+            ),
         ],
       ),
     );

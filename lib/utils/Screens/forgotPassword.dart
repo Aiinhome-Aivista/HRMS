@@ -94,7 +94,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               ],
             ),
           ),
-          if (_isLoading) const LoadingSpinner()
+          if (_isLoading)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const Center(
+                  child: LoadingSpinner(),
+                ),
+              ),
+            ),
         ],
       ),
     );
