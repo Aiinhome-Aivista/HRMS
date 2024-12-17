@@ -7,7 +7,7 @@ import 'package:hrms/components/TransparentPageRoute.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:hrms/utils/Screens/attandanceScreen.dart';
-import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LeaveScreen extends StatefulWidget {
   @override
@@ -19,12 +19,29 @@ class _LeaveScreenState extends State<LeaveScreen> {
   DateTime? startDate;
   DateTime? endDate;
   TextEditingController causesController = TextEditingController();
+  String userName = '';
 
   bool get isFormValid {
     return selectedLeaveType != null &&
         startDate != null &&
         endDate != null &&
         causesController.text.isNotEmpty;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _SavedCredentials();
+  }
+
+  // Get local storage data
+  Future<void> _SavedCredentials() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? gateUserName = prefs.getString('SaveUserName');
+
+    setState(() {
+      userName = gateUserName ?? '';
+    });
   }
 
   @override
@@ -54,16 +71,16 @@ class _LeaveScreenState extends State<LeaveScreen> {
             children: [
               _buildInputField(
                 icon: Icons.person,
-                hintText: 'Supriti Pal',
+                hintText: userName,
                 isReadOnly: true,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildInputField(
                 icon: Icons.hotel,
                 hintText: 'Leave type',
                 isDropdown: true,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               DatePickerField(
                 icon: Icons.calendar_month,
                 label: 'Leave start',
@@ -73,7 +90,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
                   });
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               DatePickerField(
                 icon: Icons.calendar_month,
                 label: 'Leave end',
@@ -83,13 +100,13 @@ class _LeaveScreenState extends State<LeaveScreen> {
                   });
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildInputField(
                 hintText: '     Causes...',
                 maxLines: 4,
                 causesController: causesController,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: CustomButton(

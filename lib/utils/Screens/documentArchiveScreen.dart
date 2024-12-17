@@ -67,7 +67,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                   SizedBox(height: 8),
                   Text(
                     userName,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: AppColors.lightblue,
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
