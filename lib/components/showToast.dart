@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrms/styleColor.dart';
 
 class CustomToast {
   static void show(
@@ -23,11 +24,7 @@ class CustomToast {
               padding:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [backgroundColor, backgroundColor.withOpacity(0.9)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: AppColors.greyShade,
                 borderRadius: BorderRadius.circular(12.0),
                 boxShadow: [
                   BoxShadow(

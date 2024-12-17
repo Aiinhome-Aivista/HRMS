@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hrms/components/CustomButton.dart';
 import 'package:hrms/components/CustomTextField.dart';
+import 'package:hrms/components/loading_spinner.dart';
 import 'package:hrms/components/showToast.dart';
 import 'package:hrms/styleColor.dart';
 
@@ -94,9 +95,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             ),
           ),
           if (_isLoading)
-            const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.lightblue,
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const Center(
+                  child: LoadingSpinner(),
+                ),
               ),
             ),
         ],
