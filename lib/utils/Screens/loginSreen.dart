@@ -11,6 +11,7 @@ import 'package:hrms/components/showToast.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/utils/Screens/forgotPassword.dart';
 import 'package:hrms/utils/Screens/locationFillScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,12 +24,45 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
-  bool _rememberMe = false; // For Remember Me Checkbox
+  bool _rememberMe = false;
+  bool get _isButtonEnabled =>
+      _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
   @override
   void initState() {
     super.initState();
+    _loadSavedCredentials();
     _updateButtonState();
+  }
+
+  // Get local storage data
+  Future<void> _loadSavedCredentials() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? savedEmail = prefs.getString('saved_email');
+    final String? savedPassword = prefs.getString('saved_password');
+    final bool? rememberMeStatus = prefs.getBool('remember_me');
+
+    if (rememberMeStatus != null && rememberMeStatus) {
+      setState(() {
+        _emailController.text = savedEmail ?? '';
+        _passwordController.text = savedPassword ?? '';
+        _rememberMe = rememberMeStatus;
+      });
+    }
+  }
+
+   // Set local storage data
+  Future<void> _saveCredentials() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (_rememberMe) {
+      await prefs.setString('saved_email', _emailController.text);
+      await prefs.setString('saved_password', _passwordController.text);
+      await prefs.setBool('remember_me', true);
+    } else {
+      await prefs.remove('saved_email');
+      await prefs.remove('saved_password');
+      await prefs.setBool('remember_me', false);
+    }
   }
 
   void _updateButtonState() {
@@ -40,9 +74,6 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {});
     });
   }
-
-  bool get _isButtonEnabled =>
-      _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
   Future<void> fetchLocation() async {
     try {
@@ -71,11 +102,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks.first;
-        String city = place.locality ?? 'Unknown';
-        String state = place.administrativeArea ?? 'Unknown';
-
-        print('City is: $city');
-        print('State is: $state');
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -95,31 +121,29 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void loginUser() async {
-    if (_emailController.text.isEmpty && _passwordController.text.isEmpty) {
-      CustomToast.show(
-        context,
-        'User name and Password is required',
-      );
-    } else {
-      setState(() {
-        _isLoading = true;
-      });
-      POST_API postApi = POST_API();
-      Map<String, dynamic> response = await postApi.login(
-        _emailController.text,
-        _passwordController.text,
-      );
+    setState(() {
+      _isLoading = true;
+    });
 
-      if (response['status'] == true) {
-        fetchLocation();
-        print('Login Successful: ${response['user']}');
-      } else {
-        print('Login Failed: ${response['msg']}');
-        CustomToast.show(context, response['msg']);
-        setState(() {
-          _isLoading = false;
-        });
-      }
+    POST_API postApi = POST_API();
+    Map<String, dynamic> response = await postApi.login(
+      _emailController.text,
+      _passwordController.text,
+    );
+
+    if (response['status'] == true) {
+      await _saveCredentials();
+      fetchLocation();
+      print('Login Successful: ${response['user']}');
+      // Set local storage data
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('SaveUserName', response['user']['emp_name']);
+      await prefs.setString('SaveUserEmail', response['user']['emp_email']);
+    } else {
+      CustomToast.show(context, response['msg']);
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
