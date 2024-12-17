@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hrms/components/showToast.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/components/CustomButton.dart';
 import 'package:hrms/components/CustomTextField.dart';
@@ -124,24 +125,27 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
                       builder: (context) => const BottamnavigationBar()),
                   //Activityscreen()),
                 );
+                CustomToast.show(
+                  context,
+                  'Location save Successful',
+                );
               },
             ),
             const SizedBox(height: 20.0),
 
-           GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    'Back to Login',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: AppColors.lightblue,
-                  
-                      fontSize: 16.0,
-                    ),
-                  ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Back to Login',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppColors.lightblue,
+                  fontSize: 16.0,
                 ),
+              ),
+            ),
           ],
         ),
       ),

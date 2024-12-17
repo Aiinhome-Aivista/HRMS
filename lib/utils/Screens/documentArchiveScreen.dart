@@ -4,8 +4,34 @@ import 'package:hrms/components/TransparentPageRoute.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:hrms/utils/Screens/attandanceScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class DocumentArchiveScreen extends StatelessWidget {
+class DocumentArchiveScreen extends StatefulWidget {
+  @override
+  State<DocumentArchiveScreen> createState() => _DocumentArchiveScreenState();
+}
+
+class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
+  String userName = '';
+  String userEmail = '';
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
+
+  // Get local storage data
+  Future<void> _loadSavedCredentials() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? gateUserName = prefs.getString('SaveUserName');
+    final String? gateUserEmail = prefs.getString('SaveUserEmail');
+
+    setState(() {
+      userName = gateUserName ?? '';
+      userEmail = gateUserEmail ?? '';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,15 +65,15 @@ class DocumentArchiveScreen extends StatelessWidget {
                   const Icon(Icons.person,
                       size: 50, color: AppColors.lightblue),
                   SizedBox(height: 8),
-                  const Text(
-                    'Supriti Pal',
+                  Text(
+                    userName,
                     style: TextStyle(
                         color: AppColors.lightblue,
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    'supritipal2016@gmail.com',
+                    userEmail,
                     style: docArchiveFontStyle.style,
                   ),
                   SizedBox(height: 16),
