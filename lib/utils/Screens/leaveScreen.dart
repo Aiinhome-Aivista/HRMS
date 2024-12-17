@@ -31,11 +31,11 @@ class _LeaveScreenState extends State<LeaveScreen> {
   @override
   void initState() {
     super.initState();
-    _SavedCredentials();
+    _savedCredentials();
   }
 
   // Get local storage data
-  Future<void> _SavedCredentials() async {
+  Future<void> _savedCredentials() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? gateUserName = prefs.getString('SaveUserName');
 
@@ -168,7 +168,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
                 color: Colors.black,
               ),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
           ],
           Expanded(
             child: isDropdown
