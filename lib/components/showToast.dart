@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hrms/styleColor.dart';
 
 class CustomToast {
   static void show(
-    BuildContext context, 
+    BuildContext context,
     String message, {
     Color backgroundColor = const Color.fromARGB(237, 1, 8, 2),
     Color textColor = Colors.white,
@@ -21,7 +20,8 @@ class CustomToast {
           child: Material(
             color: Colors.transparent,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [backgroundColor, backgroundColor.withOpacity(0.9)],
@@ -66,9 +66,8 @@ class CustomToast {
     );
 
     overlay.insert(overlayEntry);
-    
+
     Future.delayed(duration, () async {
-      // Fade out the toast before removing it
       try {
         overlayEntry.markNeedsBuild();
         await Future.delayed(const Duration(milliseconds: 300));
