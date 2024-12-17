@@ -22,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
+  bool _rememberMe = false; // For Remember Me Checkbox
 
   @override
   void initState() {
@@ -29,7 +30,6 @@ class _LoginScreenState extends State<LoginScreen> {
     _updateButtonState();
   }
 
-  // Function to update the button state
   void _updateButtonState() {
     _emailController.addListener(() {
       setState(() {});
@@ -40,7 +40,6 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  // Function to check if the email and password fields are not empty
   bool get _isButtonEnabled =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
@@ -160,23 +159,58 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomTextField(
                   controller: _passwordController,
                   labelText: 'PASSWORD',
-                  prefixIcon: Icons.privacy_tip,
+                  prefixIcon: Icons.lock,
                   isPassword: true,
                 ),
-                const SizedBox(height: 24.0),
 
-                  // Animated Login Button
-                  CustomButton(
-                    buttonText: 'LOGIN',
-                    onPressed: _isButtonEnabled ? loginUser : () {},
-                    backgroundColor: _isButtonEnabled
-                        ? AppColors.lightblue
-                        : AppColors.greyShade2,
-                  )
-                ],
-              ),
+                // Row for Remember Me Checkbox and Forgot Password
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: _rememberMe,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _rememberMe = value ?? false;
+                            });
+                          },
+                          activeColor: AppColors.lightblue,
+                        ),
+                        const Text(
+                          'Remember Me',
+                          style: TextStyle(color: AppColors.lightblue),
+                        ),
+                      ],
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            color: AppColors.lightblue,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10.0),
+                
+                // Login Button
+                CustomButton(
+                  buttonText: 'LOGIN',
+                  onPressed: _isButtonEnabled ? loginUser : () {},
+                  backgroundColor: _isButtonEnabled
+                      ? AppColors.lightblue
+                      : AppColors.greyShade2,
+                )
+              ],
             ),
-          
+          ),
           if (_isLoading) const Center(child: LoadingSpinner()),
         ],
       ),
