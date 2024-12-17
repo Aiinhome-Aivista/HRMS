@@ -9,7 +9,7 @@ class LoadingSpinner extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       child: const CircularProgressIndicator(
-        color: AppColors.greyShade,
+        color: AppColors.lightblue,
       ),
     );
   }

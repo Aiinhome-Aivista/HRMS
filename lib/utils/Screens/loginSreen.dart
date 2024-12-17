@@ -29,7 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> fetchLocation() async {
     try {
-      // Check and request location permission
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
@@ -40,12 +39,10 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       }
 
-      // Get the current position
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      // Get the address from latitude and longitude
       List<Placemark> placemarks = await placemarkFromCoordinates(
         position.latitude,
         position.longitude,
@@ -81,24 +78,31 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void loginUser() async {
-    setState(() {
-      _isLoading = true;
-    });
-    POST_API postApi = POST_API();
-    Map<String, dynamic> response = await postApi.login(
-      _emailController.text,
-      _passwordController.text,
-    );
-
-    if (response['status'] == true) {
-      fetchLocation();
-      print('Login Successful: ${response['user']}');
+    if (_emailController.text.isEmpty && _passwordController.text.isEmpty) {
+      CustomToast.show(
+        context,
+        'User name and Password is required',
+      );
     } else {
-      print('Login Failed: ${response['msg']}');
-      CustomToast.show(context, response['msg']);
       setState(() {
-        _isLoading = false;
+        _isLoading = true;
       });
+      POST_API postApi = POST_API();
+      Map<String, dynamic> response = await postApi.login(
+        _emailController.text,
+        _passwordController.text,
+      );
+
+      if (response['status'] == true) {
+        fetchLocation();
+        print('Login Successful: ${response['user']}');
+      } else {
+        print('Login Failed: ${response['msg']}');
+        CustomToast.show(context, response['msg']);
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -109,51 +113,54 @@ class _LoginScreenState extends State<LoginScreen> {
     ));
 
     return Scaffold(
-      backgroundColor: Color.fromRGBO(8, 12, 17, 1),
-      body: _isLoading
-          ? LoadingSpinner()
-          : Padding(
-              padding: const EdgeInsets.all(50.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: SvgPicture.asset(
-                      'assets/images/login.svg',
-                    ),
+      backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(50.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: SvgPicture.asset(
+                    'assets/images/login.svg',
                   ),
-                  const SizedBox(height: 70.0),
+                ),
+                const SizedBox(height: 70.0),
 
-                  // Email TextField
-                  CustomTextField(
-                    controller: _emailController,
-                    labelText: 'USER NAME',
-                    prefixIcon: Icons.person,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  const SizedBox(height: 20.0),
+                // Email TextField
+                CustomTextField(
+                  controller: _emailController,
+                  labelText: 'USER NAME',
+                  prefixIcon: Icons.person,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 20.0),
 
-                  // Password TextField
-                  CustomTextField(
-                    controller: _passwordController,
-                    labelText: 'PASSWORD',
-                    prefixIcon: Icons.privacy_tip,
-                    isPassword: true,
-                  ),
-                  const SizedBox(height: 24.0),
+                // Password TextField
+                CustomTextField(
+                  controller: _passwordController,
+                  labelText: 'PASSWORD',
+                  prefixIcon: Icons.privacy_tip,
+                  isPassword: true,
+                ),
+                const SizedBox(height: 24.0),
 
-                  // Animated Login Button
-                  CustomButton(
-                    buttonText: 'LOGIN',
-                    onPressed: () async {
-                      loginUser();
-                    },
-                  )
-                ],
-              ),
+                // Login Button
+                CustomButton(
+                  buttonText: 'LOGIN',
+                  onPressed: () async {
+                    loginUser();
+                  },
+                ),
+              ],
             ),
+          ),
+          if (_isLoading) const Center(child: LoadingSpinner()),
+        ],
+      ),
     );
   }
 }
