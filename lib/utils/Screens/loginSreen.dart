@@ -219,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-          if (_isLoading) const Center(child: LoadingSpinner()),
+          if (_isLoading) const LoadingSpinner(),
         ],
       ),
     );
