@@ -9,11 +9,11 @@ class DatePickerField extends StatefulWidget {
   final Function(DateTime) onDateSelected;
 
   const DatePickerField({
-    Key? key,
+    super.key,
     required this.icon,
     required this.label,
     required this.onDateSelected,
-  }) : super(key: key);
+  });
 
   @override
   _DatePickerFieldState createState() => _DatePickerFieldState();
@@ -65,7 +65,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
                 color: Colors.black,
               ),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Expanded(
               child: Text(
                 selectedDate == null

@@ -10,14 +10,14 @@ class CustomButton extends StatefulWidget {
   final Duration animationDuration;
 
   const CustomButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.buttonText,
     this.backgroundColor = AppColors.lightblue,
     this.textColor = const Color.fromRGBO(8, 12, 17, 1),
     this.padding = const EdgeInsets.symmetric(vertical: 16.0),
     this.animationDuration = const Duration(milliseconds: 200),
-  }) : super(key: key);
+  });
 
   @override
   _CustomButtonState createState() => _CustomButtonState();

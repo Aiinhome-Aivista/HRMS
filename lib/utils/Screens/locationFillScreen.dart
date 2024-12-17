@@ -10,8 +10,7 @@ class Locationfillscreen extends StatefulWidget {
   final String city;
   final String state;
 
-  const Locationfillscreen({Key? key, required this.city, required this.state})
-      : super(key: key);
+  const Locationfillscreen({super.key, required this.city, required this.state});
 
   @override
   State<Locationfillscreen> createState() => _LocationfillscreenState();

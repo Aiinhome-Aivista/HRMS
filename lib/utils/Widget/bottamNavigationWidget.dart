@@ -6,7 +6,7 @@ import 'package:hrms/utils/Screens/leaveScreen.dart';
 import 'package:hrms/utils/Screens/loginSreen.dart';
 
 class BottamnavigationBar extends StatefulWidget {
-  const BottamnavigationBar({Key? key}) : super(key: key);
+  const BottamnavigationBar({super.key});
 
   @override
   State<BottamnavigationBar> createState() => _BottamnavigationBarState();
@@ -16,7 +16,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
   int _currentPage = 0;
 
   final List<Widget> _pages = [
-    Center(child: DocumentArchiveScreen()),
+    const Center(child: DocumentArchiveScreen()),
     // const Center(child: Attandancescreen()),
     Center(child: LeaveScreen()),
     const Center(child: Text('Logout')),

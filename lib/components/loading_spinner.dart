@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hrms/styleColor.dart';
 
 class LoadingSpinner extends StatelessWidget {
-  const LoadingSpinner({Key? key}) : super(key: key);
+  const LoadingSpinner({super.key});
 
   @override
   Widget build(BuildContext context) {

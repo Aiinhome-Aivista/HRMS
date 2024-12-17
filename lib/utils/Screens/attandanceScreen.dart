@@ -53,7 +53,7 @@ class _AttandancescreenState extends State<Attandancescreen> {
     final double screenWidth = MediaQuery.of(context).size.width;
 
     // Icon position offsets and swipe button size
-    final double buttonSize = 80.0;
+    const double buttonSize = 80.0;
 
     // Calculate limits based on icon positions
     _leftLimit = -(screenWidth * 0.1 +
