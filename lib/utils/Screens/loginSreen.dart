@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
 
-  Future<void> loginAndFetchLocation() async {
+  Future<void> fetchLocation() async {
     try {
       // Check and request location permission
       LocationPermission permission = await Geolocator.checkPermission();
@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     if (response['status'] == true) {
-      loginAndFetchLocation();
+      fetchLocation();
       print('Login Successful: ${response['user']}');
     } else {
       print('Login Failed: ${response['msg']}');
