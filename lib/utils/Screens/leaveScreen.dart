@@ -127,7 +127,7 @@ class _LeaveScreenState extends State<LeaveScreen> {
       floatingActionButton: CustomFloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
-            TransparentPageRoute.create(const Attandancescreen()),
+            TransparentPageRoute.create(const AttendanceScreen()),
           );
         },
         icon: Icons.add,

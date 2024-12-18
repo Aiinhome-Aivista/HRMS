@@ -83,14 +83,14 @@ class _DateDisplayState extends State<DateDisplay> {
     if ((parsedTime.isAtSameMomentAs(greenStart) ||
             parsedTime.isAfter(greenStart)) &&
         parsedTime.isBefore(greenEnd.add(const Duration(seconds: 1)))) {
-      return const Color.fromARGB(195, 139, 248, 143);
+      return const Color.fromRGBO(190, 249, 205, 0.5);
     } else if ((parsedTime.isAtSameMomentAs(yellowStart) ||
             parsedTime.isAfter(yellowStart)) &&
         parsedTime.isBefore(yellowEnd.add(const Duration(seconds: 1)))) {
-      return const Color.fromARGB(195, 255, 240, 110);
+      return const Color.fromRGBO(249, 235, 190, 0.5);
     } else if (parsedTime.isAtSameMomentAs(redStart) ||
         parsedTime.isAfter(redStart)) {
-      return const Color.fromARGB(192, 245, 102, 92);
+      return const Color.fromRGBO(249, 190, 191, 0.5);
     }
 
     return null;
