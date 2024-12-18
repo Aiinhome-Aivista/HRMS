@@ -1,6 +1,7 @@
-// EventCard.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hrms/styleColor.dart';
+import 'package:hrms/textStyle.dart';
 
 class LeaveEventCard extends StatelessWidget {
   final String title;
@@ -18,16 +19,28 @@ class LeaveEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String imageAsset;
+
+    if (leaveStatus == 'Approved') {
+      imageAsset = 'assets/images/approve.svg';
+    } else if (leaveStatus == 'Cancelled') {
+      imageAsset = 'assets/images/cancel.svg';
+    } else if (leaveStatus == 'Pending') {
+      imageAsset = 'assets/images/pending.svg';
+    } else {
+      imageAsset = 'assets/images/leaveCardIcon.svg';
+    }
+
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: AppColors.blackShade,
+        color: AppColors.leaveCardColor,
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
+            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
             decoration: BoxDecoration(
               gradient: title == 'Half Day'
                   ? const LinearGradient(
@@ -42,59 +55,31 @@ class LeaveEventCard extends StatelessWidget {
               color: AppColors.lightblue,
               borderRadius: BorderRadius.circular(20.0),
             ),
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            child: Text(title, style: leaveCardTextStyle.style),
           ),
-          const SizedBox(width: 16.0), // Spacing between title and date
+          const SizedBox(width: 16.0),
 
-          // Date and time details
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // 'From' and its date
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'From',
-                      style: TextStyle(
-                        color: Colors.grey[400],
-                        fontSize: 12.0,
-                      ),
-                    ),
+                    Text('From', style: leaveCardTextStyle.style),
                     Text(
                       '${startDate.day}/${startDate.month}/${startDate.year}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: leaveCardDateStyle.style,
                     ),
                   ],
                 ),
-
-                // 'To' and its date
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'To',
-                      style: TextStyle(
-                        color: Colors.grey[400],
-                        fontSize: 12.0,
-                      ),
-                    ),
+                    Text('To', style: leaveCardTextStyle.style),
                     Text(
                       '${endDate.day}/${endDate.month}/${endDate.year}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: leaveCardDateStyle.style,
                     ),
                   ],
                 ),
@@ -105,14 +90,32 @@ class LeaveEventCard extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(left: 10.0),
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-            child: Text(
-              leaveStatus,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/images/leaveCardIcon.svg',
+                      width: 15,
+                      height: 15,
+                    ),
+                    const SizedBox(width: 8),
+                    SvgPicture.asset(
+                      imageAsset,
+                      width: 15,
+                      height: 15,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  leaveStatus,
+                  style: leaveCardTextStyle.style,
+                ),
+              ],
             ),
-          ),
+          )
         ],
       ),
     );

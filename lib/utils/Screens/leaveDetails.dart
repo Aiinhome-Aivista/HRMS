@@ -32,7 +32,7 @@ class _LeavedetailsState extends State<Leavedetails> {
       "title": "Full Day",
       "startDate": "2024-12-25",
       "endDate": "2024-12-30",
-      "leaveStatus": "Approve"
+      "leaveStatus": "Approved"
     },
     {
       "title": "Half Day",
@@ -44,13 +44,13 @@ class _LeavedetailsState extends State<Leavedetails> {
       "title": "Full Day",
       "startDate": "2025-01-05",
       "endDate": "2025-01-05",
-      "leaveStatus": "Approve"
+      "leaveStatus": "Approved"
     },
     {
       "title": "Half Day",
       "startDate": "2025-01-10",
       "endDate": "2025-01-10",
-      "leaveStatus": "Rejected"
+      "leaveStatus": "Cancelled"
     },
     {
       "title": "Full Day",
@@ -62,13 +62,13 @@ class _LeavedetailsState extends State<Leavedetails> {
       "title": "Half Day",
       "startDate": "2025-03-22",
       "endDate": "2025-03-22",
-      "leaveStatus": "Approve"
+      "leaveStatus": "Approved"
     },
     {
       "title": "Full Day",
       "startDate": "2025-04-01",
       "endDate": "2025-04-03",
-      "leaveStatus": "Approve"
+      "leaveStatus": "Approved"
     },
     {
       "title": "Half Day",
@@ -122,7 +122,6 @@ class _LeavedetailsState extends State<Leavedetails> {
       ),
       backgroundColor: AppColors.backgroundColor,
       body: RefreshIndicator(
-        // Add RefreshIndicator for swipe-to-refresh
         onRefresh: _onRefresh,
         child: Padding(
           padding: const EdgeInsets.all(16),

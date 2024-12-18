@@ -67,3 +67,25 @@ class selectedNavBarTextStyle {
     );
   }
 }
+
+class leaveCardTextStyle {
+  static TextStyle get style {
+    return const TextStyle(
+      fontSize: 12.0,
+      fontFamily: 'Khula',
+      fontWeight: FontWeight.w700,
+      color: AppColors.unselectedNavBarColor,
+    );
+  }
+}
+
+class leaveCardDateStyle {
+  static TextStyle get style {
+    return const TextStyle(
+      fontSize: 14.0,
+      fontFamily: 'Khula',
+      fontWeight: FontWeight.w700,
+      color: AppColors.unselectedNavBarColor,
+    );
+  }
+}
