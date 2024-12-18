@@ -45,3 +45,25 @@ class docArchiveNumStyle {
     );
   }
 }
+
+class unselectedNavBarTextStyle {
+  static TextStyle get style {
+    return const TextStyle(
+      fontSize: 14.0,
+      fontFamily: 'Inter',
+      fontWeight: FontWeight.w400,
+      color: AppColors.unselectedNavBarColor,
+    );
+  }
+}
+
+class selectedNavBarTextStyle {
+  static TextStyle get style {
+    return const TextStyle(
+      fontSize: 14.0,
+      fontFamily: 'Inter',
+      fontWeight: FontWeight.w700,
+      color: AppColors.selectedNavBarColor,
+    );
+  }
+}
