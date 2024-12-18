@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:hrms/utils/Screens/documentArchiveScreen.dart';
-import 'package:hrms/utils/Screens/leaveScreen.dart';
+import 'package:hrms/utils/Screens/leaveApplyScreen.dart';
 import 'package:hrms/utils/Widget/moreWidget.dart';
 
 class BottamnavigationBar extends StatefulWidget {
@@ -18,7 +18,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
   final List<Widget> _pages = [
     const Center(child: DocumentArchiveScreen()),
     // const Center(child: Attandancescreen()),
-    Center(child: LeaveScreen()),
+    Center(child: Leaveapplyscreen()),
     const Center(child: Morewidget()),
   ];
 

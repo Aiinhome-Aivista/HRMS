@@ -8,6 +8,7 @@ class CustomButton extends StatefulWidget {
   final Color textColor;
   final EdgeInsets padding;
   final Duration animationDuration;
+  final BorderRadius? borderRadius;
 
   const CustomButton({
     super.key,
@@ -17,6 +18,7 @@ class CustomButton extends StatefulWidget {
     this.textColor = const Color.fromRGBO(8, 12, 17, 1),
     this.padding = const EdgeInsets.symmetric(vertical: 16.0),
     this.animationDuration = const Duration(milliseconds: 200),
+    this.borderRadius,
   });
 
   @override
@@ -49,6 +51,11 @@ class _CustomButtonState extends State<CustomButton> {
         style: ElevatedButton.styleFrom(
           backgroundColor: widget.backgroundColor,
           padding: widget.padding,
+          shape: widget.borderRadius != null
+              ? RoundedRectangleBorder(
+                  borderRadius: widget.borderRadius!,
+                )
+              : null,
         ),
         child: Text(
           widget.buttonText,

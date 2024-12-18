@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hrms/components/CustomButton.dart';
 import 'package:hrms/components/CustomFloatingButton.dart';
 import 'package:hrms/components/DatePickerField.dart';
@@ -7,14 +8,15 @@ import 'package:hrms/components/TransparentPageRoute.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:hrms/utils/Screens/attandanceScreen.dart';
+import 'package:hrms/utils/Screens/leaveDetails.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LeaveScreen extends StatefulWidget {
+class Leaveapplyscreen extends StatefulWidget {
   @override
-  _LeaveScreenState createState() => _LeaveScreenState();
+  _LeaveapplyscreenState createState() => _LeaveapplyscreenState();
 }
 
-class _LeaveScreenState extends State<LeaveScreen> {
+class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
   String? selectedLeaveType;
   DateTime? startDate;
   DateTime? endDate;
@@ -52,15 +54,24 @@ class _LeaveScreenState extends State<LeaveScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: Text(
-            'Leave',
-            style: HeaderFontStyle.style,
-          ),
-        ),
+        surfaceTintColor: Colors.transparent,
+        scrolledUnderElevation: 4,
         backgroundColor: AppColors.backgroundColor,
+        elevation: 0,
+        leading: IconButton(
+          icon: SvgPicture.asset(
+            'assets/images/arrow.svg',
+            width: 22,
+            height: 22,
+          ),
+          onPressed: () {},
+        ),
+        title: Text(
+          'Leave Apply',
+          style: HeaderFontStyle.style,
+        ),
+        centerTitle: false,
+        titleSpacing: -5,
       ),
       backgroundColor: AppColors.backgroundColor,
       body: SingleChildScrollView(
@@ -111,9 +122,19 @@ class _LeaveScreenState extends State<LeaveScreen> {
                 width: double.infinity,
                 child: CustomButton(
                   buttonText: 'Apply',
+                  borderRadius: BorderRadius.circular(12),
                   onPressed: isFormValid
                       ? () {
-                          print("apply leave");
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => Leavedetails(
+                                startDate: startDate ?? DateTime.now(),
+                                endDate: endDate ?? DateTime.now(),
+                                selectedLeaveType: selectedLeaveType ?? '',
+                                causes: causesController.text,
+                              ),
+                            ),
+                          );
                         }
                       : () {},
                   backgroundColor:
