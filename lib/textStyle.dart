@@ -45,3 +45,47 @@ class docArchiveNumStyle {
     );
   }
 }
+
+class unselectedNavBarTextStyle {
+  static TextStyle get style {
+    return const TextStyle(
+      fontSize: 14.0,
+      fontFamily: 'Inter',
+      fontWeight: FontWeight.w400,
+      color: AppColors.unselectedNavBarColor,
+    );
+  }
+}
+
+class selectedNavBarTextStyle {
+  static TextStyle get style {
+    return const TextStyle(
+      fontSize: 14.0,
+      fontFamily: 'Inter',
+      fontWeight: FontWeight.w700,
+      color: AppColors.selectedNavBarColor,
+    );
+  }
+}
+
+class leaveCardTextStyle {
+  static TextStyle get style {
+    return const TextStyle(
+      fontSize: 12.0,
+      fontFamily: 'Khula',
+      fontWeight: FontWeight.w700,
+      color: AppColors.unselectedNavBarColor,
+    );
+  }
+}
+
+class leaveCardDateStyle {
+  static TextStyle get style {
+    return const TextStyle(
+      fontSize: 14.0,
+      fontFamily: 'Khula',
+      fontWeight: FontWeight.w700,
+      color: AppColors.unselectedNavBarColor,
+    );
+  }
+}

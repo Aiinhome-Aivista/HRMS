@@ -38,6 +38,7 @@ dependencies:
   intl: ^0.18.0
   table_calendar: ^3.0.0 
   shared_preferences: ^2.1.0
+  slider_button: ^2.1.0
 
 
 dev_dependencies:
