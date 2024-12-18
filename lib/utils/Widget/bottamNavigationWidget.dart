@@ -63,7 +63,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
                     ? AppColors.selectedNavBarColor
                     : AppColors.unselectedNavBarColor,
               ),
-              label: 'Document',
+              label: 'Activity',
             ),
             //    BottomNavigationBarItem(
             //   icon:  SvgPicture.asset(
