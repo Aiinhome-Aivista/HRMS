@@ -34,8 +34,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: Center(
-                        child: Text('Attendance', style: HeaderFontStyle.style),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 35),
+                        child: Center(
+                          child: Text('Attendance', style: HeaderFontStyle.style),
+                        ),
                       ),
                     ),
                     IconButton(

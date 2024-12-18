@@ -13,10 +13,10 @@ class _AttendanceStartState extends State<AttendanceStart> {
   double _xOffset = 0;
   double _yOffset = 0;
   final double _swipeThreshold = 50.0;
-  bool _isFirstSwipeComplete = false;
-  bool _isSecondSwipeComplete = false;
-  bool _isThirdSwipeComplete = false;
-  bool _isFinalSwipeComplete = false;
+  bool _isSelectWorkLocation = false;
+  bool _isSelectBreakStart = false;
+  bool _isSelectBreakComplete = false;
+  bool _isSelectPunchOut = false;
   String _swipeDirectionIS = '';
 
   String? _swipeDirection;
@@ -59,10 +59,10 @@ class _AttendanceStartState extends State<AttendanceStart> {
             _xOffset = 0;
           }
 
-          if (!_isFirstSwipeComplete) {
+          if (!_isSelectWorkLocation) {
             _xOffset += details.delta.dx;
             _yOffset += details.delta.dy;
-          } else if (_isThirdSwipeComplete) {
+          } else if (_isSelectBreakComplete) {
             _yOffset += details.delta.dy;
             _xOffset = 0;
             if (_yOffset < 0) _yOffset = 0;
@@ -84,38 +84,38 @@ class _AttendanceStartState extends State<AttendanceStart> {
       onPanEnd: (details) {
         if (_xOffset.abs() > _swipeThreshold ||
             _yOffset.abs() > _swipeThreshold) {
-          if (!_isFirstSwipeComplete) {
-            _isFirstSwipeComplete = true;
+          if (!_isSelectWorkLocation) {
+            _isSelectWorkLocation = true;
             _swipeDirectionIS = _yOffset > 0 ? 'client' : 'pwc';
-          } else if (!_isSecondSwipeComplete) {
-            _isSecondSwipeComplete = true;
+          } else if (!_isSelectBreakStart) {
+            _isSelectBreakStart = true;
             _swipeDirectionIS = _xOffset > 0 ? 'break_start' : 'skip_next';
-          } else if (!_isThirdSwipeComplete) {
-            _isThirdSwipeComplete = true;
+          } else if (!_isSelectBreakComplete) {
+            _isSelectBreakComplete = true;
             _swipeDirectionIS = _xOffset > 0 ? 'break_complete' : 'skip_next';
           } else {
             _swipeDirectionIS = _yOffset > 0 ? 'punch_out' : '';
-            _isFinalSwipeComplete = true;
+            _isSelectPunchOut = true;
           }
         }
         _resetPosition();
       },
       child: Stack(
         children: [
-          if (!_isFirstSwipeComplete) _buildFirstSwipeUI(context),
-          if (_isFirstSwipeComplete && !_isSecondSwipeComplete)
-            _buildSecondSwipeUI(context),
-          if (_isFirstSwipeComplete &&
-              _isSecondSwipeComplete &&
-              !_isThirdSwipeComplete)
-            _buildThirdSwipeUI(context),
-          if (_isFirstSwipeComplete &&
-              _isSecondSwipeComplete &&
-              _isThirdSwipeComplete &&
-              !_isFinalSwipeComplete)
-            _buildFinalSwipeUI(context),
-          if (!_isFinalSwipeComplete) _buildSwipeControl(),
-          if (_isFinalSwipeComplete) _finalDone(context),
+          if (!_isSelectWorkLocation) _buildSelectWorkLocation(context),
+          if (_isSelectWorkLocation && !_isSelectBreakStart)
+            _buildBreakStart(context),
+          if (_isSelectWorkLocation &&
+              _isSelectBreakStart &&
+              !_isSelectBreakComplete)
+            _buildBreakComplete(context),
+          if (_isSelectWorkLocation &&
+              _isSelectBreakStart &&
+              _isSelectBreakComplete &&
+              !_isSelectPunchOut)
+            __buildPunchOut(context),
+          if (!_isSelectPunchOut) _buildSwipeControl(),
+          if (_isSelectPunchOut) _finalDone(context),
         ],
       ),
     );
@@ -133,7 +133,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
     );
   }
 
-  Widget _buildFirstSwipeUI(BuildContext context) {
+  Widget _buildSelectWorkLocation(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
@@ -167,7 +167,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
     );
   }
 
-  Widget _buildSecondSwipeUI(BuildContext context) {
+  Widget _buildBreakStart(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
@@ -189,14 +189,14 @@ class _AttendanceStartState extends State<AttendanceStart> {
     );
   }
 
-  Widget _buildThirdSwipeUI(BuildContext context) {
+  Widget _buildBreakComplete(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
     return Stack(
       children: [
         _buildIcon(
-          left: screenWidth * 0.05,
+          left: screenWidth * 0.04,
           top: (screenHeight / 6) - 10,
           iconPath: 'assets/images/break_complete.svg',
           isHighlighted: _swipeDirectionIS == 'break_complete',
@@ -211,7 +211,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
     );
   }
 
-  Widget _buildFinalSwipeUI(BuildContext context) {
+  Widget __buildPunchOut(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     return Stack(
