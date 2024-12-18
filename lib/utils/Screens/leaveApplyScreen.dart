@@ -58,19 +58,19 @@ class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
         scrolledUnderElevation: 4,
         backgroundColor: AppColors.backgroundColor,
         elevation: 0,
-        leading: IconButton(
-          icon: SvgPicture.asset(
-            'assets/images/arrow.svg',
-            width: 22,
-            height: 22,
-          ),
-          onPressed: () {},
-        ),
+        // leading: IconButton(
+        //   icon: SvgPicture.asset(
+        //     'assets/images/arrow.svg',
+        //     width: 22,
+        //     height: 22,
+        //   ),
+        //   onPressed: () {},
+        // ),
         title: Text(
           'Leave Apply',
           style: HeaderFontStyle.style,
         ),
-        centerTitle: false,
+        centerTitle: true,
         titleSpacing: -5,
       ),
       backgroundColor: AppColors.backgroundColor,

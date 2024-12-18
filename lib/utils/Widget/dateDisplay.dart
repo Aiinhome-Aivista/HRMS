@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrms/components/timingDetails.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -174,11 +175,26 @@ class _DateDisplayState extends State<DateDisplay> {
         TableCalendar(
           focusedDay: _focusedDay,
           selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+
           onDaySelected: (selectedDay, focusedDay) {
             setState(() {
               _selectedDay = selectedDay;
               _focusedDay = focusedDay;
             });
+
+            // Get the highlight color for the selected day
+            Color? highlightColor = getHighlightColor(selectedDay);
+
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) {
+                return DateModal(
+                  selectedDate: selectedDay,
+                  highlightColor: highlightColor,
+                );
+              },
+            );
           },
           firstDay: DateTime.utc(2000, 1, 1),
           lastDay: DateTime.utc(2101, 12, 31),
