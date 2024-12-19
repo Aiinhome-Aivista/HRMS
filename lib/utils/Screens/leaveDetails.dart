@@ -29,52 +29,60 @@ class Leavedetails extends StatefulWidget {
 class _LeavedetailsState extends State<Leavedetails> {
   final List<dynamic> leaveValues = [
     {
-      "title": "Full Day",
+      "leaveType": "Full Day",
       "startDate": "2024-12-25",
       "endDate": "2024-12-30",
-      "leaveStatus": "Approved"
+      "leaveStatus": "Approved",
+      "causes": "Family vacation planned for Christmas holidays.",
     },
     {
-      "title": "Half Day",
+      "leaveType": "Half Day",
       "startDate": "2024-12-31",
       "endDate": "2024-12-31",
-      "leaveStatus": "Pending"
+      "leaveStatus": "Pending",
+      "causes": "Personal work requiring half a day.",
     },
     {
-      "title": "Full Day",
+      "leaveType": "Full Day",
       "startDate": "2025-01-05",
       "endDate": "2025-01-05",
-      "leaveStatus": "Approved"
+      "leaveStatus": "Approved",
+      "causes": "Attending a family function.",
     },
     {
-      "title": "Half Day",
+      "leaveType": "Half Day",
       "startDate": "2025-01-10",
       "endDate": "2025-01-10",
-      "leaveStatus": "Cancelled"
+      "leaveStatus": "Cancelled",
+      "causes": "Request withdrawn due to schedule change.",
     },
     {
-      "title": "Full Day",
+      "leaveType": "Full Day",
       "startDate": "2025-02-15",
       "endDate": "2025-02-17",
-      "leaveStatus": "Pending"
+      "leaveStatus": "Pending",
+      "causes": "Medical leave awaiting approval.",
     },
     {
-      "title": "Half Day",
+      "leaveType": "Half Day",
       "startDate": "2025-03-22",
       "endDate": "2025-03-22",
-      "leaveStatus": "Approved"
+      "leaveStatus": "Approved",
+      "causes": "Bank-related work scheduled in the afternoon.",
     },
     {
-      "title": "Full Day",
+      "leaveType": "Full Day",
       "startDate": "2025-04-01",
       "endDate": "2025-04-03",
-      "leaveStatus": "Approved"
+      "leaveStatus": "Approved",
+      "causes": "Official training program attendance.",
     },
     {
-      "title": "Half Day",
+      "leaveType": "Half Day",
       "startDate": "2025-05-12",
       "endDate": "2025-05-12",
-      "leaveStatus": "Pending"
+      "leaveStatus": "Pending",
+      "causes": "Half-day leave for attending a seminar.",
     },
   ];
 
@@ -85,7 +93,7 @@ class _LeavedetailsState extends State<Leavedetails> {
   @override
   void initState() {
     super.initState();
-    _resetFilters(); // Reset filters on page load
+    _resetFilters();
   }
 
   Future<void> _onRefresh() async {
@@ -218,10 +226,11 @@ class _LeavedetailsState extends State<Leavedetails> {
           final endDate = DateTime.parse(leave['endDate']);
           return Column(children: [
             LeaveEventCard(
-              title: leave['title'],
+              leaveType: leave['leaveType'],
               startDate: startDate,
               endDate: endDate,
               leaveStatus: leave['leaveStatus'],
+              leaveCause: leave['causes'],
             ),
             const SizedBox(
               height: 6,

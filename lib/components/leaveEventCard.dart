@@ -4,17 +4,19 @@ import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 
 class LeaveEventCard extends StatelessWidget {
-  final String title;
+  final String leaveType;
   final DateTime startDate;
   final DateTime endDate;
   final String leaveStatus;
+  final String leaveCause;
 
   const LeaveEventCard({
     Key? key,
-    required this.title,
+    required this.leaveType,
     required this.startDate,
     required this.endDate,
     required this.leaveStatus,
+    required this.leaveCause,
   }) : super(key: key);
 
   @override
@@ -42,7 +44,7 @@ class LeaveEventCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
             decoration: BoxDecoration(
-              gradient: title == 'Half Day'
+              gradient: leaveType == 'Half Day'
                   ? const LinearGradient(
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
@@ -55,7 +57,7 @@ class LeaveEventCard extends StatelessWidget {
               color: AppColors.lightblue,
               borderRadius: BorderRadius.circular(20.0),
             ),
-            child: Text(title, style: leaveCardTextStyle.style),
+            child: Text(leaveType, style: leaveCardTextStyle.style),
           ),
           const SizedBox(width: 16.0),
 
@@ -95,11 +97,27 @@ class LeaveEventCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    SvgPicture.asset(
-                      'assets/images/leaveCardIcon.svg',
-                      width: 15,
-                      height: 15,
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Leave Reason:'),
+                            content: Text(leaveCause),
+                          ),
+                        );
+                      },
+                      child: SvgPicture.asset(
+                        'assets/images/leaveCardIcon.svg',
+                        width: 15,
+                        height: 15,
+                      ),
                     ),
+                    // SvgPicture.asset(
+                    //   'assets/images/leaveCardIcon.svg',
+                    //   width: 15,
+                    //   height: 15,
+                    // ),
                     const SizedBox(width: 8),
                     SvgPicture.asset(
                       imageAsset,
