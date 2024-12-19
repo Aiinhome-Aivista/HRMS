@@ -122,7 +122,7 @@ class _DateDisplayState extends State<DateDisplay> {
                     Text(
                       '${widget.selectedDay.day}',
                       style: const TextStyle(
-                        fontSize: 40,
+                        fontSize: 35,
                         fontWeight: FontWeight.w700,
                         color: Color.fromRGBO(143, 181, 255, 1),
                       ),
@@ -153,7 +153,7 @@ class _DateDisplayState extends State<DateDisplay> {
                 Text(
                   '${widget.selectedDay.year}',
                   style: const TextStyle(
-                    fontSize: 21,
+                    fontSize: 20,
                     fontWeight: FontWeight.w700,
                     color: Color.fromRGBO(143, 181, 255, 1),
                   ),
@@ -161,7 +161,7 @@ class _DateDisplayState extends State<DateDisplay> {
                 Text(
                   DateFormat('EEEE').format(widget.selectedDay),
                   style: const TextStyle(
-                    fontSize: 21,
+                    fontSize: 20,
                     fontWeight: FontWeight.w300,
                     color: Color.fromRGBO(143, 181, 255, 1),
                   ),

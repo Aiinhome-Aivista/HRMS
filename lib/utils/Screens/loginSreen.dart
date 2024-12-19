@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-   // Set local storage data
+  // Set local storage data
   Future<void> _saveCredentials() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_rememberMe) {
@@ -153,6 +153,15 @@ class _LoginScreenState extends State<LoginScreen> {
       statusBarIconBrightness: Brightness.light,
     ));
 
+    double screenHeight = MediaQuery.of(context).size.height;
+    double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    double imageHeight =
+        keyboardHeight > 0 ? screenHeight * 0.15 : screenHeight * 0.2;
+
+    double sizeboxHeight = keyboardHeight > 0
+        ? MediaQuery.of(context).size.height * 0.045
+        : MediaQuery.of(context).size.height * 0.0862;
+
     return Scaffold(
       backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
       body: Stack(
@@ -163,13 +172,15 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 10),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  height: imageHeight,
                   child: SvgPicture.asset(
                     'assets/images/login.svg',
+                    fit: BoxFit.contain,
                   ),
                 ),
-                const SizedBox(height: 70.0),
+                SizedBox(height: sizeboxHeight),
 
                 // Email TextField
                 CustomTextField(
@@ -188,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   isPassword: true,
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 // Row for Remember Me Checkbox and Forgot Password
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -206,7 +217,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const Text(
                           'Remember Me',
-                          style: TextStyle(color: AppColors.lightblue),
+                          style: TextStyle(
+                              color: AppColors.lightblue, fontSize: 13),
                         ),
                       ],
                     ),
@@ -220,11 +232,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                       },
                       child: const Padding(
-                        padding: EdgeInsets.only(right: 10),
+                        padding: EdgeInsets.only(right: 5),
                         child: Text(
-                          'Forgot Password?',
+                          'Forgot Password ?',
                           style: TextStyle(
                             color: AppColors.lightblue,
+                            fontSize: 13,
                           ),
                         ),
                       ),

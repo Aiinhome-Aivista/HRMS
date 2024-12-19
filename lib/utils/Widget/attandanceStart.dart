@@ -30,6 +30,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
   void initState() {
     super.initState();
     _setSelectvalue();
+    
   }
 
   // Get local storage data
@@ -104,28 +105,39 @@ class _AttendanceStartState extends State<AttendanceStart> {
 
     _leftLimit = -(screenWidth * 0.1 + buttonSize / 2);
     _rightLimit = screenWidth * 0.1 + buttonSize / 2;
-    _topLimit = -(screenHeight * 0.2 - buttonSize * 1.5);
-    _bottomLimit = screenHeight * 0.2 - buttonSize * 1.5;
+    _topLimit = -(screenHeight * 0.2 - buttonSize);
+    _bottomLimit = screenHeight * 0.2 - buttonSize;
 
     return GestureDetector(
       onPanUpdate: (details) {
         setState(() {
-          _swipeDirection ??= (details.delta.dx.abs() > details.delta.dy.abs())
+          _swipeDirection = (details.delta.dx.abs() > details.delta.dy.abs())
               ? 'horizontal'
               : 'vertical';
 
-          if (_swipeDirection == 'horizontal') {
-            _xOffset += details.delta.dx;
-            _yOffset = 0;
-          } else if (_swipeDirection == 'vertical') {
-            _yOffset += details.delta.dy;
-            _xOffset = 0;
-          }
+          // if (_swipeDirection == 'horizontal') {
+          //   _xOffset += details.delta.dx;
+          //   _yOffset += details.delta.dy;
+          // } else if (_swipeDirection == 'vertical') {
+          //   _xOffset += details.delta.dx;
+          //   _yOffset += details.delta.dy;
+          // }
 
           if (!_isSelectWorkLocation) {
+            if (_swipeDirection == 'horizontal') {
+              _xOffset += details.delta.dx;
+              _yOffset = 0;
+            } else if (_swipeDirection == 'vertical') {
+              _yOffset += details.delta.dy;
+              _xOffset = 0;
+            }
+          } else if (!_isSelectBreakStart) {
+            _yOffset = 0;
             _xOffset += details.delta.dx;
-            _yOffset += details.delta.dy;
-          } else if (_isSelectBreakComplete) {
+          } else if (!_isSelectBreakComplete) {
+            _yOffset = 0;
+            _xOffset += details.delta.dx;
+          } else if (!_isSelectPunchOut) {
             _yOffset += details.delta.dy;
             _xOffset = 0;
             if (_yOffset < 0) _yOffset = 0;
@@ -161,8 +173,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
               _isSelectBreakStart &&
               _isSelectBreakComplete &&
               !_isSelectPunchOut)
-            __buildPunchOut(context),
-          if (!_isSelectPunchOut) _buildSwipeControl(),
+            _buildPunchOut(context),
           if (_isSelectPunchOut) _finalDone(context),
         ],
       ),
@@ -170,66 +181,54 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   Widget _buildSwipeControl() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 100),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        transform: Matrix4.translationValues(_xOffset, _yOffset, 0),
-        alignment: Alignment.center,
-        child: SvgPicture.asset('assets/images/swip.svg'),
-      ),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      transform: Matrix4.translationValues(_xOffset, _yOffset, 0),
+      alignment: Alignment.center,
+      child: SvgPicture.asset('assets/images/swip.svg'),
     );
   }
 
   Widget _buildSelectWorkLocation(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
-
-    return Stack(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         _buildIcon(
-          bottom: screenHeight * 0.385,
-          left: (screenWidth / 2) - 60,
           iconPath: 'assets/images/pwc.svg',
           isHighlighted: _swipeDirectionIS == 'pwc',
         ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildIcon(
+              iconPath: 'assets/images/home.svg',
+              isHighlighted: _swipeDirectionIS == 'home',
+            ),
+            _buildSwipeControl(),
+            _buildIcon(
+              iconPath: 'assets/images/office.svg',
+              isHighlighted: _swipeDirectionIS == 'office',
+            ),
+          ],
+        ),
         _buildIcon(
-          bottom: screenHeight * 0.125,
-          left: (screenWidth / 2) - 50,
           iconPath: 'assets/images/client.svg',
           isHighlighted: _swipeDirectionIS == 'client',
-        ),
-        _buildIcon(
-          left: screenWidth * 0.04,
-          top: (screenHeight / 6) - 10,
-          iconPath: 'assets/images/home.svg',
-          isHighlighted: _swipeDirectionIS == 'home',
-        ),
-        _buildIcon(
-          right: screenWidth * 0.04,
-          top: (screenHeight / 6) - 10,
-          iconPath: 'assets/images/office.svg',
-          isHighlighted: _swipeDirectionIS == 'office',
         ),
       ],
     );
   }
 
   Widget _buildBreakStart(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
-
-    return Stack(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         _buildIcon(
-          left: screenWidth * 0.04,
-          top: (screenHeight / 6) - 10,
           iconPath: 'assets/images/break_start.svg',
           isHighlighted: _swipeDirectionIS == 'break_start',
         ),
+        _buildSwipeControl(),
         _buildIcon(
-          right: screenWidth * 0.05,
-          top: (screenHeight / 6) - 10,
           iconPath: 'assets/images/Skip_next.svg',
           isHighlighted: _swipeDirectionIS == 'Skip_next',
         ),
@@ -238,20 +237,15 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   Widget _buildBreakComplete(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
-
-    return Stack(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         _buildIcon(
-          left: screenWidth * 0.04,
-          top: (screenHeight / 6) - 10,
           iconPath: 'assets/images/break_complete.svg',
           isHighlighted: _swipeDirectionIS == 'break_complete',
         ),
+        _buildSwipeControl(),
         _buildIcon(
-          right: screenWidth * 0.05,
-          top: (screenHeight / 6) - 10,
           iconPath: 'assets/images/Skip_next.svg',
           isHighlighted: _swipeDirectionIS == 'Skip_next',
         ),
@@ -259,14 +253,16 @@ class _AttendanceStartState extends State<AttendanceStart> {
     );
   }
 
-  Widget __buildPunchOut(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWidth = MediaQuery.of(context).size.width;
-    return Stack(
+  Widget _buildPunchOut(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         _buildIcon(
-          bottom: screenHeight * 0.12,
-          left: (screenWidth / 2) - 55,
+          iconPath: '',
+          isHighlighted: _swipeDirectionIS == '',
+        ),
+        _buildSwipeControl(),
+        _buildIcon(
           iconPath: 'assets/images/punch_out.svg',
           isHighlighted: _swipeDirectionIS == 'punch_out',
         ),
@@ -279,13 +275,11 @@ class _AttendanceStartState extends State<AttendanceStart> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
-            child: SvgPicture.asset(
-              'assets/images/final_thankyou.svg',
-              height: 68,
-              width: 96,
-              color: AppColors.lightblue,
-            ),
+          SvgPicture.asset(
+            'assets/images/final_thankyou.svg',
+            height: 68,
+            width: 96,
+            color: AppColors.lightblue,
           ),
           const SizedBox(height: 10),
           const Text(
@@ -312,28 +306,18 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   Widget _buildIcon({
-    double? top,
-    double? bottom,
-    double? left,
-    double? right,
     required String iconPath,
     required bool isHighlighted,
   }) {
-    return Positioned(
-      top: top,
-      bottom: bottom,
-      left: left,
-      right: right,
-      child: ColorFiltered(
-        colorFilter: ColorFilter.mode(
-          isHighlighted ? AppColors.greyShade2 : Colors.white,
-          BlendMode.srcIn,
-        ),
-        child: SvgPicture.asset(
-          iconPath,
-          height: 50,
-          width: 50,
-        ),
+    return ColorFiltered(
+      colorFilter: ColorFilter.mode(
+        isHighlighted ? AppColors.greyShade2 : Colors.white,
+        BlendMode.srcIn,
+      ),
+      child: SvgPicture.asset(
+        iconPath,
+        height: 50,
+        width: 50,
       ),
     );
   }
