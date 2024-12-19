@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hrms/styleColor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AttendanceStart extends StatefulWidget {
   const AttendanceStart({super.key});
@@ -24,6 +25,68 @@ class _AttendanceStartState extends State<AttendanceStart> {
   double _rightLimit = 0;
   double _topLimit = 0;
   double _bottomLimit = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _setSelectvalue();
+  }
+
+  // Get local storage data
+  Future<void> _setSelectvalue() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool? savedSelectWorkLocation =
+        prefs.getBool('_isSelectWorkLocation');
+    final bool? savedSelectBreakStart = prefs.getBool('_isSelectBreakStart');
+    final bool? savedSelectBreakComplete =
+        prefs.getBool('_isSelectBreakComplete');
+    final bool? savedSelectPunchOut = prefs.getBool('_isSelectPunchOut');
+
+    setState(() {
+      _isSelectWorkLocation = savedSelectWorkLocation ?? false;
+      _isSelectBreakStart = savedSelectBreakStart ?? false;
+      _isSelectBreakComplete = savedSelectBreakComplete ?? false;
+      _isSelectPunchOut = savedSelectPunchOut ?? false;
+    });
+  }
+
+  //  SharedPreferences and update the local variable
+  Future<void> _updateLocalStorage(String key, bool value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(key, value);
+  }
+
+  // Set local storage data
+  Future<void> _resetSelectValue() async {
+    await Future.delayed(Duration(seconds: 10));
+    await _updateLocalStorage('_isSelectWorkLocation', false);
+    await _updateLocalStorage('_isSelectBreakStart', false);
+    await _updateLocalStorage('_isSelectBreakComplete', false);
+    await _updateLocalStorage('_isSelectPunchOut', false);
+  }
+
+  _handleSwipeCompletion() async {
+    if (_xOffset.abs() > _swipeThreshold || _yOffset.abs() > _swipeThreshold) {
+      if (!_isSelectWorkLocation) {
+        await _updateLocalStorage('_isSelectWorkLocation', true);
+        _isSelectWorkLocation = true;
+        _swipeDirectionIS = _yOffset > 0 ? 'client' : 'pwc';
+      } else if (!_isSelectBreakStart) {
+        await _updateLocalStorage('_isSelectBreakStart', true);
+        _isSelectBreakStart = true;
+        _swipeDirectionIS = _xOffset > 0 ? 'break_start' : 'skip_next';
+      } else if (!_isSelectBreakComplete) {
+        await _updateLocalStorage('_isSelectBreakComplete', true);
+        _isSelectBreakComplete = true;
+        _swipeDirectionIS = _xOffset > 0 ? 'break_complete' : 'skip_next';
+      } else {
+        await _updateLocalStorage('_isSelectPunchOut', true);
+        _isSelectPunchOut = true;
+        _swipeDirectionIS = _yOffset > 0 ? 'punch_out' : '';
+        _resetSelectValue();
+      }
+    }
+  }
 
   void _resetPosition() {
     setState(() {
@@ -81,24 +144,9 @@ class _AttendanceStartState extends State<AttendanceStart> {
           if (_yOffset > _bottomLimit) _yOffset = _bottomLimit;
         });
       },
-      onPanEnd: (details) {
-        if (_xOffset.abs() > _swipeThreshold ||
-            _yOffset.abs() > _swipeThreshold) {
-          if (!_isSelectWorkLocation) {
-            _isSelectWorkLocation = true;
-            _swipeDirectionIS = _yOffset > 0 ? 'client' : 'pwc';
-          } else if (!_isSelectBreakStart) {
-            _isSelectBreakStart = true;
-            _swipeDirectionIS = _xOffset > 0 ? 'break_start' : 'skip_next';
-          } else if (!_isSelectBreakComplete) {
-            _isSelectBreakComplete = true;
-            _swipeDirectionIS = _xOffset > 0 ? 'break_complete' : 'skip_next';
-          } else {
-            _swipeDirectionIS = _yOffset > 0 ? 'punch_out' : '';
-            _isSelectPunchOut = true;
-          }
-        }
-        _resetPosition();
+      onPanEnd: (details) async {
+        await _handleSwipeCompletion(); // Call the reusable function
+        _resetPosition(); // Reset position after completion
       },
       child: Stack(
         children: [
