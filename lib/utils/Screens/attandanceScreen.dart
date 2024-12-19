@@ -27,7 +27,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 45, 16, 16),
+            padding: const EdgeInsets.fromLTRB(16, 45, 16, 6),
             child: Column(
               children: [
                 Row(
