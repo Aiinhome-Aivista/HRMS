@@ -55,7 +55,7 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? Employee_Id = prefs.getString('Employee_Id');
 
-    print("Emp_Id:$Employee_Id");
+    // print("Emp_Id:$Employee_Id");
 
     setState(() {
       Emp_Id = Employee_Id ?? '';
@@ -85,7 +85,7 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
       if (response['status'] == true) {
         CustomToast.show(context, 'Location saved successfully!');
       } else {
-        CustomToast.show(context, response['msg']);
+        // CustomToast.show(context, response['msg']);
       }
     } catch (e) {
       setState(() {

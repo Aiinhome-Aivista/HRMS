@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/CustomFloatingButton.dart';
 import 'package:hrms/components/TransparentPageRoute.dart';
+import 'package:hrms/components/showToast.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:hrms/utils/Screens/attandanceScreen.dart';
@@ -16,6 +18,10 @@ class DocumentArchiveScreen extends StatefulWidget {
 class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
   String userName = '';
   String userEmail = '';
+  String Emp_Id = '';
+  bool _isLoading = false;
+  List<dynamic> notices = [];
+
   @override
   void initState() {
     super.initState();
@@ -27,11 +33,51 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? gateUserName = prefs.getString('SaveUserName');
     final String? gateUserEmail = prefs.getString('SaveUserEmail');
+    final String? Employee_Id = prefs.getString('Employee_Id');
+
+    print("Emp_Id:$Employee_Id");
 
     setState(() {
       userName = gateUserName ?? '';
       userEmail = gateUserEmail ?? '';
+      Emp_Id = Employee_Id ?? '';
     });
+    if (Emp_Id.isNotEmpty) {
+      await noticeFetch();
+    }
+  }
+
+  Future<void> noticeFetch() async {
+    if (Emp_Id.isEmpty) {
+      print('Emp_Id is empty');
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      POST_API postApi = POST_API();
+      Map<String, dynamic> response = await postApi.notice(Emp_Id);
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (response['status'] == true) {
+        notices = List<String>.from(response['data']);
+        print("notice data fetch:$notices");
+        setState(() {}); // Update the UI
+      } else {
+        print('Error: ${response['msg']}');
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      print('Error: $e');
+    }
   }
 
   @override
@@ -101,27 +147,37 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'From admin',
-                    style: LeaveFontStyle.style,
-                  ),
                   const SizedBox(height: 8),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-                    style: docArchiveFontStyle.style,
-                  ),
+                  notices.isNotEmpty
+                      ? SizedBox(
+                          height: 100,
+                          child: PageView.builder(
+                            itemCount: notices.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Text(
+                                  notices[index],
+                                  style: docArchiveFontStyle.style,
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : SizedBox(
+                          height: 100,
+                          child: Center(
+                            child: Text(
+                              'No notices available.',
+                              style: docArchiveFontStyle.style,
+                            ),
+                          ),
+                        ),
                   const SizedBox(height: 8),
-                  const Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Text(
-                      'Adventure Technology P.L.T',
-                      style:
-                          TextStyle(color: AppColors.lightblue, fontSize: 12),
-                    ),
-                  ),
                 ],
               ),
             ),
+
             const SizedBox(height: 16),
 
             // Options List
