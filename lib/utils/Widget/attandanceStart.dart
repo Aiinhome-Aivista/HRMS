@@ -4,7 +4,8 @@ import 'package:hrms/styleColor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AttendanceStart extends StatefulWidget {
-  const AttendanceStart({super.key});
+  final List<dynamic> currentAttendanceDatais;
+  const AttendanceStart({super.key, required this.currentAttendanceDatais});
 
   @override
   State<AttendanceStart> createState() => _AttendanceStartState();
@@ -26,11 +27,36 @@ class _AttendanceStartState extends State<AttendanceStart> {
   double _topLimit = 0;
   double _bottomLimit = 0;
 
+  List<dynamic> _currentAttendanceData = [];
+  String currectDateLoginTime = '';
+  String currentBreakStartTime = '';
+  String currentBreakCompletionTime = '';
+  String currentLogoutTime = '';
+  bool _isBreakStart = false;
+  bool _isBreakEnd = false;
+
   @override
   void initState() {
     super.initState();
     _setSelectvalue();
-    
+    fetchAttendance();
+  }
+
+  void fetchAttendance() async {
+    await Future.delayed(Duration(seconds: 3));
+    setState(() {
+      _currentAttendanceData = widget.currentAttendanceDatais;
+      currectDateLoginTime =
+          (_currentAttendanceData[0]['login_time'] ?? '').toString();
+      currentBreakStartTime =
+          (_currentAttendanceData[0]['break_start_time'] ?? '').toString();
+      currentBreakCompletionTime =
+          (_currentAttendanceData[0]['break_completion_time'] ?? '').toString();
+      currentLogoutTime =
+          (_currentAttendanceData[0]['logout_time'] ?? '').toString();
+    });
+    print(
+        'Current date login time: ${_currentAttendanceData[0]['login_time']}');
   }
 
   // Get local storage data
@@ -68,24 +94,31 @@ class _AttendanceStartState extends State<AttendanceStart> {
 
   _handleSwipeCompletion() async {
     if (_xOffset.abs() > _swipeThreshold || _yOffset.abs() > _swipeThreshold) {
-      if (!_isSelectWorkLocation) {
+      if (currectDateLoginTime.isEmpty) {
         await _updateLocalStorage('_isSelectWorkLocation', true);
         _isSelectWorkLocation = true;
         _swipeDirectionIS = _yOffset > 0 ? 'client' : 'pwc';
-      } else if (!_isSelectBreakStart) {
+      } else if (currectDateLoginTime.isNotEmpty &&
+          currentBreakStartTime.isEmpty) {
         await _updateLocalStorage('_isSelectBreakStart', true);
         _isSelectBreakStart = true;
-        _swipeDirectionIS = _xOffset > 0 ? 'break_start' : 'skip_next';
-      } else if (!_isSelectBreakComplete) {
+
+        _swipeDirectionIS = _xOffset > 0 ? 'skip_next' : 'break_start';
+      } else if (currectDateLoginTime.isNotEmpty &&
+          currentBreakStartTime.isNotEmpty &&
+          currentBreakCompletionTime.isEmpty) {
         await _updateLocalStorage('_isSelectBreakComplete', true);
         _isSelectBreakComplete = true;
-        _swipeDirectionIS = _xOffset > 0 ? 'break_complete' : 'skip_next';
+
+        _swipeDirectionIS = _xOffset > 0 ? 'skip_next' : 'break_complete';
       } else {
         await _updateLocalStorage('_isSelectPunchOut', true);
         _isSelectPunchOut = true;
         _swipeDirectionIS = _yOffset > 0 ? 'punch_out' : '';
         _resetSelectValue();
       }
+
+      print('Swipe Direction: $_swipeDirectionIS');
     }
   }
 
@@ -123,7 +156,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
           //   _yOffset += details.delta.dy;
           // }
 
-          if (!_isSelectWorkLocation) {
+          if (currectDateLoginTime.isEmpty) {
             if (_swipeDirection == 'horizontal') {
               _xOffset += details.delta.dx;
               _yOffset = 0;
@@ -131,13 +164,13 @@ class _AttendanceStartState extends State<AttendanceStart> {
               _yOffset += details.delta.dy;
               _xOffset = 0;
             }
-          } else if (!_isSelectBreakStart) {
+          } else if (currentBreakStartTime.isEmpty) {
             _yOffset = 0;
             _xOffset += details.delta.dx;
-          } else if (!_isSelectBreakComplete) {
+          } else if (currentBreakCompletionTime.isEmpty) {
             _yOffset = 0;
             _xOffset += details.delta.dx;
-          } else if (!_isSelectPunchOut) {
+          } else if (currentLogoutTime.isEmpty) {
             _yOffset += details.delta.dy;
             _xOffset = 0;
             if (_yOffset < 0) _yOffset = 0;
@@ -162,19 +195,21 @@ class _AttendanceStartState extends State<AttendanceStart> {
       },
       child: Stack(
         children: [
-          if (!_isSelectWorkLocation) _buildSelectWorkLocation(context),
-          if (_isSelectWorkLocation && !_isSelectBreakStart)
+          if (currectDateLoginTime.isEmpty) _buildSelectWorkLocation(context),
+          if (currectDateLoginTime.isNotEmpty &&
+                  currentBreakStartTime.isEmpty ||
+              _isBreakStart)
             _buildBreakStart(context),
-          if (_isSelectWorkLocation &&
-              _isSelectBreakStart &&
-              !_isSelectBreakComplete)
+          if (currectDateLoginTime.isNotEmpty &&
+              currentBreakStartTime.isNotEmpty &&
+              currentBreakCompletionTime.isEmpty)
             _buildBreakComplete(context),
-          if (_isSelectWorkLocation &&
-              _isSelectBreakStart &&
-              _isSelectBreakComplete &&
-              !_isSelectPunchOut)
+          if (currectDateLoginTime.isNotEmpty &&
+              currentBreakStartTime.isNotEmpty &&
+              currentBreakCompletionTime.isNotEmpty &&
+              currentLogoutTime.isEmpty)
             _buildPunchOut(context),
-          if (_isSelectPunchOut) _finalDone(context),
+          if (currentLogoutTime.isNotEmpty) _finalDone(context),
         ],
       ),
     );
@@ -257,10 +292,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _buildIcon(
-          iconPath: '',
-          isHighlighted: _swipeDirectionIS == '',
-        ),
+        const SizedBox(height: 50),
         _buildSwipeControl(),
         _buildIcon(
           iconPath: 'assets/images/punch_out.svg',

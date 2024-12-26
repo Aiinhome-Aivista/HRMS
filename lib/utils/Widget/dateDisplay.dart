@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/timingDetails.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:intl/intl.dart';
@@ -7,9 +6,11 @@ import 'package:table_calendar/table_calendar.dart';
 
 class DateDisplay extends StatefulWidget {
   final DateTime selectedDay;
+  final List<dynamic> attendanceData;
 
   // Constructor to accept the selectedDay
-  const DateDisplay({required this.selectedDay, super.key});
+  const DateDisplay(
+      {required this.selectedDay, super.key, required this.attendanceData});
 
   @override
   State<DateDisplay> createState() => _DateDisplayState();
@@ -28,21 +29,14 @@ class _DateDisplayState extends State<DateDisplay> {
     _selectedDay = DateTime.now();
     _focusedDay = DateTime.now();
     fetchAttendance();
+    print('get all attendance data: ${widget.attendanceData}');
   }
 
   void fetchAttendance() async {
-    final GET_API getApi = GET_API();
-    final result = await getApi.getAttendance('126');
-
-    if (result['status'] == true) {
-      print('Attendance Data: ${result['data']}');
-
-      setState(() {
-        _highlightedDates = result['data'];
-      });
-    } else {
-      print('Error: ${result['message']}');
-    }
+    await Future.delayed(Duration(seconds: 3));
+    setState(() {
+      _highlightedDates = widget.attendanceData;
+    });
   }
 
   // Function to get the suffix for the day
