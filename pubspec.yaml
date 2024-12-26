@@ -39,6 +39,7 @@ dependencies:
   table_calendar: ^3.0.0 
   shared_preferences: ^2.1.0
   slider_button: ^2.1.0
+  carousel_slider: ^5.0.0
 
 
 dev_dependencies:

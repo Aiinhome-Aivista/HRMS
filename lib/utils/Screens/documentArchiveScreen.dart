@@ -1,7 +1,10 @@
+import 'package:carousel_slider/carousel_options.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/CustomFloatingButton.dart';
 import 'package:hrms/components/TransparentPageRoute.dart';
+import 'package:hrms/components/loading_spinner.dart';
 import 'package:hrms/components/showToast.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
@@ -137,45 +140,82 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
               ),
             ),
             const SizedBox(height: 16),
-
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.greyShade,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 8),
-                  notices.isNotEmpty
-                      ? SizedBox(
-                          height: 100,
-                          child: PageView.builder(
-                            itemCount: notices.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: Text(
-                                  notices[index],
-                                  style: docArchiveFontStyle.style,
-                                ),
-                              );
-                            },
+            //notice
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (notices.isNotEmpty)
+                  CarouselSlider(
+                    items: notices.map((notice) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          color: AppColors.greyShade,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                        )
-                      : SizedBox(
-                          height: 100,
-                          child: Center(
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
                             child: Text(
-                              'No notices available.',
-                              style: docArchiveFontStyle.style,
+                              notice,
+                              style: noticeFontStyle.style,
                             ),
                           ),
                         ),
-                  const SizedBox(height: 8),
-                ],
-              ),
+                      );
+                    }).toList(),
+                    options: CarouselOptions(
+                      height: 150,
+                      enlargeCenterPage: true,
+                      autoPlay: false,
+                      aspectRatio: 16 / 9,
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      enableInfiniteScroll: true,
+                      autoPlayAnimationDuration:
+                          const Duration(milliseconds: 800),
+                      viewportFraction: 0.9,
+                      initialPage: 0,
+                      enlargeFactor: 0.2,
+                    ),
+                  )
+                else
+                  CarouselSlider(
+                    items: [
+                      Builder(
+                        builder: (BuildContext context) {
+                          return Container(
+                              alignment: Alignment.center,
+                              width: MediaQuery.of(context).size.width,
+                              margin: const EdgeInsets.only(
+                                right: 15,
+                                top: 0,
+                                left: 15,
+                                bottom: 35,
+                              ),
+                              padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                              decoration: BoxDecoration(
+                                color: AppColors.greyShade,
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: LoadingSpinner());
+                        },
+                      ),
+                    ],
+                    options: CarouselOptions(
+                      height: 150.0,
+                      enlargeCenterPage: true,
+                      autoPlay: false,
+                      aspectRatio: 16 / 9,
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      enableInfiniteScroll: true,
+                      autoPlayAnimationDuration:
+                          const Duration(milliseconds: 800),
+                      viewportFraction: 1.0,
+                      initialPage: 0,
+                    ),
+                  ),
+              ],
             ),
 
             const SizedBox(height: 16),
