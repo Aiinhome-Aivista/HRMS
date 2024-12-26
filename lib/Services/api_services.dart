@@ -150,16 +150,18 @@ class POST_API {
   }
 
   //attendance API
-  Future<Map<String, dynamic>> attendance(
-      String employee_id,
-      String update_field,
-      String duty_location,
-      String latitude,
-      String longitude) async {
+  Future<Map<String, dynamic>> attendance({
+    required String employee_id,
+    required String update_field,
+    String? attendance_id,
+    required String latitude,
+    required String longitude,
+    String? duty_location,
+  }) async {
     final String url = _apiService._postApiConnection.attendanceApi;
 
     try {
-// Create an HttpClient instance
+      // Create an HttpClient instance
       HttpClient httpClient = HttpClient();
 
       // Create a POST request
@@ -167,14 +169,24 @@ class POST_API {
       request.headers.set(
           HttpHeaders.contentTypeHeader, "application/x-www-form-urlencoded");
 
-      // Add body parameters
+      // Prepare the body parameters dynamically
       final Map<String, String> body = {
         'Employee_Id': employee_id,
         'TimeUpdate': update_field,
-        'Location': duty_location,
         'Latitude': latitude,
         'Longitude': longitude,
       };
+
+      // Add duty location only for login
+      if (duty_location != null) {
+        body['Location'] = duty_location;
+      }
+
+      // Add attendance ID only for updates (break/logout)
+      if (attendance_id != null) {
+        body['Attendance_Id'] = attendance_id;
+      }
+
       print("Encoded body : ${Uri(queryParameters: body).query}");
       request.write(Uri(queryParameters: body).query);
 
@@ -186,11 +198,10 @@ class POST_API {
         // Read and decode the response
         final String responseBody =
             await response.transform(utf8.decoder).join();
-
         return json.decode(responseBody);
       } else {
         print(
-            "location api call failed with status code ${response.statusCode}");
+            "location API call failed with status code ${response.statusCode}");
         return {
           'status': false,
           'message': 'Failed with status code ${response.statusCode}',
@@ -211,9 +222,9 @@ class GET_API {
   final ApiService _apiService = ApiService();
 
   // Fetch attendance data
-  Future<Map<String, dynamic>> getAttendance(String employeeId) async {
+  Future<Map<String, dynamic>> getAttendance(String employee_id) async {
     final String url =
-        '${_apiService._getApiConnection.attandenceGetApi}?employee_id=$employeeId';
+        '${_apiService._getApiConnection.attandenceGetApi}?employee_id=$employee_id';
 
     try {
       // Create an HttpClient instance

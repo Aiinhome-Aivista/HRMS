@@ -32,6 +32,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   //     String employeeId = "12345";
   //     String updateField = "ClockIn";
   //     String dutyLocation = "Head Office";
+  //     String attendance_id = "23454";
   //     String latitude = "12.971598";
   //     String longitude = "77.594566";
 
@@ -40,6 +41,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   //       employeeId,
   //       updateField,
   //       dutyLocation,
+  //       attendance_id,
   //       latitude,
   //       longitude,
   //     );
