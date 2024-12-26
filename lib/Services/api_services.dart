@@ -106,6 +106,49 @@ class POST_API {
       };
     }
   }
+
+//notice API
+
+  Future<Map<String, dynamic>> notice(String employee_id) async {
+    final String url = _apiService._postApiConnection.noticeApi;
+
+    try {
+      // Create an HttpClient instance
+      HttpClient httpClient = HttpClient();
+
+      // Create a POST request
+      HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
+      request.headers.set(
+          HttpHeaders.contentTypeHeader, "application/x-www-form-urlencoded");
+
+      // Add body parameters as a Map<String, String>
+      final Map<String, String> body = {
+        'employee_id': employee_id,
+      };
+      request.write(Uri(queryParameters: body).query);
+
+      // Send the request
+      HttpClientResponse response = await request.close();
+
+      // Check the response status
+      if (response.statusCode == 200) {
+        // Read and decode the response
+        final String responseBody =
+            await response.transform(utf8.decoder).join();
+        return json.decode(responseBody);
+      } else {
+        return {
+          'status': false,
+          'message': 'Failed with status code ${response.statusCode}',
+        };
+      }
+    } catch (e) {
+      return {
+        'status': false,
+        'message': 'Error: $e',
+      };
+    }
+  }
 }
 
 class GET_API {
