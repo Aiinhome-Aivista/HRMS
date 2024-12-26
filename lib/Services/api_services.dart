@@ -108,7 +108,6 @@ class POST_API {
   }
 
 //notice API
-
   Future<Map<String, dynamic>> notice(String employee_id) async {
     final String url = _apiService._postApiConnection.noticeApi;
 
@@ -143,6 +142,63 @@ class POST_API {
         };
       }
     } catch (e) {
+      return {
+        'status': false,
+        'message': 'Error: $e',
+      };
+    }
+  }
+
+  //attendance API
+  Future<Map<String, dynamic>> attendance(
+      String employee_id,
+      String update_field,
+      String duty_location,
+      String latitude,
+      String longitude) async {
+    final String url = _apiService._postApiConnection.attendanceApi;
+
+    try {
+// Create an HttpClient instance
+      HttpClient httpClient = HttpClient();
+
+      // Create a POST request
+      HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
+      request.headers.set(
+          HttpHeaders.contentTypeHeader, "application/x-www-form-urlencoded");
+
+      // Add body parameters
+      final Map<String, String> body = {
+        'Employee_Id': employee_id,
+        'TimeUpdate': update_field,
+        'Location': duty_location,
+        'Latitude': latitude,
+        'Longitude': longitude,
+      };
+      print("Encoded body : ${Uri(queryParameters: body).query}");
+      request.write(Uri(queryParameters: body).query);
+
+      // Send the request
+      HttpClientResponse response = await request.close();
+
+      // Check the response status
+      if (response.statusCode == 200) {
+        // Read and decode the response
+        final String responseBody =
+            await response.transform(utf8.decoder).join();
+
+        return json.decode(responseBody);
+      } else {
+        print(
+            "location api call failed with status code ${response.statusCode}");
+        return {
+          'status': false,
+          'message': 'Failed with status code ${response.statusCode}',
+        };
+      }
+    } catch (e, stackTrace) {
+      print("Error during location API call: $e");
+      print("Stack Trace: $stackTrace");
       return {
         'status': false,
         'message': 'Error: $e',
