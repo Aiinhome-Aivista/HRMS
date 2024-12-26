@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/showToast.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/components/CustomButton.dart';
 import 'package:hrms/components/CustomTextField.dart';
 import 'package:hrms/utils/Widget/bottamNavigationWidget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Locationfillscreen extends StatefulWidget {
   final String city;
   final String state;
+  final latitude;
+  final longitude;
 
-  const Locationfillscreen({super.key, required this.city, required this.state});
+  const Locationfillscreen(
+      {super.key,
+      required this.city,
+      required this.state,
+      required this.latitude,
+      required this.longitude});
 
   @override
   State<Locationfillscreen> createState() => _LocationfillscreenState();
@@ -20,6 +29,12 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _pincodeController = TextEditingController();
+  String Emp_Id = '';
+  String _selectedState = '';
+  String _selectedCity = '';
+  String _selectedPincode = '';
+
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -27,6 +42,57 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
     // Set the initial values of city and state in the respective controllers
     _cityController.text = widget.city;
     _stateController.text = widget.state;
+
+    setState(() {
+      _selectedState = widget.state;
+      _selectedCity = widget.city;
+    });
+
+    _savedEmp_Id();
+  }
+
+  Future<void> _savedEmp_Id() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? Employee_Id = prefs.getString('Employee_Id');
+
+    print("Emp_Id:$Employee_Id");
+
+    setState(() {
+      Emp_Id = Employee_Id ?? '';
+    });
+  }
+
+  Future<void> sendLocation() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      POST_API postApi = POST_API();
+      Map<String, dynamic> response = await postApi.location(
+        Emp_Id,
+        _selectedPincode,
+        _selectedCity,
+        _selectedState,
+        widget.latitude.toString(),
+        widget.longitude.toString(),
+      );
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (response['status'] == true) {
+        CustomToast.show(context, 'Location saved successfully!');
+      } else {
+        CustomToast.show(context, response['msg']);
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      CustomToast.show(context, 'Error: $e');
+    }
   }
 
   @override
@@ -41,27 +107,6 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
-      //   leading: IconButton(
-      //     icon: const Icon(
-      //       Icons.arrow_back,
-      //       color: AppColors.lightblue,
-      //     ),
-      //     onPressed: () {
-      //       Navigator.pop(context); // Navigate back to the previous screen
-      //     },
-      //   ),
-      //   title: const Text(
-      //     'Select location',
-      //     style: TextStyle(
-      //       color: AppColors.lightblue,
-      //       fontWeight: FontWeight.w600,
-      //       fontSize: 20,
-      //     ),
-      //   ),
-      //   titleSpacing: 0,
-      // ),
       backgroundColor: const Color.fromRGBO(8, 12, 17, 1),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(50, 0, 50, 50),
@@ -110,23 +155,39 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
             CustomButton(
               buttonText: 'SAVE',
               onPressed: () async {
-                // Handle form submission logic here
-                String city = _cityController.text;
-                String state = _stateController.text;
-                String pincode = _pincodeController.text;
+                // Retrieve values from text controllers
+                String city = _cityController.text.trim();
+                String state = _stateController.text.trim();
+                String pincode = _pincodeController.text.trim();
 
-                print("state: $state, City: $city, pincode: $pincode");
+                // Validation for blank fields
+                if (city.isEmpty || state.isEmpty || pincode.isEmpty) {
+                  CustomToast.show(
+                    context,
+                    'Please fill in all the fields before proceeding.',
+                  );
+                  return; // Prevent further execution if validation fails
+                }
 
-                // Navigate to ActivityScreen after saving
+                // If all fields are valid, proceed to save location
+                setState(() {
+                  _selectedPincode = pincode;
+                });
+
+                await sendLocation();
+
+                // Show success toast
+                CustomToast.show(
+                  context,
+                  'Location save successful!',
+                );
+
+                // Navigate to ActivityScreen
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const BottamnavigationBar()),
-                  //Activityscreen()),
-                );
-                CustomToast.show(
-                  context,
-                  'Location save Successful',
+                    builder: (context) => const BottamnavigationBar(),
+                  ),
                 );
               },
             ),

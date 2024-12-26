@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/timingDetails.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:intl/intl.dart';
@@ -19,20 +20,29 @@ class _DateDisplayState extends State<DateDisplay> {
   late DateTime _focusedDay;
 
   // Sample JSON list of dates to highlight (YYYY-MM-DD format)
-  final List<Map<String, String>> _highlightedDates = [
-    {'date': '2024-12-07', 'time': '10:05'},
-    {'date': '2024-12-08', 'time': '10:15'},
-    {'date': '2024-12-09', 'time': '10:20'},
-    {'date': '2024-12-10', 'time': '10:29'},
-    {'date': '2024-12-11', 'time': '10:30'},
-    {'date': '2024-12-12', 'time': '10:45'},
-  ];
+  List<dynamic> _highlightedDates = [];
 
   @override
   void initState() {
     super.initState();
     _selectedDay = DateTime.now();
     _focusedDay = DateTime.now();
+    fetchAttendance();
+  }
+
+  void fetchAttendance() async {
+    final GET_API getApi = GET_API();
+    final result = await getApi.getAttendance('126');
+
+    if (result['status'] == true) {
+      print('Attendance Data: ${result['data']}');
+
+      setState(() {
+        _highlightedDates = result['data'];
+      });
+    } else {
+      print('Error: ${result['message']}');
+    }
   }
 
   // Function to get the suffix for the day
@@ -70,11 +80,11 @@ class _DateDisplayState extends State<DateDisplay> {
     // If no matching date, return null (no color)
     if (matchingEntry.isEmpty) return null;
 
-    String time = matchingEntry['time'] ?? '00:00';
+    String time = matchingEntry['login_time'] ?? '00:00';
 
     DateTime parsedTime = DateFormat('HH:mm').parse(time);
 
-    DateTime greenStart = DateFormat('HH:mm:ss').parse('10:00:00');
+    DateTime greenStart = DateFormat('HH:mm:ss').parse('06:00:00');
     DateTime greenEnd = DateFormat('HH:mm:ss').parse('10:14:59');
     DateTime yellowStart = DateFormat('HH:mm:ss').parse('10:15:00');
     DateTime yellowEnd = DateFormat('HH:mm:ss').parse('10:29:59');
@@ -122,7 +132,7 @@ class _DateDisplayState extends State<DateDisplay> {
                     Text(
                       '${widget.selectedDay.day}',
                       style: const TextStyle(
-                        fontSize: 35,
+                        fontSize: 40,
                         fontWeight: FontWeight.w700,
                         color: Color.fromRGBO(143, 181, 255, 1),
                       ),
@@ -153,7 +163,7 @@ class _DateDisplayState extends State<DateDisplay> {
                 Text(
                   '${widget.selectedDay.year}',
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 21,
                     fontWeight: FontWeight.w700,
                     color: Color.fromRGBO(143, 181, 255, 1),
                   ),
@@ -161,7 +171,7 @@ class _DateDisplayState extends State<DateDisplay> {
                 Text(
                   DateFormat('EEEE').format(widget.selectedDay),
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 21,
                     fontWeight: FontWeight.w300,
                     color: Color.fromRGBO(143, 181, 255, 1),
                   ),

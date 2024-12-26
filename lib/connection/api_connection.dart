@@ -1,9 +1,12 @@
-const baseUrl = "https://aiinhome.com/";
+const baseUrl = "https://aiinhome.com/aiinhome-hrms/API/";
 
 class PostApiConnection {
-  String loginapi = '${baseUrl}aiinhome-hrms/API/login.php';
+  String loginapi = '${baseUrl}login.php';
+  String locationApi = '${baseUrl}location.php';
 }
 
-class GetApiConnection {}
+class GetApiConnection {
+  String attandenceGetApi = '${baseUrl}get_attandence.php';
+}
 
 class PutApiConnection {}
