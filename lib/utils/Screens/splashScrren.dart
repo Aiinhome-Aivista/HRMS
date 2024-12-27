@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hrms/styleColor.dart';
 import 'dart:async';
 import 'package:hrms/utils/Screens/loginSreen.dart';
+import 'package:hrms/utils/Widget/bottamNavigationWidget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,6 +19,8 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _scaleAnimation;
 
   bool showContent = false;
+  String latitude = '';
+  String longitude = '';
 
   @override
   void initState() {
@@ -50,12 +54,38 @@ class _SplashScreenState extends State<SplashScreen>
       _animationController.forward();
     });
 
-    Timer(const Duration(seconds: 5), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
+    _savedlatitudelongitude();
+  }
+
+  // Get local storage data
+  Future<void> _savedlatitudelongitude() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? getlatitude = prefs.getString('Savelatitude');
+    final String? getlongitude = prefs.getString('Savelongitude');
+
+    setState(() {
+      latitude = getlatitude ?? '';
+      longitude = getlongitude ?? '';
     });
+    print('getlatitude: $latitude');
+    print('getlongitude: $longitude');
+
+    // After checking if latitude and longitude are available, navigate accordingly
+    if (latitude.isNotEmpty && longitude.isNotEmpty) {
+      Timer(const Duration(seconds: 2), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => BottamnavigationBar()),
+        );
+      });
+    } else {
+      Timer(const Duration(seconds: 2), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      });
+    }
   }
 
   @override

@@ -96,6 +96,11 @@ class _LoginScreenState extends State<LoginScreen> {
         position.longitude,
       );
 
+      // Store the latitude and longitude in SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('Savelatitude', position.latitude.toString());
+      await prefs.setString('Savelongitude', position.longitude.toString());
+
       CustomToast.show(context, 'Successfully login');
       setState(() {
         _isLoading = false;
@@ -113,7 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
               longitude: position.longitude,
             ),
           ),
-          //  Navigator.pushReplacementNamed(context, '/dashboard');
         );
       }
     } catch (e) {

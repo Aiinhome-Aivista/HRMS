@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/CustomFloatingButton.dart';
 import 'package:hrms/components/TransparentPageRoute.dart';
@@ -23,8 +24,8 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
   String userName = '';
   String userEmail = '';
   String Emp_Id = '';
-  String latitude = "12.971598";
-  String longitude = "77.594566";
+  String latitude = '';
+  String longitude = '';
   String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
   bool _isLoading = false;
   List<dynamic> notices = [];
@@ -55,16 +56,39 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
     }
   }
 
+//fetch latitude longitude
+  Future<void> fetchLocation() async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        return;
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      setState(() {
+        latitude = position.latitude.toString();
+        longitude = position.longitude.toString();
+      });
+    } catch (e) {
+      print("Error fetching location: $e");
+    }
+  }
+
 //location update
   void updateLocation() async {
-    print("Calling updateLocation API at: ${DateTime.now()}");
-
+    fetchLocation();
     try {
       POST_API postApi = POST_API();
       Map<String, dynamic> response =
           await postApi.locationUpdate(Emp_Id, latitude, longitude, date);
 
-      // Check the response
       if (response['status'] == true) {
         print("Location update successful: ${response['message']}");
       } else {
