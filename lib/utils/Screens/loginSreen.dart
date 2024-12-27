@@ -113,6 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
               longitude: position.longitude,
             ),
           ),
+          //  Navigator.pushReplacementNamed(context, '/dashboard');
         );
       }
     } catch (e) {

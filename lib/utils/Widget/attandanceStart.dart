@@ -53,9 +53,8 @@ class _AttendanceStartState extends State<AttendanceStart> {
     _setSelectvalue();
     fetchAttendance();
     _loadSavedCredentials();
+    fetchLocation();
   }
-
-
 
   Future<void> fetchLocation() async {
     try {
@@ -74,6 +73,10 @@ class _AttendanceStartState extends State<AttendanceStart> {
       );
 
       print("Latitude: ${position.latitude}, Longitude: ${position.longitude}");
+      setState(() {
+        latitude = position.latitude.toString();
+        longitude = position.longitude.toString();
+      });
     } catch (e) {
       print("Error fetching location: $e");
     }
@@ -131,8 +134,6 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   _handleSwipeCompletion() async {
- 
-    fetchLocation();
     if (_xOffset.abs() > _swipeThreshold || _yOffset.abs() > _swipeThreshold) {
       if (currectDateLoginTime.isEmpty) {
         await _updateLocalStorage('_isSelectWorkLocation', true);
