@@ -149,7 +149,7 @@ class POST_API {
     }
   }
 
-  //attendance API
+//attendance API
   Future<Map<String, dynamic>> attendance({
     required String employee_id,
     required String update_field,
@@ -171,20 +171,20 @@ class POST_API {
 
       // Prepare the body parameters dynamically
       final Map<String, String> body = {
-        'Employee_Id': employee_id,
-        'TimeUpdate': update_field,
-        'Latitude': latitude,
-        'Longitude': longitude,
+        'employee_id': employee_id,
+        'update_field': update_field,
+        'latitude': latitude,
+        'longitude': longitude,
       };
 
       // Add duty location only for login
       if (duty_location != null) {
-        body['Location'] = duty_location;
+        body['duty_location'] = duty_location;
       }
 
       // Add attendance ID only for updates (break/logout)
       if (attendance_id != null) {
-        body['Attendance_Id'] = attendance_id;
+        body['attendance_id'] = attendance_id;
       }
 
       print("Encoded body : ${Uri(queryParameters: body).query}");
@@ -201,14 +201,14 @@ class POST_API {
         return json.decode(responseBody);
       } else {
         print(
-            "location API call failed with status code ${response.statusCode}");
+            "Attendance API call failed with status code ${response.statusCode}");
         return {
           'status': false,
           'message': 'Failed with status code ${response.statusCode}',
         };
       }
     } catch (e, stackTrace) {
-      print("Error during location API call: $e");
+      print("Error during attendance API call: $e");
       print("Stack Trace: $stackTrace");
       return {
         'status': false,
@@ -216,6 +216,7 @@ class POST_API {
       };
     }
   }
+
 }
 
 class GET_API {

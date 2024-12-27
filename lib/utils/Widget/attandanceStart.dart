@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,7 +20,6 @@ class _AttendanceStartState extends State<AttendanceStart> {
   bool _isSelectBreakStart = false;
   bool _isSelectBreakComplete = false;
   bool _isSelectPunchOut = false;
-  String _swipeDirectionIS = '';
 
   String? _swipeDirection;
   double _leftLimit = 0;
@@ -32,20 +32,31 @@ class _AttendanceStartState extends State<AttendanceStart> {
   String currentBreakStartTime = '';
   String currentBreakCompletionTime = '';
   String currentLogoutTime = '';
+  String _swipeDirectionIS = '';
   bool _isBreakStart = false;
   bool _isBreakEnd = false;
+  bool _isLoading = false;
+
+  String employeeId = '';
+  String attendanceId = '';
+  String updateField = "login_time";
+  String dutyLocation = '';
+  String latitude = "12.971598";
+  String longitude = "77.594566";
 
   @override
   void initState() {
     super.initState();
     _setSelectvalue();
     fetchAttendance();
+    _loadSavedCredentials();
   }
 
   void fetchAttendance() async {
     await Future.delayed(Duration(seconds: 3));
     setState(() {
       _currentAttendanceData = widget.currentAttendanceDatais;
+      attendanceId = _currentAttendanceData[0]['id'].toString();
       currectDateLoginTime =
           (_currentAttendanceData[0]['login_time'] ?? '').toString();
       currentBreakStartTime =
@@ -98,28 +109,42 @@ class _AttendanceStartState extends State<AttendanceStart> {
         await _updateLocalStorage('_isSelectWorkLocation', true);
         _isSelectWorkLocation = true;
         _swipeDirectionIS = _yOffset > 0 ? 'client' : 'pwc';
+        setState(() {
+          dutyLocation = _swipeDirectionIS;
+        });
       } else if (currectDateLoginTime.isNotEmpty &&
           currentBreakStartTime.isEmpty) {
         await _updateLocalStorage('_isSelectBreakStart', true);
         _isSelectBreakStart = true;
 
-        _swipeDirectionIS = _xOffset > 0 ? 'skip_next' : 'break_start';
+        _swipeDirectionIS = _xOffset > 0 ? 'skip_next' : 'break_start_time';
+        setState(() {
+          dutyLocation = _swipeDirectionIS;
+        });
       } else if (currectDateLoginTime.isNotEmpty &&
           currentBreakStartTime.isNotEmpty &&
           currentBreakCompletionTime.isEmpty) {
         await _updateLocalStorage('_isSelectBreakComplete', true);
         _isSelectBreakComplete = true;
 
-        _swipeDirectionIS = _xOffset > 0 ? 'skip_next' : 'break_complete';
+        _swipeDirectionIS =
+            _xOffset > 0 ? 'skip_next' : 'break_completion_time';
+        setState(() {
+          dutyLocation = _swipeDirectionIS;
+        });
       } else {
         await _updateLocalStorage('_isSelectPunchOut', true);
         _isSelectPunchOut = true;
-        _swipeDirectionIS = _yOffset > 0 ? 'punch_out' : '';
+        _swipeDirectionIS = _yOffset > 0 ? 'logout_time' : '';
+        setState(() {
+          dutyLocation = _swipeDirectionIS;
+        });
         _resetSelectValue();
       }
 
       print('Swipe Direction: $_swipeDirectionIS');
     }
+    submitAttendance();
   }
 
   void _resetPosition() {
@@ -128,6 +153,55 @@ class _AttendanceStartState extends State<AttendanceStart> {
       _yOffset = 0;
       _swipeDirection = null;
     });
+  }
+
+  Future<void> _loadSavedCredentials() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final String? Employee_Id = prefs.getString('Employee_Id');
+
+    print("Emp_Id:$Employee_Id");
+
+    setState(() {
+      employeeId = Employee_Id ?? '';
+    });
+  }
+
+  void submitAttendance() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // String employeeId = "126";
+      // String updateField = "break_start_time";
+      // String dutyLocation = "Home";
+      // String attendanceId = "34603";
+      // String latitude = "12.971598";
+      // String longitude = "77.594566";
+
+      POST_API postApi = POST_API();
+      Map<String, dynamic> result = await postApi.attendance(
+        employee_id: employeeId,
+        update_field: updateField,
+        duty_location: dutyLocation,
+        attendance_id: attendanceId,
+        latitude: latitude,
+        longitude: longitude,
+      );
+
+      if (result['status'] == true) {
+        print("Attendance marked successfully: ${result['message']}");
+      } else {
+        print("Failed to mark attendance: ${result['message']}");
+      }
+    } catch (e) {
+      print("Error during attendance API call: $e");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
