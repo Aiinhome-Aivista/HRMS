@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hrms/Services/api_services.dart';
+import 'package:hrms/components/showToast.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class AttendanceStart extends StatefulWidget {
   final List<dynamic> currentAttendanceDatais;
@@ -41,8 +44,8 @@ class _AttendanceStartState extends State<AttendanceStart> {
   String attendanceId = '';
   String updateField = '';
   String dutyLocation = '';
-  String latitude = "12.971598";
-  String longitude = "77.594566";
+  String latitude = '';
+  String longitude = '';
 
   @override
   void initState() {
@@ -50,6 +53,30 @@ class _AttendanceStartState extends State<AttendanceStart> {
     _setSelectvalue();
     fetchAttendance();
     _loadSavedCredentials();
+  }
+
+
+
+  Future<void> fetchLocation() async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        print("Location permissions are permanently denied.");
+        return;
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      print("Latitude: ${position.latitude}, Longitude: ${position.longitude}");
+    } catch (e) {
+      print("Error fetching location: $e");
+    }
   }
 
   void fetchAttendance() async {
@@ -104,6 +131,8 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   _handleSwipeCompletion() async {
+ 
+    fetchLocation();
     if (_xOffset.abs() > _swipeThreshold || _yOffset.abs() > _swipeThreshold) {
       if (currectDateLoginTime.isEmpty) {
         await _updateLocalStorage('_isSelectWorkLocation', true);

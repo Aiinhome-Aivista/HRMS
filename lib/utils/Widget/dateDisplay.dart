@@ -29,7 +29,7 @@ class _DateDisplayState extends State<DateDisplay> {
     _selectedDay = DateTime.now();
     _focusedDay = DateTime.now();
     fetchAttendance();
-    print('get all attendance data: ${widget.attendanceData}');
+    // print('get all attendance data: ${widget.attendanceData}');
   }
 
   void fetchAttendance() async {
@@ -37,6 +37,7 @@ class _DateDisplayState extends State<DateDisplay> {
     setState(() {
       _highlightedDates = widget.attendanceData;
     });
+    print('get all attendance data: $_highlightedDates');
   }
 
   // Function to get the suffix for the day
@@ -189,6 +190,21 @@ class _DateDisplayState extends State<DateDisplay> {
             // Get the highlight color for the selected day
             Color? highlightColor = getHighlightColor(selectedDay);
 
+            // Find the data for the selected day
+            Map<String, dynamic>? selectedDateData =
+                _highlightedDates.firstWhere(
+              (data) =>
+                  data['date'] == DateFormat('yyyy-MM-dd').format(selectedDay),
+              orElse: () => null,
+            );
+
+            // Extract the required fields or set them to null if not available
+            String loginTime = selectedDateData?['login_time'] ?? '';
+            String breakStartTime = selectedDateData?['break_start_time'] ?? '';
+            String breakCompletionTime =
+                selectedDateData?['break_completion_time'] ?? '';
+            String logoutTime = selectedDateData?['logout_time'] ?? '';
+
             showModalBottomSheet(
               context: context,
               isScrollControlled: true,
@@ -196,6 +212,10 @@ class _DateDisplayState extends State<DateDisplay> {
                 return DateModal(
                   selectedDate: selectedDay,
                   highlightColor: highlightColor,
+                  loginTime: loginTime,
+                  breakStartTime: breakStartTime,
+                  breakCompletionTime: breakCompletionTime,
+                  logoutTime: logoutTime,
                 );
               },
             );
