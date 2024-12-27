@@ -54,7 +54,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
 
     try {
       String employeeId = "126";
-      String updateField = "login_time";
+      String updateField = "logout_time";
       String dutyLocation = "Home";
       String attendanceId = "34603";
       String latitude = "12.971598";
