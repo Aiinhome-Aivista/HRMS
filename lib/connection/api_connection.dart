@@ -5,6 +5,7 @@ class PostApiConnection {
   String locationApi = '${baseUrl}location.php';
   String noticeApi = '${baseUrl}get_notice.php';
   String attendanceApi = '${baseUrl}attendance.php';
+  String locationUpdateApi = '${baseUrl}update_latitude.php';
 }
 
 class GetApiConnection {

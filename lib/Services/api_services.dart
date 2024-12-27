@@ -107,6 +107,58 @@ class POST_API {
     }
   }
 
+  // location Update API
+  Future<Map<String, dynamic>> locationUpdate(String employee_id,
+      String latitude, String longitude, String date) async {
+    final String url = _apiService._postApiConnection.locationUpdateApi;
+
+    try {
+// Create an HttpClient instance
+      HttpClient httpClient = HttpClient();
+
+      // Create a POST request
+      HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
+      request.headers.set(
+          HttpHeaders.contentTypeHeader, "application/x-www-form-urlencoded");
+
+      // Add body parameters
+      final Map<String, String> body = {
+        'employee_id': employee_id,
+        'latitude': latitude,
+        'longitude': longitude,
+        'date': date,
+      };
+      print("Encoded body : ${Uri(queryParameters: body).query}");
+      request.write(Uri(queryParameters: body).query);
+
+      // Send the request
+      HttpClientResponse response = await request.close();
+
+      // Check the response status
+      if (response.statusCode == 200) {
+        // Read and decode the response
+        final String responseBody =
+            await response.transform(utf8.decoder).join();
+
+        return json.decode(responseBody);
+      } else {
+        print(
+            "location api call failed with status code ${response.statusCode}");
+        return {
+          'status': false,
+          'message': 'Failed with status code ${response.statusCode}',
+        };
+      }
+    } catch (e, stackTrace) {
+      print("Error during location API call: $e");
+      print("Stack Trace: $stackTrace");
+      return {
+        'status': false,
+        'message': 'Error: $e',
+      };
+    }
+  }
+
 //notice API
   Future<Map<String, dynamic>> notice(String employee_id) async {
     final String url = _apiService._postApiConnection.noticeApi;

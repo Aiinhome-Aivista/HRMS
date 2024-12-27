@@ -9,6 +9,7 @@ import 'package:hrms/components/showToast.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:hrms/utils/Screens/attandanceScreen.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DocumentArchiveScreen extends StatefulWidget {
@@ -22,6 +23,9 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
   String userName = '';
   String userEmail = '';
   String Emp_Id = '';
+  String latitude = "12.971598";
+  String longitude = "77.594566";
+  String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
   bool _isLoading = false;
   List<dynamic> notices = [];
 
@@ -29,6 +33,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
   void initState() {
     super.initState();
     _loadSavedCredentials();
+    updateLocation();
   }
 
   // Get local storage data
@@ -50,6 +55,31 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
     }
   }
 
+//location update
+  void updateLocation() async {
+    print("Calling updateLocation API at: ${DateTime.now()}");
+
+    try {
+      POST_API postApi = POST_API();
+      Map<String, dynamic> response =
+          await postApi.locationUpdate(Emp_Id, latitude, longitude, date);
+
+      // Check the response
+      if (response['status'] == true) {
+        print("Location update successful: ${response['message']}");
+      } else {
+        print("Location update failed: ${response['message']}");
+      }
+    } catch (e) {
+      print("Error calling locationUpdate API: $e");
+    }
+
+    Future.delayed(Duration(hours: 1), () {
+      updateLocation();
+    });
+  }
+
+// notice fetch
   Future<void> noticeFetch() async {
     if (Emp_Id.isEmpty) {
       print('Emp_Id is empty');
