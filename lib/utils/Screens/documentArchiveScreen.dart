@@ -221,7 +221,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                     }).toList(),
                     options: CarouselOptions(
                       height: 150,
-                      enlargeCenterPage: true,
+                      // enlargeCenterPage: true,
                       autoPlay: false,
                       aspectRatio: 16 / 9,
                       autoPlayCurve: Curves.fastOutSlowIn,
@@ -241,15 +241,9 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                           return Container(
                               alignment: Alignment.center,
                               width: MediaQuery.of(context).size.width,
-                              margin: const EdgeInsets.only(
-                                right: 15,
-                                top: 0,
-                                left: 15,
-                                bottom: 35,
-                              ),
                               padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                               decoration: BoxDecoration(
-                                color: AppColors.greyShade,
+                                color: AppColors.blackShade,
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
                               child: LoadingSpinner());

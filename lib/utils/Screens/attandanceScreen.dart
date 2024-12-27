@@ -61,6 +61,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     } else {
       print('Error: ${result['message']}');
     }
+    
     setState(() {
       _isLoading = false;
     });
