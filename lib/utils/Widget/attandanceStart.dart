@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hrms/Services/api_services.dart';
+import 'package:hrms/components/showToast.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class AttendanceStart extends StatefulWidget {
   final List<dynamic> currentAttendanceDatais;
@@ -34,12 +38,72 @@ class _AttendanceStartState extends State<AttendanceStart> {
   String currentLogoutTime = '';
   bool _isBreakStart = false;
   bool _isBreakEnd = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _setSelectvalue();
     fetchAttendance();
+  }
+
+  void submitAttendance() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      String employeeId = "126";
+      String updateField = "login_time";
+      String dutyLocation = "Home";
+      String attendanceId = "34603";
+      String latitude = "12.971598";
+      String longitude = "77.594566";
+
+      POST_API postApi = POST_API();
+      Map<String, dynamic> result = await postApi.attendance(
+        employee_id: employeeId,
+        update_field: updateField,
+        duty_location: dutyLocation,
+        attendance_id: attendanceId,
+        latitude: latitude,
+        longitude: longitude,
+      );
+
+      if (result['status'] == true) {
+        print("Attendance marked successfully: ${result['message']}");
+      } else {
+        print("Failed to mark attendance: ${result['message']}");
+      }
+    } catch (e) {
+      print("Error during attendance API call: $e");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> fetchLocation() async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        print("Location permissions are permanently denied.");
+        return;
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      print("Latitude: ${position.latitude}, Longitude: ${position.longitude}");
+    } catch (e) {
+      print("Error fetching location: $e");
+    }
   }
 
   void fetchAttendance() async {
@@ -93,6 +157,8 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   _handleSwipeCompletion() async {
+    submitAttendance();
+    fetchLocation();
     if (_xOffset.abs() > _swipeThreshold || _yOffset.abs() > _swipeThreshold) {
       if (currectDateLoginTime.isEmpty) {
         await _updateLocalStorage('_isSelectWorkLocation', true);

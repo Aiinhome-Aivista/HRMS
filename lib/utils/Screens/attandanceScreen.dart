@@ -16,7 +16,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   late DateTime _selectedDay;
   List<dynamic> _allAttendanceData = [];
   List<dynamic> _currentAttendance = [];
-  bool _isLoading = false;
 
   @override
   void initState() {
@@ -61,43 +60,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     }
   }
 
-  // void submitAttendance() async {
-  //   setState(() {
-  //     _isLoading = true;
-  //   });
-
-  //   try {
-  //     String employeeId = "12345";
-  //     String updateField = "ClockIn";
-  //     String dutyLocation = "Head Office";
-  //     String attendance_id = "23454";
-  //     String latitude = "12.971598";
-  //     String longitude = "77.594566";
-
-  //     POST_API postApi = POST_API();
-  //     Map<String, dynamic> result = await postApi.attendance(
-  //       employeeId,
-  //       updateField,
-  //       dutyLocation,
-  //       attendance_id,
-  //       latitude,
-  //       longitude,
-  //     );
-
-  //     if (result['status'] == true) {
-  //       print("Attendance marked successfully: ${result['message']}");
-  //     } else {
-  //       print("Failed to mark attendance: ${result['message']}");
-  //     }
-  //   } catch (e) {
-  //     print("Error during attendance API call: $e");
-  //   } finally {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,11 +88,17 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                     ),
                   ],
                 ),
-                DateDisplay(selectedDay: _selectedDay,attendanceData: _allAttendanceData,),
+                DateDisplay(
+                  selectedDay: _selectedDay,
+                  attendanceData: _allAttendanceData,
+                ),
               ],
             ),
           ),
-          Expanded(child: AttendanceStart(currentAttendanceDatais:_currentAttendance,)),
+          Expanded(
+              child: AttendanceStart(
+            currentAttendanceDatais: _currentAttendance,
+          )),
         ],
       ),
     );
