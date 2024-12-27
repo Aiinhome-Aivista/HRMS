@@ -39,7 +39,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
 
   String employeeId = '';
   String attendanceId = '';
-  String updateField = "login_time";
+  String updateField = '';
   String dutyLocation = '';
   String latitude = "12.971598";
   String longitude = "77.594566";
@@ -119,7 +119,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
 
         _swipeDirectionIS = _xOffset > 0 ? 'skip_next' : 'break_start_time';
         setState(() {
-          dutyLocation = _swipeDirectionIS;
+          updateField = _swipeDirectionIS;
         });
       } else if (currectDateLoginTime.isNotEmpty &&
           currentBreakStartTime.isNotEmpty &&
@@ -130,14 +130,14 @@ class _AttendanceStartState extends State<AttendanceStart> {
         _swipeDirectionIS =
             _xOffset > 0 ? 'skip_next' : 'break_completion_time';
         setState(() {
-          dutyLocation = _swipeDirectionIS;
+          updateField = _swipeDirectionIS;
         });
       } else {
         await _updateLocalStorage('_isSelectPunchOut', true);
         _isSelectPunchOut = true;
         _swipeDirectionIS = _yOffset > 0 ? 'logout_time' : '';
         setState(() {
-          dutyLocation = _swipeDirectionIS;
+          updateField = _swipeDirectionIS;
         });
         _resetSelectValue();
       }
