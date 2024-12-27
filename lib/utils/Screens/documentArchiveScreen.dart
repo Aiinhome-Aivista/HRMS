@@ -178,9 +178,9 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                   CarouselSlider(
                     items: notices.map((notice) {
                       return Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(0.0),
                         child: Card(
-                          color: AppColors.greyShade,
+                          color: AppColors.blackShade,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),

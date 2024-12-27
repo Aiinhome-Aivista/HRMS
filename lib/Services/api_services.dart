@@ -201,7 +201,7 @@ class POST_API {
     }
   }
 
-  //attendance API
+//attendance API
   Future<Map<String, dynamic>> attendance({
     required String employee_id,
     required String update_field,
@@ -268,6 +268,7 @@ class POST_API {
       };
     }
   }
+
 }
 
 class GET_API {
