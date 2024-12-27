@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hrms/Services/api_services.dart';
-import 'package:hrms/components/showToast.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
 
 class AttendanceStart extends StatefulWidget {
   final List<dynamic> currentAttendanceDatais;
@@ -19,10 +17,6 @@ class _AttendanceStartState extends State<AttendanceStart> {
   double _xOffset = 0;
   double _yOffset = 0;
   final double _swipeThreshold = 50.0;
-  bool _isSelectWorkLocation = false;
-  bool _isSelectBreakStart = false;
-  bool _isSelectBreakComplete = false;
-  bool _isSelectPunchOut = false;
 
   String? _swipeDirection;
   double _leftLimit = 0;
@@ -50,7 +44,6 @@ class _AttendanceStartState extends State<AttendanceStart> {
   @override
   void initState() {
     super.initState();
-    _setSelectvalue();
     fetchAttendance();
     _loadSavedCredentials();
     fetchLocation();
@@ -64,7 +57,6 @@ class _AttendanceStartState extends State<AttendanceStart> {
       }
 
       if (permission == LocationPermission.deniedForever) {
-        print("Location permissions are permanently denied.");
         return;
       }
 
@@ -72,7 +64,6 @@ class _AttendanceStartState extends State<AttendanceStart> {
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      print("Latitude: ${position.latitude}, Longitude: ${position.longitude}");
       setState(() {
         latitude = position.latitude.toString();
         longitude = position.longitude.toString();
@@ -83,70 +74,53 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   void fetchAttendance() async {
-    await Future.delayed(Duration(seconds: 3));
+    // await Future.delayed(Duration(seconds: 7));
     setState(() {
-      _currentAttendanceData = widget.currentAttendanceDatais;
-      attendanceId = _currentAttendanceData[0]['id'].toString();
-      currectDateLoginTime =
-          (_currentAttendanceData[0]['login_time'] ?? '').toString();
-      currentBreakStartTime =
-          (_currentAttendanceData[0]['break_start_time'] ?? '').toString();
-      currentBreakCompletionTime =
-          (_currentAttendanceData[0]['break_completion_time'] ?? '').toString();
-      currentLogoutTime =
-          (_currentAttendanceData[0]['logout_time'] ?? '').toString();
+      _currentAttendanceData = widget.currentAttendanceDatais ?? [];
+
+      if (_currentAttendanceData.isNotEmpty) {
+        attendanceId = (_currentAttendanceData[0]['id'] ?? '').toString();
+        currectDateLoginTime =
+            (_currentAttendanceData[0]['login_time'] ?? '').toString();
+        currentBreakStartTime =
+            (_currentAttendanceData[0]['break_start_time'] ?? '').toString();
+        currentBreakCompletionTime =
+            (_currentAttendanceData[0]['break_completion_time'] ?? '')
+                .toString();
+        currentLogoutTime =
+            (_currentAttendanceData[0]['logout_time'] ?? '').toString();
+      } else {
+        print("No attendance data available");
+        attendanceId = '';
+        currectDateLoginTime = '';
+        currentBreakStartTime = '';
+        currentBreakCompletionTime = '';
+        currentLogoutTime = '';
+      }
     });
-    print(
-        'Current date login time: ${_currentAttendanceData[0]['login_time']}');
-  }
-
-  // Get local storage data
-  Future<void> _setSelectvalue() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool? savedSelectWorkLocation =
-        prefs.getBool('_isSelectWorkLocation');
-    final bool? savedSelectBreakStart = prefs.getBool('_isSelectBreakStart');
-    final bool? savedSelectBreakComplete =
-        prefs.getBool('_isSelectBreakComplete');
-    final bool? savedSelectPunchOut = prefs.getBool('_isSelectPunchOut');
-
-    setState(() {
-      _isSelectWorkLocation = savedSelectWorkLocation ?? false;
-      _isSelectBreakStart = savedSelectBreakStart ?? false;
-      _isSelectBreakComplete = savedSelectBreakComplete ?? false;
-      _isSelectPunchOut = savedSelectPunchOut ?? false;
-    });
-  }
-
-  //  SharedPreferences and update the local variable
-  Future<void> _updateLocalStorage(String key, bool value) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(key, value);
-  }
-
-  // Set local storage data
-  Future<void> _resetSelectValue() async {
-    await Future.delayed(Duration(seconds: 10));
-    await _updateLocalStorage('_isSelectWorkLocation', false);
-    await _updateLocalStorage('_isSelectBreakStart', false);
-    await _updateLocalStorage('_isSelectBreakComplete', false);
-    await _updateLocalStorage('_isSelectPunchOut', false);
   }
 
   _handleSwipeCompletion() async {
     if (_xOffset.abs() > _swipeThreshold || _yOffset.abs() > _swipeThreshold) {
       if (currectDateLoginTime.isEmpty) {
-        await _updateLocalStorage('_isSelectWorkLocation', true);
-        _isSelectWorkLocation = true;
-        _swipeDirectionIS = _yOffset > 0 ? 'client' : 'pwc';
+        if (_yOffset > 0 && _xOffset == 0) {
+          _swipeDirectionIS = 'Client_site';
+        } else if (_yOffset < 0 && _xOffset == 0) {
+          _swipeDirectionIS = 'pwc';
+        } else if (_xOffset > 0 && _yOffset == 0) {
+          _swipeDirectionIS = 'Head_Office';
+        } else if (_xOffset < 0 && _yOffset == 0) {
+          _swipeDirectionIS = 'Home';
+        } else {
+          _swipeDirectionIS = 'Unknown';
+        }
+
         setState(() {
           dutyLocation = _swipeDirectionIS;
+          updateField = 'login_time';
         });
       } else if (currectDateLoginTime.isNotEmpty &&
           currentBreakStartTime.isEmpty) {
-        await _updateLocalStorage('_isSelectBreakStart', true);
-        _isSelectBreakStart = true;
-
         _swipeDirectionIS = _xOffset > 0 ? 'skip_next' : 'break_start_time';
         setState(() {
           updateField = _swipeDirectionIS;
@@ -154,25 +128,20 @@ class _AttendanceStartState extends State<AttendanceStart> {
       } else if (currectDateLoginTime.isNotEmpty &&
           currentBreakStartTime.isNotEmpty &&
           currentBreakCompletionTime.isEmpty) {
-        await _updateLocalStorage('_isSelectBreakComplete', true);
-        _isSelectBreakComplete = true;
-
         _swipeDirectionIS =
             _xOffset > 0 ? 'skip_next' : 'break_completion_time';
         setState(() {
           updateField = _swipeDirectionIS;
         });
       } else {
-        await _updateLocalStorage('_isSelectPunchOut', true);
-        _isSelectPunchOut = true;
         _swipeDirectionIS = _yOffset > 0 ? 'logout_time' : '';
         setState(() {
           updateField = _swipeDirectionIS;
         });
-        _resetSelectValue();
       }
 
       print('Swipe Direction: $_swipeDirectionIS');
+      print('Duty Location: $dutyLocation');
     }
     submitAttendance();
   }
@@ -187,29 +156,14 @@ class _AttendanceStartState extends State<AttendanceStart> {
 
   Future<void> _loadSavedCredentials() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
     final String? Employee_Id = prefs.getString('Employee_Id');
-
-    print("Emp_Id:$Employee_Id");
-
     setState(() {
       employeeId = Employee_Id ?? '';
     });
   }
 
   void submitAttendance() async {
-    setState(() {
-      _isLoading = true;
-    });
-
     try {
-      // String employeeId = "126";
-      // String updateField = "break_start_time";
-      // String dutyLocation = "Home";
-      // String attendanceId = "34603";
-      // String latitude = "12.971598";
-      // String longitude = "77.594566";
-
       POST_API postApi = POST_API();
       Map<String, dynamic> result = await postApi.attendance(
         employee_id: employeeId,
@@ -227,11 +181,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
       }
     } catch (e) {
       print("Error during attendance API call: $e");
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    } finally {}
   }
 
   @override
@@ -251,14 +201,6 @@ class _AttendanceStartState extends State<AttendanceStart> {
           _swipeDirection = (details.delta.dx.abs() > details.delta.dy.abs())
               ? 'horizontal'
               : 'vertical';
-
-          // if (_swipeDirection == 'horizontal') {
-          //   _xOffset += details.delta.dx;
-          //   _yOffset += details.delta.dy;
-          // } else if (_swipeDirection == 'vertical') {
-          //   _xOffset += details.delta.dx;
-          //   _yOffset += details.delta.dy;
-          // }
 
           if (currectDateLoginTime.isEmpty) {
             if (_swipeDirection == 'horizontal') {
@@ -294,25 +236,25 @@ class _AttendanceStartState extends State<AttendanceStart> {
         });
       },
       onPanEnd: (details) async {
-        await _handleSwipeCompletion(); // Call the reusable function
-        _resetPosition(); // Reset position after completion
+        await _handleSwipeCompletion();
+        _resetPosition();
+        await Future.delayed(Duration(seconds: 1));
+        Navigator.pop(context);
       },
       child: Stack(
         children: [
           if (currectDateLoginTime.isEmpty) _buildSelectWorkLocation(context),
           if (currectDateLoginTime.isNotEmpty &&
-                  currentBreakStartTime.isEmpty ||
-              _isBreakStart)
+              currentBreakStartTime.isNotEmpty &&
+              currentBreakCompletionTime.isNotEmpty &&
+              currentLogoutTime.isEmpty)
+            _buildPunchOut(context),
+          if (currectDateLoginTime.isNotEmpty && currentBreakStartTime.isEmpty)
             _buildBreakStart(context),
           if (currectDateLoginTime.isNotEmpty &&
               currentBreakStartTime.isNotEmpty &&
               currentBreakCompletionTime.isEmpty)
             _buildBreakComplete(context),
-          if (currectDateLoginTime.isNotEmpty &&
-              currentBreakStartTime.isNotEmpty &&
-              currentBreakCompletionTime.isNotEmpty &&
-              currentLogoutTime.isEmpty)
-            _buildPunchOut(context),
           if (currentLogoutTime.isNotEmpty) _finalDone(context),
         ],
       ),
@@ -341,18 +283,18 @@ class _AttendanceStartState extends State<AttendanceStart> {
           children: [
             _buildIcon(
               iconPath: 'assets/images/home.svg',
-              isHighlighted: _swipeDirectionIS == 'home',
+              isHighlighted: _swipeDirectionIS == 'Home',
             ),
             _buildSwipeControl(),
             _buildIcon(
               iconPath: 'assets/images/office.svg',
-              isHighlighted: _swipeDirectionIS == 'office',
+              isHighlighted: _swipeDirectionIS == 'Head_Office',
             ),
           ],
         ),
         _buildIcon(
           iconPath: 'assets/images/client.svg',
-          isHighlighted: _swipeDirectionIS == 'client',
+          isHighlighted: _swipeDirectionIS == 'Client_site',
         ),
       ],
     );
@@ -364,7 +306,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
       children: [
         _buildIcon(
           iconPath: 'assets/images/break_start.svg',
-          isHighlighted: _swipeDirectionIS == 'break_start',
+          isHighlighted: _swipeDirectionIS == 'break_start_time',
         ),
         _buildSwipeControl(),
         _buildIcon(
@@ -381,7 +323,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
       children: [
         _buildIcon(
           iconPath: 'assets/images/break_complete.svg',
-          isHighlighted: _swipeDirectionIS == 'break_complete',
+          isHighlighted: _swipeDirectionIS == 'break_completion_time',
         ),
         _buildSwipeControl(),
         _buildIcon(
@@ -400,7 +342,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
         _buildSwipeControl(),
         _buildIcon(
           iconPath: 'assets/images/punch_out.svg',
-          isHighlighted: _swipeDirectionIS == 'punch_out',
+          isHighlighted: _swipeDirectionIS == 'logout_time',
         ),
       ],
     );
