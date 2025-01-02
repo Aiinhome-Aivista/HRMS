@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,6 +13,7 @@ import 'package:hrms/components/showToast.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/utils/Screens/forgotPassword.dart';
 import 'package:hrms/utils/Screens/locationFillScreen.dart';
+import 'package:hrms/utils/Widget/bottamNavigationWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -108,17 +111,30 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks.first;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Locationfillscreen(
-              city: place.locality ?? '',
-              state: place.administrativeArea ?? '',
-              latitude: position.latitude,
-              longitude: position.longitude,
-            ),
-          ),
-        );
+
+        if ((position.latitude.toString()).isNotEmpty &&
+            (position.longitude.toString()).isNotEmpty) {
+          Timer(const Duration(seconds: 2), () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => BottamnavigationBar()),
+            );
+          });
+        } else {
+          Timer(const Duration(seconds: 2), () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Locationfillscreen(
+                  city: place.locality ?? '',
+                  state: place.administrativeArea ?? '',
+                  latitude: position.latitude,
+                  longitude: position.longitude,
+                ),
+              ),
+            );
+          });
+        }
       }
     } catch (e) {
       print("Error fetching location: $e");

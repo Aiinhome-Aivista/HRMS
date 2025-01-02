@@ -30,9 +30,9 @@ class _AttendanceStartState extends State<AttendanceStart> {
   String currentBreakCompletionTime = '';
   String currentLogoutTime = '';
   String _swipeDirectionIS = '';
-  bool _isBreakStart = false;
-  bool _isBreakEnd = false;
-  bool _isLoading = false;
+  // bool _isBreakStart = false;
+  // bool _isBreakEnd = false;
+  // bool _isLoading = false;
 
   String employeeId = '';
   String attendanceId = '';

@@ -5,6 +5,7 @@ import 'package:hrms/utils/Widget/attandanceStart.dart';
 import 'package:hrms/utils/Widget/dateDisplay.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:hrms/styleColor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AttendanceScreen extends StatefulWidget {
   const AttendanceScreen({super.key});
@@ -18,12 +19,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   List<dynamic> _allAttendanceData = [];
   List<dynamic> _currentAttendance = [];
   bool _isLoading = false;
+  String Emp_Id = '';
 
   @override
   void initState() {
     super.initState();
     _selectedDay = DateTime.now();
-    fetchAttendance();
+    // fetchAttendance();
+    _loadSavedCredentials();
   }
 
   List filterTodayAttendance(List<dynamic> attendanceData) {
@@ -35,12 +38,23 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     }).toList();
   }
 
-  void fetchAttendance() async {
+  // Get local storage data
+  Future<void> _loadSavedCredentials() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? Employee_Id = prefs.getString('Employee_Id');
+    setState(() {
+      Emp_Id = Employee_Id ?? '';
+    });
+    print("Emp_Iddddddddddddddddddddddd:$Emp_Id");
+    await fetchAttendance();
+  }
+
+  fetchAttendance() async {
     setState(() {
       _isLoading = true;
     });
     final GET_API getApi = GET_API();
-    final result = await getApi.getAttendance('126');
+    final result = await getApi.getAttendance(Emp_Id);
 
     if (result['status'] == true) {
       setState(() {
@@ -61,7 +75,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     } else {
       print('Error: ${result['message']}');
     }
-    
+
     setState(() {
       _isLoading = false;
     });

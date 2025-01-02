@@ -33,10 +33,14 @@ class _DateDisplayState extends State<DateDisplay> {
   }
 
   void fetchAttendance() async {
-    await Future.delayed(Duration(seconds: 3));
+    // await Future.delayed(Duration(seconds: 3));
+
+    if (!mounted) return;
+
     setState(() {
       _highlightedDates = widget.attendanceData;
     });
+
     print('get all attendance data: $_highlightedDates');
   }
 
