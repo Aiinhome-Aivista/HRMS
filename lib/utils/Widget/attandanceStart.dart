@@ -238,7 +238,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
       onPanEnd: (details) async {
         await _handleSwipeCompletion();
         _resetPosition();
-        await Future.delayed(Duration(seconds: 1));
+        await Future.delayed(const Duration(seconds: 1));
         Navigator.pop(context);
       },
       child: Stack(
