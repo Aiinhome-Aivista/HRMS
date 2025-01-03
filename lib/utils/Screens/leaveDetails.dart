@@ -138,7 +138,7 @@ class _LeavedetailsState extends State<Leavedetails> {
               _buildSortAndFilterRow(),
               const SizedBox(height: 12),
               _buildLeaveList(),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -252,7 +252,7 @@ class _LeavedetailsState extends State<Leavedetails> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Leaveapplyscreen()),
+              MaterialPageRoute(builder: (context) => const Leaveapplyscreen()),
             );
           },
         ),

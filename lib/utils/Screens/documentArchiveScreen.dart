@@ -1,17 +1,15 @@
-import 'package:carousel_slider/carousel_options.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/CustomFloatingButton.dart';
 import 'package:hrms/components/TransparentPageRoute.dart';
 import 'package:hrms/components/loading_spinner.dart';
-import 'package:hrms/components/showToast.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:hrms/utils/Screens/attandanceScreen.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class DocumentArchiveScreen extends StatefulWidget {
   const DocumentArchiveScreen({super.key});
@@ -23,7 +21,7 @@ class DocumentArchiveScreen extends StatefulWidget {
 class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
   String userName = '';
   String userEmail = '';
-  String Emp_Id = '';
+  String empId = '';
   String latitude = '';
   String longitude = '';
   String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -42,16 +40,16 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? gateUserName = prefs.getString('SaveUserName');
     final String? gateUserEmail = prefs.getString('SaveUserEmail');
-    final String? Employee_Id = prefs.getString('Employee_Id');
+    final String? employeeId = prefs.getString('employeeId');
 
-    print("Emp_Id:$Employee_Id");
+    print("empId:$employeeId");
 
     setState(() {
       userName = gateUserName ?? '';
       userEmail = gateUserEmail ?? '';
-      Emp_Id = Employee_Id ?? '';
+      empId = employeeId ?? '';
     });
-    if (Emp_Id.isNotEmpty) {
+    if (empId.isNotEmpty) {
       await noticeFetch();
     }
   }
@@ -87,7 +85,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
     try {
       POST_API postApi = POST_API();
       Map<String, dynamic> response =
-          await postApi.locationUpdate(Emp_Id, latitude, longitude, date);
+          await postApi.locationUpdate(empId, latitude, longitude, date);
 
       if (response['status'] == true) {
         print("Location update successful: ${response['message']}");
@@ -98,15 +96,15 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
       print("Error calling locationUpdate API: $e");
     }
 
-    Future.delayed(Duration(hours: 1), () {
+    Future.delayed(const Duration(hours: 1), () {
       updateLocation();
     });
   }
 
 // notice fetch
   Future<void> noticeFetch() async {
-    if (Emp_Id.isEmpty) {
-      print('Emp_Id is empty');
+    if (empId.isEmpty) {
+      print('empId is empty');
       return;
     }
 
@@ -116,7 +114,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
 
     try {
       POST_API postApi = POST_API();
-      Map<String, dynamic> response = await postApi.notice(Emp_Id);
+      Map<String, dynamic> response = await postApi.notice(empId);
 
       setState(() {
         _isLoading = false;
@@ -246,7 +244,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                                 color: AppColors.blackShade,
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
-                              child: LoadingSpinner());
+                              child: const LoadingSpinner());
                         },
                       ),
                     ],

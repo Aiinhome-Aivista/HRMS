@@ -28,7 +28,7 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _pincodeController = TextEditingController();
-  String Emp_Id = '';
+  String empId = '';
   String _selectedState = '';
   String _selectedCity = '';
   String _selectedPincode = '';
@@ -47,17 +47,17 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
       _selectedCity = widget.city;
     });
 
-    _savedEmp_Id();
+    _savedempId();
   }
 
-  Future<void> _savedEmp_Id() async {
+  Future<void> _savedempId() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? Employee_Id = prefs.getString('Employee_Id');
+    final String? employeeId = prefs.getString('employeeId');
 
-    // print("Emp_Id:$Employee_Id");
+    // print("empId:$employeeId");
 
     setState(() {
-      Emp_Id = Employee_Id ?? '';
+      empId = employeeId ?? '';
     });
   }
 
@@ -69,7 +69,7 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
     try {
       POST_API postApi = POST_API();
       Map<String, dynamic> response = await postApi.location(
-        Emp_Id,
+        empId,
         _selectedPincode,
         _selectedCity,
         _selectedState,
@@ -82,7 +82,9 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
       });
 
       if (response['status'] == true) {
-        CustomToast.show(context, 'Location saved successfully!');
+        if (mounted) {
+          CustomToast.show(context, 'Location saved successfully!');
+        }
       } else {
         // CustomToast.show(context, response['msg']);
       }
@@ -90,7 +92,9 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
       setState(() {
         _isLoading = false;
       });
-      CustomToast.show(context, 'Error: $e');
+      if (mounted) {
+        CustomToast.show(context, 'Error: $e');
+      }
     }
   }
 
@@ -176,6 +180,7 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
                 await sendLocation();
 
                 // Show success toast
+
                 CustomToast.show(
                   context,
                   'Location save successful!',

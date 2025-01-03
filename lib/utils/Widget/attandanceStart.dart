@@ -6,8 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
 
 class AttendanceStart extends StatefulWidget {
-  final List<dynamic> currentAttendanceDatais;
-  const AttendanceStart({super.key, required this.currentAttendanceDatais});
+  final List<dynamic> currentAttendanceDetails;
+  const AttendanceStart({super.key, required this.currentAttendanceDetails});
 
   @override
   State<AttendanceStart> createState() => _AttendanceStartState();
@@ -25,7 +25,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
   double _bottomLimit = 0;
 
   List<dynamic> _currentAttendanceData = [];
-  String currectDateLoginTime = '';
+  String currentDateLoginTime = '';
   String currentBreakStartTime = '';
   String currentBreakCompletionTime = '';
   String currentLogoutTime = '';
@@ -76,11 +76,11 @@ class _AttendanceStartState extends State<AttendanceStart> {
   void fetchAttendance() async {
     // await Future.delayed(Duration(seconds: 7));
     setState(() {
-      _currentAttendanceData = widget.currentAttendanceDatais ?? [];
+      _currentAttendanceData = widget.currentAttendanceDetails ?? [];
 
       if (_currentAttendanceData.isNotEmpty) {
         attendanceId = (_currentAttendanceData[0]['id'] ?? '').toString();
-        currectDateLoginTime =
+        currentDateLoginTime =
             (_currentAttendanceData[0]['login_time'] ?? '').toString();
         currentBreakStartTime =
             (_currentAttendanceData[0]['break_start_time'] ?? '').toString();
@@ -92,7 +92,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
       } else {
         print("No attendance data available");
         attendanceId = '';
-        currectDateLoginTime = '';
+        currentDateLoginTime = '';
         currentBreakStartTime = '';
         currentBreakCompletionTime = '';
         currentLogoutTime = '';
@@ -102,7 +102,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
 
   _handleSwipeCompletion() async {
     if (_xOffset.abs() > _swipeThreshold || _yOffset.abs() > _swipeThreshold) {
-      if (currectDateLoginTime.isEmpty) {
+      if (currentDateLoginTime.isEmpty) {
         if (_yOffset > 0 && _xOffset == 0) {
           _swipeDirectionIS = 'Client_site';
         } else if (_yOffset < 0 && _xOffset == 0) {
@@ -119,13 +119,13 @@ class _AttendanceStartState extends State<AttendanceStart> {
           dutyLocation = _swipeDirectionIS;
           updateField = 'login_time';
         });
-      } else if (currectDateLoginTime.isNotEmpty &&
+      } else if (currentDateLoginTime.isNotEmpty &&
           currentBreakStartTime.isEmpty) {
         _swipeDirectionIS = _xOffset > 0 ? 'skip_next' : 'break_start_time';
         setState(() {
           updateField = _swipeDirectionIS;
         });
-      } else if (currectDateLoginTime.isNotEmpty &&
+      } else if (currentDateLoginTime.isNotEmpty &&
           currentBreakStartTime.isNotEmpty &&
           currentBreakCompletionTime.isEmpty) {
         _swipeDirectionIS =
@@ -202,7 +202,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
               ? 'horizontal'
               : 'vertical';
 
-          if (currectDateLoginTime.isEmpty) {
+          if (currentDateLoginTime.isEmpty) {
             if (_swipeDirection == 'horizontal') {
               _xOffset += details.delta.dx;
               _yOffset = 0;
@@ -238,20 +238,20 @@ class _AttendanceStartState extends State<AttendanceStart> {
       onPanEnd: (details) async {
         await _handleSwipeCompletion();
         _resetPosition();
-        await Future.delayed(Duration(seconds: 1));
+        await Future.delayed(const Duration(seconds: 1));
         Navigator.pop(context);
       },
       child: Stack(
         children: [
-          if (currectDateLoginTime.isEmpty) _buildSelectWorkLocation(context),
-          if (currectDateLoginTime.isNotEmpty &&
+          if (currentDateLoginTime.isEmpty) _buildSelectWorkLocation(context),
+          if (currentDateLoginTime.isNotEmpty &&
               currentBreakStartTime.isNotEmpty &&
               currentBreakCompletionTime.isNotEmpty &&
               currentLogoutTime.isEmpty)
             _buildPunchOut(context),
-          if (currectDateLoginTime.isNotEmpty && currentBreakStartTime.isEmpty)
+          if (currentDateLoginTime.isNotEmpty && currentBreakStartTime.isEmpty)
             _buildBreakStart(context),
-          if (currectDateLoginTime.isNotEmpty &&
+          if (currentDateLoginTime.isNotEmpty &&
               currentBreakStartTime.isNotEmpty &&
               currentBreakCompletionTime.isEmpty)
             _buildBreakComplete(context),

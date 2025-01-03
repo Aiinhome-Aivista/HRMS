@@ -26,9 +26,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
       try {
         await Future.delayed(const Duration(seconds: 2));
-        CustomToast.show(context, 'Password reset link sent to your email');
+        if (mounted) {
+          CustomToast.show(context, 'Password reset link sent to your email');
+        }
       } catch (e) {
-        CustomToast.show(context, 'Failed to send reset link');
+        if (mounted) {
+          CustomToast.show(context, 'Failed to send reset link');
+        }
       } finally {
         setState(() {
           _isLoading = false;
