@@ -30,6 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
   bool get _isButtonEnabled =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+  String latitude = '';
+  String longitude = '';
 
   @override
   void initState() {
@@ -112,12 +114,11 @@ class _LoginScreenState extends State<LoginScreen> {
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks.first;
 
-        if ((position.latitude.toString()).isNotEmpty &&
-            (position.longitude.toString()).isNotEmpty) {
+        if (latitude.isNotEmpty && longitude.isNotEmpty) {
           Timer(const Duration(seconds: 2), () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => BottamnavigationBar()),
+              MaterialPageRoute(builder: (context) => const BottamnavigationBar()),
             );
           });
         } else {
@@ -158,7 +159,11 @@ class _LoginScreenState extends State<LoginScreen> {
     if (response['status'] == true) {
       await _saveCredentials();
       fetchLocation();
-      print('Login Successful: ${response['user']}');
+      print('Login Successful: ${response['user']['latitude']}');
+      setState(() {
+        latitude = response['user']['latitude'];
+        longitude = response['user']['longitude'];
+      });
       // Set local storage data
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('SaveUserName', response['user']['emp_name']);

@@ -67,15 +67,15 @@ class _SplashScreenState extends State<SplashScreen>
       latitude = getlatitude ?? '';
       longitude = getlongitude ?? '';
     });
-    print('getlatitude: $latitude');
-    print('getlongitude: $longitude');
+    // print('getlatitude: $latitude');
+    // print('getlongitude: $longitude');
 
     // After checking if latitude and longitude are available, navigate accordingly
     if (latitude.isNotEmpty && longitude.isNotEmpty) {
       Timer(const Duration(seconds: 2), () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => BottamnavigationBar()),
+          MaterialPageRoute(builder: (context) => const BottamnavigationBar()),
         );
       });
     } else {
