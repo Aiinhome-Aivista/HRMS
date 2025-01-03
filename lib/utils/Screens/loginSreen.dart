@@ -170,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('SaveUserName', response['user']['emp_name']);
       await prefs.setString('SaveUserEmail', response['user']['emp_email']);
-      await prefs.setString('Employee_Id', response['employee_id']);
+      await prefs.setString('employeeId', response['employee_id']);
     } else {
       if (mounted) {
         CustomToast.show(context, response['msg']);

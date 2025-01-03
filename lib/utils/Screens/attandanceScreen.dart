@@ -42,6 +42,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   Future<void> _loadSavedCredentials() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? employeeId = prefs.getString('employeeId');
+     print("empIddddddddddddddddddddddsssssssssd:$employeeId");
     setState(() {
       empId = employeeId ?? '';
     });
