@@ -9,7 +9,7 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen>
@@ -72,14 +72,14 @@ class _SplashScreenState extends State<SplashScreen>
 
     // After checking if latitude and longitude are available, navigate accordingly
     if (latitude.isNotEmpty && longitude.isNotEmpty) {
-      Timer(const Duration(seconds: 2), () {
+      Timer(const Duration(seconds: 4), () {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const BottamnavigationBar()),
         );
       });
     } else {
-      Timer(const Duration(seconds: 2), () {
+      Timer(const Duration(seconds: 4), () {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const LoginScreen()),

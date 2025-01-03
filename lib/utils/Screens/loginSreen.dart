@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       if (permission == LocationPermission.deniedForever) {
-        print("Location permissions are permanently denied.");
+        // print("Location permissions are permanently denied.");
         return;
       }
 
@@ -105,8 +105,9 @@ class _LoginScreenState extends State<LoginScreen> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('Savelatitude', position.latitude.toString());
       await prefs.setString('Savelongitude', position.longitude.toString());
-
-      CustomToast.show(context, 'Successfully login');
+      if (mounted) {
+        CustomToast.show(context, 'Successfully login');
+      }
       setState(() {
         _isLoading = false;
       });
@@ -118,7 +119,8 @@ class _LoginScreenState extends State<LoginScreen> {
           Timer(const Duration(seconds: 2), () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const BottamnavigationBar()),
+              MaterialPageRoute(
+                  builder: (context) => const BottamnavigationBar()),
             );
           });
         } else {
@@ -138,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       }
     } catch (e) {
-      print("Error fetching location: $e");
+      //print("Error fetching location: $e");
       setState(() {
         _isLoading = false;
       });
@@ -159,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (response['status'] == true) {
       await _saveCredentials();
       fetchLocation();
-      print('Login Successful: ${response['user']['latitude']}');
+      //print('Login Successful: ${response['user']['latitude']}');
       setState(() {
         latitude = response['user']['latitude'];
         longitude = response['user']['longitude'];
@@ -170,7 +172,9 @@ class _LoginScreenState extends State<LoginScreen> {
       await prefs.setString('SaveUserEmail', response['user']['emp_email']);
       await prefs.setString('Employee_Id', response['employee_id']);
     } else {
-      CustomToast.show(context, response['msg']);
+      if (mounted) {
+        CustomToast.show(context, response['msg']);
+      }
       setState(() {
         _isLoading = false;
       });

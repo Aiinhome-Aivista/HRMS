@@ -19,7 +19,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   List<dynamic> _allAttendanceData = [];
   List<dynamic> _currentAttendance = [];
   bool _isLoading = false;
-  String Emp_Id = '';
+  String empId = '';
 
   @override
   void initState() {
@@ -41,11 +41,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   // Get local storage data
   Future<void> _loadSavedCredentials() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? Employee_Id = prefs.getString('Employee_Id');
+    final String? employeeId = prefs.getString('employeeId');
     setState(() {
-      Emp_Id = Employee_Id ?? '';
+      empId = employeeId ?? '';
     });
-    print("Emp_Iddddddddddddddddddddddd:$Emp_Id");
+    print("empIddddddddddddddddddddddd:$empId");
     await fetchAttendance();
   }
 
@@ -54,7 +54,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       _isLoading = true;
     });
     final GET_API getApi = GET_API();
-    final result = await getApi.getAttendance(Emp_Id);
+    final result = await getApi.getAttendance(empId);
 
     if (result['status'] == true) {
       setState(() {
@@ -123,7 +123,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 ),
                 Expanded(
                     child: AttendanceStart(
-                  currentAttendanceDatais: _currentAttendance,
+                  currentAttendanceDetails: _currentAttendance,
                 )),
               ],
             ),

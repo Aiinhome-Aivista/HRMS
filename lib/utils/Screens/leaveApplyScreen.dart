@@ -8,8 +8,9 @@ import 'package:hrms/textStyle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Leaveapplyscreen extends StatefulWidget {
+  const Leaveapplyscreen({super.key});
   @override
-  _LeaveapplyscreenState createState() => _LeaveapplyscreenState();
+  State<Leaveapplyscreen> createState() => _LeaveapplyscreenState();
 }
 
 class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
