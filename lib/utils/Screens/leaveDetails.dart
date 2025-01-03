@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:hrms/components/CustomButton.dart';
+import 'package:hrms/components/CustomFloatingButton.dart';
+import 'package:hrms/components/TransparentPageRoute.dart';
 import 'package:hrms/components/leaveEventCard.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
@@ -84,11 +84,33 @@ class _LeavedetailsState extends State<Leavedetails> {
       "leaveStatus": "Pending",
       "causes": "Half-day leave for attending a seminar.",
     },
+    {
+      "leaveType": "Half Day",
+      "startDate": "2025-05-12",
+      "endDate": "2025-05-12",
+      "leaveStatus": "Pending",
+      "causes": "Half-day leave for attending a seminar.",
+    },
+    {
+      "leaveType": "Half Day",
+      "startDate": "2025-05-12",
+      "endDate": "2025-05-12",
+      "leaveStatus": "Pending",
+      "causes": "Half-day leave for attending a seminar.",
+    },
+    {
+      "leaveType": "Half Day",
+      "startDate": "2025-05-12",
+      "endDate": "2025-05-12",
+      "leaveStatus": "Pending",
+      "causes": "Half-day leave for attending a seminar.",
+    },
   ];
 
   bool isAscending = true;
   DateTime? selectedDate;
   String? selectedDateText;
+  bool showAll = false;
 
   @override
   void initState() {
@@ -119,49 +141,53 @@ class _LeavedetailsState extends State<Leavedetails> {
         scrolledUnderElevation: 4,
         backgroundColor: AppColors.backgroundColor,
         elevation: 0,
-        leading: IconButton(
-          icon: SvgPicture.asset('assets/images/arrow.svg',
-              width: 22, height: 22),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text('Leave', style: HeaderFontStyle.style),
-        centerTitle: false,
-        titleSpacing: -5,
+        title: Text('Manage Leave', style: HeaderFontStyle.style),
+        centerTitle: true,
+        titleSpacing: 5,
       ),
       backgroundColor: AppColors.backgroundColor,
       body: RefreshIndicator(
         onRefresh: _onRefresh,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
           child: Column(
             children: [
               _buildSortAndFilterRow(),
               const SizedBox(height: 12),
               _buildLeaveList(),
-              SizedBox(height: 20),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: _buildApplyLeaveButton(),
+      floatingActionButton: CustomFloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            TransparentPageRoute.create(Leaveapplyscreen()),
+          );
+        },
+        icon: Icons.add,
+      ),
     );
   }
 
   Widget _buildSortAndFilterRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _buildButton(
-          text: selectedDateText ?? 'Filter by Date',
-          icon: null,
-          onTap: _selectDate,
-        ),
-        _buildButton(
-          text: null,
-          icon: Icons.swap_vert,
-          onTap: _toggleSortOrder,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildButton(
+            text: selectedDateText ?? 'Filter by Date',
+            icon: null,
+            onTap: _selectDate,
+          ),
+          _buildButton(
+            text: null,
+            icon: Icons.swap_vert,
+            onTap: _toggleSortOrder,
+          ),
+        ],
+      ),
     );
   }
 
@@ -169,7 +195,7 @@ class _LeavedetailsState extends State<Leavedetails> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(30),
@@ -177,11 +203,13 @@ class _LeavedetailsState extends State<Leavedetails> {
         ),
         child: Row(
           children: [
-            if (icon != null) Icon(icon, size: 22, color: AppColors.lightblue),
+            if (icon != null) Icon(icon, size: 18, color: AppColors.lightblue),
             if (text != null)
               Text(text,
                   style: const TextStyle(
-                      color: AppColors.lightblue, fontWeight: FontWeight.w600)),
+                      color: AppColors.lightblue,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600)),
           ],
         ),
       ),
@@ -216,46 +244,54 @@ class _LeavedetailsState extends State<Leavedetails> {
           ? startDateA.compareTo(startDateB)
           : startDateB.compareTo(startDateA);
     });
-
+    final displayValues =
+        showAll ? filteredLeaveValues : filteredLeaveValues.take(8).toList();
     return Expanded(
-      child: ListView.builder(
-        itemCount: filteredLeaveValues.length,
-        itemBuilder: (context, index) {
-          final leave = filteredLeaveValues[index];
-          final startDate = DateTime.parse(leave['startDate']);
-          final endDate = DateTime.parse(leave['endDate']);
-          return Column(children: [
-            LeaveEventCard(
-              leaveType: leave['leaveType'],
-              startDate: startDate,
-              endDate: endDate,
-              leaveStatus: leave['leaveStatus'],
-              leaveCause: leave['causes'],
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: displayValues.length,
+              itemBuilder: (context, index) {
+                final leave = displayValues[index];
+                final startDate = DateTime.parse(leave['startDate']);
+                final endDate = DateTime.parse(leave['endDate']);
+                return Column(children: [
+                  LeaveEventCard(
+                    leaveType: leave['leaveType'],
+                    startDate: startDate,
+                    endDate: endDate,
+                    leaveStatus: leave['leaveStatus'],
+                    leaveCause: leave['causes'],
+                  ),
+                  const SizedBox(
+                    height: 6,
+                  )
+                ]);
+              },
             ),
-            const SizedBox(
-              height: 6,
-            )
-          ]);
-        },
-      ),
-    );
-  }
-
-  Widget _buildApplyLeaveButton() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
-      child: SizedBox(
-        width: double.infinity,
-        child: CustomButton(
-          buttonText: 'Apply Leave',
-          borderRadius: BorderRadius.circular(12),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Leaveapplyscreen()),
-            );
-          },
-        ),
+          ),
+          if (filteredLeaveValues.length > 8)
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  showAll = !showAll;
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.blackShade,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              child: Text(
+                showAll ? 'Show Less' : 'View All',
+                style: const TextStyle(
+                  color: AppColors.lightblue,
+                ),
+              ),
+            ),
+        
+        ],
       ),
     );
   }

@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hrms/components/CustomButton.dart';
-import 'package:hrms/components/CustomFloatingButton.dart';
 import 'package:hrms/components/DatePickerField.dart';
-import 'package:hrms/components/TransparentPageRoute.dart';
+
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
-import 'package:hrms/utils/Screens/attandanceScreen.dart';
-import 'package:hrms/utils/Screens/leaveDetails.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Leaveapplyscreen extends StatefulWidget {
@@ -51,34 +48,32 @@ class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
       statusBarIconBrightness: Brightness.light,
     ));
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        surfaceTintColor: Colors.transparent,
-        scrolledUnderElevation: 4,
-        backgroundColor: AppColors.backgroundColor,
-        elevation: 0,
-        // leading: IconButton(
-        //   icon: SvgPicture.asset(
-        //     'assets/images/arrow.svg',
-        //     width: 22,
-        //     height: 22,
-        //   ),
-        //   onPressed: () {},
-        // ),
-        title: Text(
-          'Leave Apply',
-          style: HeaderFontStyle.style,
-        ),
-        centerTitle: true,
-        titleSpacing: -5,
-      ),
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: Colors.black.withOpacity(0.5),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 40, left: 16, right: 16),
+          padding: const EdgeInsets.fromLTRB(16, 45, 16, 6),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 35),
+                      child: Center(
+                        child:
+                            Text('Leave Apply', style: HeaderFontStyle.style),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: AppColors.lightblue),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
               _buildInputField(
                 icon: Icons.person,
                 hintText: userName,
@@ -124,16 +119,7 @@ class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
                   borderRadius: BorderRadius.circular(12),
                   onPressed: isFormValid
                       ? () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => Leavedetails(
-                                startDate: startDate ?? DateTime.now(),
-                                endDate: endDate ?? DateTime.now(),
-                                selectedLeaveType: selectedLeaveType ?? '',
-                                causes: causesController.text,
-                              ),
-                            ),
-                          );
+                          Navigator.pop(context);
                         }
                       : () {},
                   backgroundColor:
@@ -143,14 +129,6 @@ class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
             ],
           ),
         ),
-      ),
-      floatingActionButton: CustomFloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            TransparentPageRoute.create(const AttendanceScreen()),
-          );
-        },
-        icon: Icons.add,
       ),
     );
   }
