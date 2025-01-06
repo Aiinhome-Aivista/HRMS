@@ -42,6 +42,10 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
     final String? gateUserEmail = prefs.getString('SaveUserEmail');
     final String? employeeId = prefs.getString('employeeId');
 
+    print('Login Successful gateUserName: $gateUserName');
+    print('Login Successful gateUserEmail: $gateUserEmail');
+    print('Login Successful employeeId: $employeeId');
+
     print("empId:$employeeId");
 
     setState(() {
@@ -81,7 +85,19 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
 
 //location update
   void updateLocation() async {
-    fetchLocation();
+    await fetchLocation();
+
+    if (empId.isEmpty) {
+      print("Error: Employee ID is missing.");
+      return;
+    }
+    if (latitude.isEmpty || longitude.isEmpty) {
+      print("Error: Latitude or Longitude is missing.");
+      return;
+    }
+
+    // print("Employee ID: $empId, Latitude: $latitude, Longitude: $longitude, Date: $date");
+
     try {
       POST_API postApi = POST_API();
       Map<String, dynamic> response =

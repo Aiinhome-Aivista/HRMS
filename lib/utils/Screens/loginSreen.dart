@@ -151,6 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = true;
     });
+    print("Loading state set to true");
 
     POST_API postApi = POST_API();
     Map<String, dynamic> response = await postApi.login(
@@ -158,19 +159,38 @@ class _LoginScreenState extends State<LoginScreen> {
       _passwordController.text,
     );
 
+    print("API Response: $response");
+
     if (response['status'] == true) {
       await _saveCredentials();
       fetchLocation();
-      //print('Login Successful: ${response['user']['latitude']}');
-      setState(() {
-        latitude = response['user']['latitude'];
-        longitude = response['user']['longitude'];
-      });
-      // Set local storage data
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('SaveUserName', response['user']['emp_name']);
-      await prefs.setString('SaveUserEmail', response['user']['emp_email']);
-      await prefs.setString('employeeId', response['employee_id']);
+
+      try {
+        setState(() {
+          latitude = response['user']?['latitude'] ?? 0.0;
+          longitude = response['user']?['longitude'] ?? 0.0;
+        });
+        // print(
+        //     "Latitude and longitude updated: latitude = $latitude, longitude = $longitude");
+      } catch (e) {
+        print("Error updating latitude/longitude: $e");
+      }
+
+      try {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        final empName = response['user']?['emp_name'] ?? 'Unknown';
+        final empEmail = response['user']?['emp_email'] ?? 'Unknown';
+        final employeeId = response['employee_id'] ?? 'Unknown';
+
+        await prefs.setString('SaveUserName', empName);
+        await prefs.setString('SaveUserEmail', empEmail);
+        await prefs.setString('employeeId', employeeId);
+
+        // print(
+        //     "User data saved locally: name = $empName, email = $empEmail, employeeId = $employeeId");
+      } catch (e) {
+        print("Error saving user data locally: $e");
+      }
     } else {
       if (mounted) {
         CustomToast.show(context, response['msg']);
@@ -178,6 +198,8 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _isLoading = false;
       });
+      // print(
+      //     "Loading state set to false, error message: ${response['msg'] ?? 'Unknown error'}");
     }
   }
 
