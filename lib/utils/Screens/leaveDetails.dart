@@ -311,8 +311,28 @@ class _LeavedetailsState extends State<Leavedetails> {
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
+      firstDate: DateTime(2000),
       lastDate: DateTime(2101),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            primaryColor: AppColors.lightblue,
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            scaffoldBackgroundColor:
+                AppColors.backgroundColor, // Background color of calendar
+            dialogBackgroundColor:
+                AppColors.backgroundColor, // Dialog background
+
+            colorScheme: const ColorScheme.dark(
+              primary: AppColors.lightblue, // Selected date background
+              onPrimary: Colors.black, // Color of selected date text
+              onSurface: AppColors
+                  .lightblue, // Text color for rest of the calendar (month, year, etc.)
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (pickedDate != null) {
       setState(() {
