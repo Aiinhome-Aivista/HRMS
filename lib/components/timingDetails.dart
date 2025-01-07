@@ -56,7 +56,6 @@ class _DateModalState extends State<DateModal> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 195,
       decoration: const BoxDecoration(
         color: AppColors.lightblue,
         borderRadius: BorderRadius.only(
@@ -64,7 +63,7 @@ class _DateModalState extends State<DateModal> {
           topRight: Radius.circular(20.0),
         ),
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -75,8 +74,8 @@ class _DateModalState extends State<DateModal> {
                 children: [
                   SvgPicture.asset(
                     imageAsset,
-                    width: 24,
-                    height: 24,
+                    width: 22,
+                    height: 22,
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -97,7 +96,7 @@ class _DateModalState extends State<DateModal> {
               ),
             ],
           ),
-          const SizedBox(height: 36),
+          const SizedBox(height: 35),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

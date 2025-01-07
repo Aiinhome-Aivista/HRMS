@@ -229,11 +229,14 @@ class _LeavedetailsState extends State<Leavedetails> {
     }).toList();
 
     if (filteredLeaveValues.isEmpty && selectedDate != null) {
-      return Center(
-          child: Text(
-        'No leave available for this date',
-        style: LeaveFontStyle.style,
-      ));
+      return Padding(
+        padding: const EdgeInsets.only(top: 350),
+        child: Center(
+            child: Text(
+          'No leave available for this date',
+          style: LeaveFontStyle.style,
+        )),
+      );
     }
 
     // Sort leaveValues based on the sorting order
