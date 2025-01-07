@@ -22,34 +22,37 @@ class _MorewidgetState extends State<Morewidget> {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
-              child: SliderButton(
-                action: () async {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen()),
-                    (route) => false, // Removes all previous routes
-                  );
-                },
-                label: const Text(
-                  "Slide to log out",
-                  style: TextStyle(
-                    color: Color(0xff4a4a4a),
-                    fontWeight: FontWeight.w500,
-                    fontSize: 17,
+              child: SizedBox(
+                height: 65,
+                child: SliderButton(
+                  action: () async {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()),
+                      (route) => false, // Removes all previous routes
+                    );
+                  },
+                  label: const Text(
+                    "Slide to log out",
+                    style: TextStyle(
+                      color: Color(0xff4a4a4a),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 17,
+                    ),
                   ),
-                ),
-                icon: const Center(
-                  child: Icon(
-                    CupertinoIcons.power,
-                    color: Colors.redAccent,
-                    size: 30.0,
-                    semanticLabel: 'Text to announce in accessibility modes',
+                  icon: const Center(
+                    child: Icon(
+                      CupertinoIcons.power,
+                      color: Colors.redAccent,
+                      size: 30.0,
+                      semanticLabel: 'Text to announce in accessibility modes',
+                    ),
                   ),
-                ),
-                boxShadow: BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 4,
+                  boxShadow: BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 4,
+                  ),
                 ),
               ),
             ),
