@@ -21,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen>
   bool showContent = false;
   String latitude = '';
   String longitude = '';
+  String empID = '';
 
   @override
   void initState() {
@@ -62,16 +63,18 @@ class _SplashScreenState extends State<SplashScreen>
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? getlatitude = prefs.getString('Savelatitude');
     final String? getlongitude = prefs.getString('Savelongitude');
+    final String? getEmpID = prefs.getString('employeeId');
 
     setState(() {
       latitude = getlatitude ?? '';
       longitude = getlongitude ?? '';
+      empID = getEmpID ?? '';
     });
     // print('getlatitude: $latitude');
     // print('getlongitude: $longitude');
 
     // After checking if latitude and longitude are available, navigate accordingly
-    if (latitude.isNotEmpty && longitude.isNotEmpty) {
+    if (latitude.isNotEmpty && longitude.isNotEmpty && empID.isNotEmpty) {
       Timer(const Duration(seconds: 4), () {
         Navigator.pushReplacement(
           context,

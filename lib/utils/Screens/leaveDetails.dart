@@ -248,7 +248,7 @@ class _LeavedetailsState extends State<Leavedetails> {
           : startDateB.compareTo(startDateA);
     });
     final displayValues =
-        showAll ? filteredLeaveValues : filteredLeaveValues.take(8).toList();
+        showAll ? filteredLeaveValues : filteredLeaveValues.take(200).toList();
     return Expanded(
       child: Column(
         children: [
@@ -274,25 +274,25 @@ class _LeavedetailsState extends State<Leavedetails> {
               },
             ),
           ),
-          if (filteredLeaveValues.length > 8)
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  showAll = !showAll;
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.blackShade,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-              ),
-              child: Text(
-                showAll ? 'Show Less' : 'View All',
-                style: const TextStyle(
-                  color: AppColors.lightblue,
-                ),
-              ),
-            ),
+          // if (filteredLeaveValues.length > 8)
+          //   ElevatedButton(
+          //     onPressed: () {
+          //       setState(() {
+          //         showAll = !showAll;
+          //       });
+          //     },
+          //     style: ElevatedButton.styleFrom(
+          //       backgroundColor: AppColors.blackShade,
+          //       shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(10)),
+          //     ),
+          //     child: Text(
+          //       showAll ? 'Show Less' : 'View All',
+          //       style: const TextStyle(
+          //         color: AppColors.lightblue,
+          //       ),
+          //     ),
+          //   ),
         
         ],
       ),
