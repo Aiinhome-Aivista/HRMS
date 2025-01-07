@@ -235,7 +235,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                     }).toList(),
                     options: CarouselOptions(
                       height: 150,
-                      // enlargeCenterPage: true,
+                      enlargeCenterPage: true,
                       autoPlay: false,
                       aspectRatio: 16 / 9,
                       autoPlayCurve: Curves.fastOutSlowIn,
@@ -244,7 +244,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                           const Duration(milliseconds: 800),
                       viewportFraction: 0.9,
                       initialPage: 0,
-                      enlargeFactor: 0.2,
+                      enlargeFactor: 0.1,
                     ),
                   )
                 else

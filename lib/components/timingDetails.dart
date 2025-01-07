@@ -74,8 +74,8 @@ class _DateModalState extends State<DateModal> {
                 children: [
                   SvgPicture.asset(
                     imageAsset,
-                    width: 24,
-                    height: 24,
+                    width: 22,
+                    height: 22,
                   ),
                   const SizedBox(width: 8),
                   Text(
