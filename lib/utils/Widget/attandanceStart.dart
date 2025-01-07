@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/styleColor.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -41,12 +42,17 @@ class _AttendanceStartState extends State<AttendanceStart> {
   String latitude = '';
   String longitude = '';
 
+  String empId = '';
+
+  String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
   @override
   void initState() {
     super.initState();
     fetchAttendance();
     _loadSavedCredentials();
     fetchLocation();
+    updateLocation();
   }
 
   Future<void> fetchLocation() async {
@@ -71,6 +77,41 @@ class _AttendanceStartState extends State<AttendanceStart> {
     } catch (e) {
       print("Error fetching location: $e");
     }
+  }
+
+//location update
+  void updateLocation() async {
+    await fetchLocation();
+
+    if (empId.isEmpty) {
+      print("Error: Employee ID is missing.");
+      return;
+    }
+    if (latitude.isEmpty || longitude.isEmpty) {
+      print("Error: Latitude or Longitude is missing.");
+      return;
+    }
+
+    print(
+        "Employee ID: $empId, Latitude: $latitude, Longitude: $longitude, Date: $date");
+
+    try {
+      POST_API postApi = POST_API();
+      Map<String, dynamic> response =
+          await postApi.locationUpdate(empId, latitude, longitude, date);
+
+      if (response['status'] == true) {
+        print("Location update successful: ${response['message']}");
+      } else {
+        print("Location update failed: ${response['message']}");
+      }
+    } catch (e) {
+      print("Error calling locationUpdate API: $e");
+    }
+
+    Future.delayed(const Duration(hours: 1), () {
+      updateLocation();
+    });
   }
 
   void fetchAttendance() async {

@@ -22,9 +22,6 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
   String userName = '';
   String userEmail = '';
   String empId = '';
-  String latitude = '';
-  String longitude = '';
-  String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
   bool _isLoading = false;
   List<dynamic> notices = [];
 
@@ -32,7 +29,6 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
   void initState() {
     super.initState();
     _loadSavedCredentials();
-    updateLocation();
   }
 
   // Get local storage data
@@ -56,65 +52,6 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
     if (empId.isNotEmpty) {
       await noticeFetch();
     }
-  }
-
-//fetch latitude longitude
-  Future<void> fetchLocation() async {
-    try {
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        return;
-      }
-
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-
-      setState(() {
-        latitude = position.latitude.toString();
-        longitude = position.longitude.toString();
-      });
-    } catch (e) {
-      print("Error fetching location: $e");
-    }
-  }
-
-//location update
-  void updateLocation() async {
-    await fetchLocation();
-
-    if (empId.isEmpty) {
-      print("Error: Employee ID is missing.");
-      return;
-    }
-    if (latitude.isEmpty || longitude.isEmpty) {
-      print("Error: Latitude or Longitude is missing.");
-      return;
-    }
-
-    // print("Employee ID: $empId, Latitude: $latitude, Longitude: $longitude, Date: $date");
-
-    try {
-      POST_API postApi = POST_API();
-      Map<String, dynamic> response =
-          await postApi.locationUpdate(empId, latitude, longitude, date);
-
-      if (response['status'] == true) {
-        print("Location update successful: ${response['message']}");
-      } else {
-        print("Location update failed: ${response['message']}");
-      }
-    } catch (e) {
-      print("Error calling locationUpdate API: $e");
-    }
-
-    Future.delayed(const Duration(hours: 1), () {
-      updateLocation();
-    });
   }
 
 // notice fetch
