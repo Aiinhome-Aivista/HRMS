@@ -156,7 +156,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
 
   Future<void> _loadSavedCredentials() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? Employee_Id = prefs.getString('Employee_Id');
+    final String? Employee_Id = prefs.getString('employeeId');
     setState(() {
       employeeId = Employee_Id ?? '';
     });
@@ -173,6 +173,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
         latitude: latitude,
         longitude: longitude,
       );
+      print('Apiiiiiiiiii send item: $result');
 
       if (result['status'] == true) {
         print("Attendance marked successfully: ${result['message']}");
