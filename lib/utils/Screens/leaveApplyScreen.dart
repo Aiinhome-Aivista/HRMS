@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hrms/components/CustomButton.dart';
 import 'package:hrms/components/DatePickerField.dart';
-
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +14,7 @@ class Leaveapplyscreen extends StatefulWidget {
 
 class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
   String? selectedLeaveType;
+  String? selectedLeaveTime;
   DateTime? startDate;
   DateTime? endDate;
   TextEditingController causesController = TextEditingController();
@@ -22,6 +22,7 @@ class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
 
   bool get isFormValid {
     return selectedLeaveType != null &&
+        (selectedLeaveType != 'Half day' || selectedLeaveTime != null) &&
         startDate != null &&
         endDate != null &&
         causesController.text.isNotEmpty;
@@ -60,12 +61,8 @@ class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 35),
-                      child: Center(
-                        child:
-                            Text('Leave Apply', style: HeaderFontStyle.style),
-                      ),
+                    child: Center(
+                      child: Text('Leave Apply', style: HeaderFontStyle.style),
                     ),
                   ),
                   IconButton(
@@ -86,6 +83,15 @@ class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
                 hintText: 'Leave type',
                 isDropdown: true,
               ),
+              if (selectedLeaveType == 'Half day') ...[
+                const SizedBox(height: 20),
+                _buildInputField(
+                  icon: Icons.schedule,
+                  hintText: 'Leave time',
+                  isDropdown: true,
+                  isLeaveTime: true,
+                ),
+              ],
               const SizedBox(height: 20),
               DatePickerField(
                 icon: Icons.calendar_month,
@@ -108,7 +114,7 @@ class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
               ),
               const SizedBox(height: 20),
               _buildInputField(
-                hintText: '     Causes...',
+                hintText: 'Causes...',
                 maxLines: 4,
                 causesController: causesController,
               ),
@@ -142,6 +148,7 @@ class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
     int maxLines = 1,
     Color borderColor = AppColors.lightblue,
     TextEditingController? causesController,
+    bool isLeaveTime = false,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -170,48 +177,65 @@ class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
             const SizedBox(width: 12),
           ],
           Expanded(
-            child: isDropdown
-                ? DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      hintText: hintText,
-                      hintStyle: LeaveFontStyle.style,
-                      border: InputBorder.none,
+            child: Padding(
+              padding: hintText == 'Causes...'
+                  ? const EdgeInsets.only(left: 12.0)
+                  : EdgeInsets.zero,
+              child: isDropdown
+                  ? isLeaveTime
+                      ? _buildDropdown(
+                          hintText: 'Leave time',
+                          items: ['First Half', 'Second Half'],
+                          value: selectedLeaveTime,
+                          onChanged: (value) =>
+                              setState(() => selectedLeaveTime = value))
+                      : _buildDropdown(
+                          hintText: 'Leave type',
+                          items: ['Half day', 'Full day'],
+                          value: selectedLeaveType,
+                          onChanged: (value) =>
+                              setState(() => selectedLeaveType = value))
+                  : TextField(
+                      controller: causesController,
+                      readOnly: isReadOnly,
+                      maxLines: hintText == 'Causes...' ? 4 : maxLines,
+                      style: const TextStyle(color: AppColors.lightblue),
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        hintText: hintText,
+                        hintStyle: LeaveFontStyle.style,
+                        border: InputBorder.none,
+                      ),
+                      onChanged: (value) {
+                        setState(() {});
+                      },
                     ),
-                    value: selectedLeaveType,
-                    items: <String>['Half day', 'Full day'].map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: LeaveFontStyle.style,
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        selectedLeaveType = newValue;
-                      });
-                    },
-                  )
-                : TextField(
-                    controller: causesController,
-                    readOnly: isReadOnly,
-                    maxLines: hintText == 'Causes...' ? 4 : maxLines,
-                    style: const TextStyle(color: AppColors.lightblue),
-                    textInputAction: TextInputAction.done,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      hintText: hintText,
-                      hintStyle: LeaveFontStyle.style,
-                      border: InputBorder.none,
-                    ),
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                  ),
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildDropdown({
+    required List<String> items,
+    String? value,
+    ValueChanged<String?>? onChanged,
+    required String hintText,
+  }) {
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: LeaveFontStyle.style,
+          border: InputBorder.none),
+      dropdownColor: AppColors.backgroundColor,
+      value: value,
+      items: items
+          .map((String value) => DropdownMenuItem<String>(
+              value: value, child: Text(value, style: LeaveFontStyle.style)))
+          .toList(),
+      onChanged: onChanged,
     );
   }
 }
