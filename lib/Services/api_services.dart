@@ -69,12 +69,12 @@ class POST_API {
 
       // Add body parameters
       final Map<String, String> body = {
-        'Employee_Id': employee_id,
-        'PinCode': pincode,
-        'City': city,
-        'State': state,
-        'Latitude': latitude,
-        'Longitude': longitude,
+        'employee_id': employee_id,
+        'pincode': pincode,
+        'city': city,
+        'state': state,
+        'latitude': latitude,
+        'longitude': longitude,
       };
       print("Encoded body : ${Uri(queryParameters: body).query}");
       request.write(Uri(queryParameters: body).query);
@@ -268,7 +268,6 @@ class POST_API {
       };
     }
   }
-
 }
 
 class GET_API {
