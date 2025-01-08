@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hrms/Services/api_services.dart';
@@ -41,20 +43,19 @@ class _AttendanceStartState extends State<AttendanceStart> {
   String dutyLocation = '';
   String latitude = '';
   String longitude = '';
-
   String empId = '';
-
   String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
     fetchAttendance();
     _loadSavedCredentials();
-    fetchLocation();
-    updateLocation();
+    // fetchLocation();
   }
 
+//fetch location
   Future<void> fetchLocation() async {
     try {
       LocationPermission permission = await Geolocator.checkPermission();
@@ -69,14 +70,34 @@ class _AttendanceStartState extends State<AttendanceStart> {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
-
-      setState(() {
-        latitude = position.latitude.toString();
-        longitude = position.longitude.toString();
-      });
+      if (mounted) {
+        setState(() {
+          latitude = position.latitude.toString();
+          longitude = position.longitude.toString();
+        });
+      }
     } catch (e) {
       print("Error fetching location: $e");
     }
+  }
+
+  void startUpdatingLocation() {
+    _timer?.cancel();
+    _timer = Timer.periodic(Duration(seconds: 15), (timer) {
+      print("api call in every 15 seconds");
+      updateLocation();
+    });
+  }
+
+  void stopUpdatingLocation() {
+    _timer?.cancel();
+    _timer = null;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer?.cancel();
   }
 
 //location update
@@ -109,9 +130,10 @@ class _AttendanceStartState extends State<AttendanceStart> {
       print("Error calling locationUpdate API: $e");
     }
 
-    Future.delayed(const Duration(hours: 1), () {
-      updateLocation();
-    });
+    // Timer.periodic(const Duration(seconds: 15), (timer) {
+    //   print("api call in every 15 seconds");
+    //   updateLocation();
+    // });
   }
 
   void fetchAttendance() async {
@@ -313,6 +335,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   Widget _buildSelectWorkLocation(BuildContext context) {
+    // startUpdatingLocation();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -360,6 +383,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   Widget _buildBreakComplete(BuildContext context) {
+    startUpdatingLocation();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -377,6 +401,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   Widget _buildPunchOut(BuildContext context) {
+    stopUpdatingLocation();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
