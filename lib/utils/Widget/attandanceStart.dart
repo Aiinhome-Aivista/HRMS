@@ -117,10 +117,10 @@ class _AttendanceStartState extends State<AttendanceStart> {
 //update location start
   void startUpdatingLocation() {
     if (!_isLocationUpdating) {
-      // print("startUpdatingLocationnnnnnnnnnnnnnnnnnnnnn");
+      print("startUpdatingLocationnnnnnnnnnnnnnnnnnnnnn");
       _isLocationUpdating = true;
       _timer?.cancel();
-      _timer = Timer.periodic(Duration(hours: 1), (timer) {
+      _timer = Timer.periodic(Duration(minutes: 1), (timer) {
         print("api call in every 1 hours");
         updateLocation();
       });
