@@ -46,13 +46,14 @@ class _AttendanceStartState extends State<AttendanceStart> {
   String empId = '';
   String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
   Timer? _timer;
+  bool _isLocationUpdating = false;
 
   @override
   void initState() {
     super.initState();
     fetchAttendance();
     _loadSavedCredentials();
-    // fetchLocation();
+    fetchLocation();
   }
 
 //fetch location
@@ -79,25 +80,6 @@ class _AttendanceStartState extends State<AttendanceStart> {
     } catch (e) {
       print("Error fetching location: $e");
     }
-  }
-
-  void startUpdatingLocation() {
-    _timer?.cancel();
-    _timer = Timer.periodic(Duration(seconds: 15), (timer) {
-      print("api call in every 15 seconds");
-      updateLocation();
-    });
-  }
-
-  void stopUpdatingLocation() {
-    _timer?.cancel();
-    _timer = null;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _timer?.cancel();
   }
 
 //location update
@@ -129,13 +111,36 @@ class _AttendanceStartState extends State<AttendanceStart> {
     } catch (e) {
       print("Error calling locationUpdate API: $e");
     }
-
-    // Timer.periodic(const Duration(seconds: 15), (timer) {
-    //   print("api call in every 15 seconds");
-    //   updateLocation();
-    // });
   }
 
+//update location start
+  void startUpdatingLocation() {
+    if (!_isLocationUpdating) {
+      // print("startUpdatingLocationnnnnnnnnnnnnnnnnnnnnn");
+      _isLocationUpdating = true;
+      _timer?.cancel();
+      _timer = Timer.periodic(Duration(seconds: 15), (timer) {
+        print("api call in every 15 seconds");
+        updateLocation();
+      });
+    }
+  }
+
+//update location stop
+  void stopUpdatingLocation() {
+    // print("stopUpdatingLocationnnnnnnnnnn");
+    _isLocationUpdating = false;
+    _timer?.cancel();
+    _timer = null;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer?.cancel();
+  }
+
+  //fetch emp attendance
   void fetchAttendance() async {
     // await Future.delayed(Duration(seconds: 7));
     setState(() {
@@ -335,7 +340,6 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   Widget _buildSelectWorkLocation(BuildContext context) {
-    // startUpdatingLocation();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -366,6 +370,9 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   Widget _buildBreakStart(BuildContext context) {
+    if (!_isLocationUpdating) {
+      startUpdatingLocation();
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -383,7 +390,6 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   Widget _buildBreakComplete(BuildContext context) {
-    startUpdatingLocation();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -401,7 +407,6 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   Widget _buildPunchOut(BuildContext context) {
-    stopUpdatingLocation();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -416,6 +421,9 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   Widget _finalDone(BuildContext context) {
+    if (!_isLocationUpdating) {
+      stopUpdatingLocation();
+    }
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
