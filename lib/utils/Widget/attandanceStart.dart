@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hrms/Services/api_services.dart';
+import 'package:hrms/components/showToast.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -186,12 +187,15 @@ class _AttendanceStartState extends State<AttendanceStart> {
         setState(() {
           dutyLocation = _swipeDirectionIS;
           updateField = 'login_time';
+          currentDateLoginTime = 'skip';
         });
       } else if (currentDateLoginTime.isNotEmpty &&
           currentBreakStartTime.isEmpty) {
         _swipeDirectionIS = _xOffset > 0 ? 'skip_next' : 'break_start_time';
         setState(() {
           updateField = _swipeDirectionIS;
+          currentDateLoginTime = 'skip';
+          currentBreakStartTime = 'skip';
         });
       } else if (currentDateLoginTime.isNotEmpty &&
           currentBreakStartTime.isNotEmpty &&
@@ -200,11 +204,18 @@ class _AttendanceStartState extends State<AttendanceStart> {
             _xOffset > 0 ? 'skip_next' : 'break_completion_time';
         setState(() {
           updateField = _swipeDirectionIS;
+          currentDateLoginTime = 'skip';
+          currentBreakStartTime = 'skip';
+          currentBreakCompletionTime = 'skip';
         });
       } else {
         _swipeDirectionIS = _yOffset > 0 ? 'logout_time' : '';
         setState(() {
           updateField = _swipeDirectionIS;
+          currentDateLoginTime = 'skip';
+          currentBreakStartTime = 'skip';
+          currentBreakCompletionTime = 'skip';
+          currentLogoutTime = 'skip';
         });
       }
 
@@ -245,6 +256,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
 
       if (result['status'] == true) {
         print("Attendance marked successfully: ${result['message']}");
+        CustomToast.show(context, result['message']);
       } else {
         print("Failed to mark attendance: ${result['message']}");
       }
@@ -307,27 +319,39 @@ class _AttendanceStartState extends State<AttendanceStart> {
       onPanEnd: (details) async {
         await _handleSwipeCompletion();
         _resetPosition();
-        await Future.delayed(const Duration(seconds: 1));
-        Navigator.pop(context);
+        // await Future.delayed(const Duration(seconds: 1));
+        // Navigator.pop(context);
       },
       child: Stack(
         children: [
-          if (currentDateLoginTime.isEmpty) _buildSelectWorkLocation(context),
-          if (currentDateLoginTime.isNotEmpty &&
-              currentBreakStartTime.isNotEmpty &&
-              currentBreakCompletionTime.isNotEmpty &&
-              currentLogoutTime.isEmpty)
-            _buildPunchOut(context),
-          if (currentDateLoginTime.isNotEmpty && currentBreakStartTime.isEmpty)
-            _buildBreakStart(context),
-          if (currentDateLoginTime.isNotEmpty &&
-              currentBreakStartTime.isNotEmpty &&
-              currentBreakCompletionTime.isEmpty)
-            _buildBreakComplete(context),
-          if (currentLogoutTime.isNotEmpty) _finalDone(context),
+          _buildAttendanceStateUI(),
         ],
       ),
     );
+  }
+
+  Widget _buildAttendanceStateUI() {
+    if (currentDateLoginTime.isEmpty) {
+      return _buildSelectWorkLocation(context);
+    } else if (currentLogoutTime.isNotEmpty) {
+      return _finalDone(context);
+    } else {
+      if (currentDateLoginTime.isNotEmpty &&
+          currentBreakStartTime.isNotEmpty &&
+          currentBreakCompletionTime.isNotEmpty &&
+          currentLogoutTime.isEmpty) {
+        return _buildPunchOut(context);
+      } else if (currentDateLoginTime.isNotEmpty &&
+          currentBreakStartTime.isEmpty) {
+        return _buildBreakStart(context);
+      } else if (currentDateLoginTime.isNotEmpty &&
+          currentBreakStartTime.isNotEmpty &&
+          currentBreakCompletionTime.isEmpty) {
+        return _buildBreakComplete(context);
+      } else {
+        return _finalDone(context);
+      }
+    }
   }
 
   Widget _buildSwipeControl() {
