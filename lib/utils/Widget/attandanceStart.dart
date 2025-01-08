@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hrms/Services/api_services.dart';
@@ -42,10 +44,10 @@ class _AttendanceStartState extends State<AttendanceStart> {
   String dutyLocation = '';
   String latitude = '';
   String longitude = '';
-
   String empId = '';
-
   String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  Timer? _timer;
+  bool _isLocationUpdating = false;
 
   @override
   void initState() {
@@ -53,9 +55,9 @@ class _AttendanceStartState extends State<AttendanceStart> {
     fetchAttendance();
     _loadSavedCredentials();
     fetchLocation();
-    updateLocation();
   }
 
+//fetch location
   Future<void> fetchLocation() async {
     try {
       LocationPermission permission = await Geolocator.checkPermission();
@@ -70,11 +72,12 @@ class _AttendanceStartState extends State<AttendanceStart> {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
-
-      setState(() {
-        latitude = position.latitude.toString();
-        longitude = position.longitude.toString();
-      });
+      if (mounted) {
+        setState(() {
+          latitude = position.latitude.toString();
+          longitude = position.longitude.toString();
+        });
+      }
     } catch (e) {
       print("Error fetching location: $e");
     }
@@ -109,12 +112,36 @@ class _AttendanceStartState extends State<AttendanceStart> {
     } catch (e) {
       print("Error calling locationUpdate API: $e");
     }
-
-    Future.delayed(const Duration(hours: 1), () {
-      updateLocation();
-    });
   }
 
+//update location start
+  void startUpdatingLocation() {
+    if (!_isLocationUpdating) {
+      // print("startUpdatingLocationnnnnnnnnnnnnnnnnnnnnn");
+      _isLocationUpdating = true;
+      _timer?.cancel();
+      _timer = Timer.periodic(Duration(hours: 1), (timer) {
+        print("api call in every 1 hours");
+        updateLocation();
+      });
+    }
+  }
+
+//update location stop
+  void stopUpdatingLocation() {
+    // print("stopUpdatingLocationnnnnnnnnnn");
+    _isLocationUpdating = false;
+    _timer?.cancel();
+    _timer = null;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer?.cancel();
+  }
+
+  //fetch emp attendance
   void fetchAttendance() async {
     // await Future.delayed(Duration(seconds: 7));
     setState(() {
@@ -367,6 +394,9 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   Widget _buildBreakStart(BuildContext context) {
+    if (!_isLocationUpdating) {
+      startUpdatingLocation();
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -415,6 +445,9 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }
 
   Widget _finalDone(BuildContext context) {
+    if (!_isLocationUpdating) {
+      stopUpdatingLocation();
+    }
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
