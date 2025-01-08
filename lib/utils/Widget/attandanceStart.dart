@@ -44,7 +44,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
   String dutyLocation = '';
   String latitude = '';
   String longitude = '';
-  String empId = '';
+  // String empId = '';
   String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
   Timer? _timer;
   bool _isLocationUpdating = false;
@@ -86,8 +86,8 @@ class _AttendanceStartState extends State<AttendanceStart> {
 //location update
   void updateLocation() async {
     await fetchLocation();
-
-    if (empId.isEmpty) {
+    print("locationnnnnnnnnnnnnnnnnnnn");
+    if (employeeId.isEmpty) {
       print("Error: Employee ID is missing.");
       return;
     }
@@ -97,12 +97,12 @@ class _AttendanceStartState extends State<AttendanceStart> {
     }
 
     print(
-        "Employee ID: $empId, Latitude: $latitude, Longitude: $longitude, Date: $date");
+        "Employee ID: $employeeId, Latitude: $latitude, Longitude: $longitude, Date: $date");
 
     try {
       POST_API postApi = POST_API();
       Map<String, dynamic> response =
-          await postApi.locationUpdate(empId, latitude, longitude, date);
+          await postApi.locationUpdate(employeeId, latitude, longitude, date);
 
       if (response['status'] == true) {
         print("Location update successful: ${response['message']}");
@@ -120,7 +120,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
       print("startUpdatingLocationnnnnnnnnnnnnnnnnnnnnn");
       _isLocationUpdating = true;
       _timer?.cancel();
-      _timer = Timer.periodic(Duration(minutes: 1), (timer) {
+      _timer = Timer.periodic(Duration(hours: 1), (timer) {
         print("api call in every 1 hours");
         updateLocation();
       });
@@ -129,7 +129,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
 
 //update location stop
   void stopUpdatingLocation() {
-    // print("stopUpdatingLocationnnnnnnnnnn");
+    print("stopUpdatingLocationnnnnnnnnnn");
     _isLocationUpdating = false;
     _timer?.cancel();
     _timer = null;
