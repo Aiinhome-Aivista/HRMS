@@ -25,6 +25,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
   String userEmail = '';
   String empId = '';
   List<dynamic> notices = [];
+  final bool _isLoading = false;
 
   @override
   void initState() {
@@ -91,7 +92,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Padding(
-          padding: const EdgeInsets.only(top: 40,bottom: 40),
+          padding: const EdgeInsets.only(top: 40, bottom: 40),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -114,104 +115,108 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          //notice
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (notices.isNotEmpty)
-                CarouselSlider(
-                  items: notices.map((notice) {
-                    return Card(
-                      color: AppColors.unselectedNavBarColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          notice,
-                          style: noticeFontStyle.style,
+      body: _isLoading
+          ? const Center(
+              child: LoadingSpinner(),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                //notice
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (notices.isNotEmpty)
+                      CarouselSlider(
+                        items: notices.map((notice) {
+                          return Card(
+                            color: AppColors.unselectedNavBarColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Text(
+                                notice,
+                                style: noticeFontStyle.style,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        options: CarouselOptions(
+                          height: 150,
+                          enlargeCenterPage: true,
+                          autoPlay: false,
+                          aspectRatio: 16 / 9,
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          enableInfiniteScroll: true,
+                          autoPlayAnimationDuration:
+                              const Duration(milliseconds: 800),
+                          viewportFraction: 0.9,
+                          initialPage: 0,
+                          enlargeFactor: 0.1,
+                        ),
+                      )
+                    else
+                      CarouselSlider(
+                        items: [
+                          Builder(
+                            builder: (BuildContext context) {
+                              return Container(
+                                  alignment: Alignment.center,
+                                  width: 370,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.unselectedNavBarColor,
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  child: const LoadingSpinner());
+                            },
+                          ),
+                        ],
+                        options: CarouselOptions(
+                          height: 150.0,
+                          enlargeCenterPage: true,
+                          autoPlay: false,
+                          aspectRatio: 16 / 9,
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          enableInfiniteScroll: true,
+                          autoPlayAnimationDuration:
+                              const Duration(milliseconds: 800),
+                          viewportFraction: 1.0,
+                          initialPage: 0,
                         ),
                       ),
-                    );
-                  }).toList(),
-                  options: CarouselOptions(
-                    height: 150,
-                    enlargeCenterPage: true,
-                    autoPlay: false,
-                    aspectRatio: 16 / 9,
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enableInfiniteScroll: true,
-                    autoPlayAnimationDuration:
-                        const Duration(milliseconds: 800),
-                    viewportFraction: 0.9,
-                    initialPage: 0,
-                    enlargeFactor: 0.1,
+                  ],
+                ),
+
+                const Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            flex: 4,
+                            child: DynamicDonutChart(),
+                          ),
+                          SizedBox(width: 2),
+                          Flexible(
+                            flex: 2,
+                            child: LeaveDaysShow(),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      WorkingHoursGraph()
+                    ],
                   ),
                 )
-              else
-                CarouselSlider(
-                  items: [
-                    Builder(
-                      builder: (BuildContext context) {
-                        return Container(
-                            alignment: Alignment.center,
-                            width: 370,
-                            decoration: BoxDecoration(
-                              color: AppColors.unselectedNavBarColor,
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: const LoadingSpinner());
-                      },
-                    ),
-                  ],
-                  options: CarouselOptions(
-                    height: 150.0,
-                    enlargeCenterPage: true,
-                    autoPlay: false,
-                    aspectRatio: 16 / 9,
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enableInfiniteScroll: true,
-                    autoPlayAnimationDuration:
-                        const Duration(milliseconds: 800),
-                    viewportFraction: 1.0,
-                    initialPage: 0,
-                  ),
-                ),
-            ],
-          ),
-
-          const Padding(
-            padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      flex: 4,
-                      child: DynamicDonutChart(),
-                    ),
-                    SizedBox(width: 2),
-                    Flexible(
-                      flex: 2,
-                      child: LeaveDaysShow(),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                WorkingHoursGraph()
               ],
             ),
-          )
-        ],
-      ),
       floatingActionButton: CustomFloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(

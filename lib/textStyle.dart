@@ -115,7 +115,7 @@ class donutChartFontStyle {
 class donutChartNumStyle {
   static TextStyle get style {
     return const TextStyle(
-      fontSize: 15.0,
+      fontSize: 14.0,
       fontFamily: 'Khula',
       fontWeight: FontWeight.w700,
       color: AppColors.lightblue,
