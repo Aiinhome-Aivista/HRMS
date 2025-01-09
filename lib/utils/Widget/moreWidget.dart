@@ -105,6 +105,7 @@ class _MorewidgetState extends State<Morewidget> {
                           builder: (context) => const LoginScreen()),
                       (route) => false, // Removes all previous routes
                     );
+                    return null;
                   },
                   label: const Text(
                     "Slide to log out",

@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       if (permission == LocationPermission.deniedForever) {
-        // print("Location permissions are permanently denied.");
+        // ////print("Location permissions are permanently denied.");
         return;
       }
 
@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       }
     } catch (e) {
-      //print("Error fetching location: $e");
+      //////print("Error fetching location: $e");
       setState(() {
         _isLoading = false;
       });
@@ -151,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = true;
     });
-    print("Loading state set to true");
+    ////print("Loading state set to true");
 
     POST_API postApi = POST_API();
     Map<String, dynamic> response = await postApi.login(
@@ -159,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _passwordController.text,
     );
 
-    print("API Response: $response");
+    ////print("API Response: $response");
 
     if (response['status'] == true) {
       await _saveCredentials();
@@ -170,10 +170,10 @@ class _LoginScreenState extends State<LoginScreen> {
           latitude = response['user']?['latitude'] ?? 0.0;
           longitude = response['user']?['longitude'] ?? 0.0;
         });
-        // print(
+        // ////print(
         //     "Latitude and longitude updated: latitude = $latitude, longitude = $longitude");
       } catch (e) {
-        print("Error updating latitude/longitude: $e");
+        ////print("Error updating latitude/longitude: $e");
       }
 
       try {
@@ -186,10 +186,10 @@ class _LoginScreenState extends State<LoginScreen> {
         await prefs.setString('SaveUserEmail', empEmail);
         await prefs.setString('employeeId', employeeId);
 
-        // print(
+        // ////print(
         //     "User data saved locally: name = $empName, email = $empEmail, employeeId = $employeeId");
       } catch (e) {
-        print("Error saving user data locally: $e");
+        ////print("Error saving user data locally: $e");
       }
     } else {
       if (mounted) {
@@ -198,7 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _isLoading = false;
       });
-      // print(
+      // ////print(
       //     "Loading state set to false, error message: ${response['msg'] ?? 'Unknown error'}");
     }
   }

@@ -76,7 +76,7 @@ class POST_API {
         'latitude': latitude,
         'longitude': longitude,
       };
-      print("Encoded body : ${Uri(queryParameters: body).query}");
+      //print("Encoded body : ${Uri(queryParameters: body).query}");
       request.write(Uri(queryParameters: body).query);
 
       // Send the request
@@ -90,16 +90,15 @@ class POST_API {
 
         return json.decode(responseBody);
       } else {
-        print(
-            "location api call failed with status code ${response.statusCode}");
+        //print("location api call failed with status code ${response.statusCode}");
         return {
           'status': false,
           'message': 'Failed with status code ${response.statusCode}',
         };
       }
     } catch (e, stackTrace) {
-      print("Error during location API call: $e");
-      print("Stack Trace: $stackTrace");
+      //print("Error during location API call: $e");
+      //print("Stack Trace: $stackTrace");
       return {
         'status': false,
         'message': 'Error: $e',
@@ -128,7 +127,7 @@ class POST_API {
         'longitude': longitude,
         'date': date,
       };
-      print("Encoded body : ${Uri(queryParameters: body).query}");
+      //print("Encoded body : ${Uri(queryParameters: body).query}");
       request.write(Uri(queryParameters: body).query);
 
       // Send the request
@@ -142,16 +141,15 @@ class POST_API {
 
         return json.decode(responseBody);
       } else {
-        print(
-            "location api call failed with status code ${response.statusCode}");
+        //print("location api call failed with status code ${response.statusCode}");
         return {
           'status': false,
           'message': 'Failed with status code ${response.statusCode}',
         };
       }
     } catch (e, stackTrace) {
-      print("Error during location API call: $e");
-      print("Stack Trace: $stackTrace");
+      //print("Error during location API call: $e");
+      //print("Stack Trace: $stackTrace");
       return {
         'status': false,
         'message': 'Error: $e',
@@ -239,7 +237,7 @@ class POST_API {
         body['attendance_id'] = attendance_id;
       }
 
-      print("Encoded body : ${Uri(queryParameters: body).query}");
+      //print("Encoded body : ${Uri(queryParameters: body).query}");
       request.write(Uri(queryParameters: body).query);
 
       // Send the request
@@ -252,16 +250,15 @@ class POST_API {
             await response.transform(utf8.decoder).join();
         return json.decode(responseBody);
       } else {
-        print(
-            "Attendance API call failed with status code ${response.statusCode}");
+        //print("Attendance API call failed with status code ${response.statusCode}");
         return {
           'status': false,
           'message': 'Failed with status code ${response.statusCode}',
         };
       }
     } catch (e, stackTrace) {
-      print("Error during attendance API call: $e");
-      print("Stack Trace: $stackTrace");
+      //print("Error during attendance API call: $e");
+      //print("Stack Trace: $stackTrace");
       return {
         'status': false,
         'message': 'Error: $e',

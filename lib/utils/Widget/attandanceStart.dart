@@ -83,7 +83,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
         });
       }
     } catch (e) {
-      print("Error fetching location: $e");
+      //print("Error fetching location: $e");
     }
   }
 
@@ -91,16 +91,16 @@ class _AttendanceStartState extends State<AttendanceStart> {
   void updateLocation() async {
     await fetchLocation();
     if (employeeId.isEmpty) {
-      print("Error: Employee ID is missing.");
+      //print("Error: Employee ID is missing.");
       return;
     }
     if (latitude.isEmpty || longitude.isEmpty) {
-      print("Error: Latitude or Longitude is missing.");
+      //print("Error: Latitude or Longitude is missing.");
       return;
     }
 
-    print(
-        "Employee ID: $employeeId, Latitude: $latitude, Longitude: $longitude, Date: $date");
+    //print(
+    // "Employee ID: $employeeId, Latitude: $latitude, Longitude: $longitude, Date: $date");
 
     try {
       POST_API postApi = POST_API();
@@ -108,12 +108,12 @@ class _AttendanceStartState extends State<AttendanceStart> {
           await postApi.locationUpdate(employeeId, latitude, longitude, date);
 
       if (response['status'] == true) {
-        print("Location update successful: ${response['message']}");
+        //print("Location update successful: ${response['message']}");
       } else {
-        print("Location update failed: ${response['message']}");
+        //print("Location update failed: ${response['message']}");
       }
     } catch (e) {
-      print("Error calling locationUpdate API: $e");
+      //print("Error calling locationUpdate API: $e");
     }
   }
 
@@ -122,8 +122,8 @@ class _AttendanceStartState extends State<AttendanceStart> {
     if (!_isLocationUpdating) {
       _isLocationUpdating = true;
       _timer?.cancel();
-      _timer = Timer.periodic(Duration(hours: 1), (timer) {
-        print("api call in every 1 hours");
+      _timer = Timer.periodic(const Duration(hours: 1), (timer) {
+        // //print("api call in every 1 hours");
         updateLocation();
       });
     }
@@ -153,7 +153,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
         currentLogoutTime =
             (_currentAttendanceData[0]['logout_time'] ?? '').toString();
       } else {
-        print("No attendance data available");
+        //print("No attendance data available");
         attendanceId = '';
         currentDateLoginTime = '';
         currentBreakStartTime = '';
@@ -213,8 +213,8 @@ class _AttendanceStartState extends State<AttendanceStart> {
         });
       }
 
-      print('Swipe Direction: $_swipeDirectionIS');
-      print('Duty Location: $dutyLocation');
+      //print('Swipe Direction: $_swipeDirectionIS');
+      //print('Duty Location: $dutyLocation');
     }
     submitAttendance();
   }
@@ -238,16 +238,16 @@ class _AttendanceStartState extends State<AttendanceStart> {
         latitude: latitude,
         longitude: longitude,
       );
-      print('Apiiiiiiiiii send item: $result');
+      //print('Apiiiiiiiiii send item: $result');
 
       if (result['status'] == true) {
-        print("Attendance marked successfully: ${result['message']}");
+        //print("Attendance marked successfully: ${result['message']}");
         CustomToast.show(context, result['message']);
       } else {
-        print("Failed to mark attendance: ${result['message']}");
+        //print("Failed to mark attendance: ${result['message']}");
       }
     } catch (e) {
-      print("Error during attendance API call: $e");
+      //print("Error during attendance API call: $e");
     } finally {}
   }
 

@@ -17,7 +17,7 @@ class DatePickerField extends StatefulWidget {
   });
 
   @override
-  _DatePickerFieldState createState() => _DatePickerFieldState();
+  State<DatePickerField> createState() => _DatePickerFieldState();
 }
 
 class _DatePickerFieldState extends State<DatePickerField> {
@@ -33,7 +33,8 @@ class _DatePickerFieldState extends State<DatePickerField> {
         return Theme(
           data: ThemeData.dark().copyWith(
             primaryColor: AppColors.lightblue,
-            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            buttonTheme:
+                const ButtonThemeData(textTheme: ButtonTextTheme.primary),
             scaffoldBackgroundColor:
                 AppColors.backgroundColor, // Background color of calendar
             dialogBackgroundColor:

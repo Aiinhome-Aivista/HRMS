@@ -12,6 +12,7 @@ class DateModal extends StatefulWidget {
   final String logoutTime;
 
   const DateModal({
+    super.key,
     required this.selectedDate,
     this.highlightColor,
     required this.loginTime,
@@ -21,7 +22,7 @@ class DateModal extends StatefulWidget {
   });
 
   @override
-  _DateModalState createState() => _DateModalState();
+  State<DateModal> createState() => _DateModalState();
 }
 
 class _DateModalState extends State<DateModal> {

@@ -22,7 +22,7 @@ class CustomButton extends StatefulWidget {
   });
 
   @override
-  _CustomButtonState createState() => _CustomButtonState();
+  State<CustomButton> createState() => _CustomButtonState();
 }
 
 class _CustomButtonState extends State<CustomButton> {
