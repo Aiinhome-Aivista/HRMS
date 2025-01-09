@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/CustomFloatingButton.dart';
 import 'package:hrms/components/TransparentPageRoute.dart';
+import 'package:hrms/components/donutChart.dart';
 import 'package:hrms/components/loading_spinner.dart';
+import 'package:hrms/components/showLeaveDays.dart';
+import 'package:hrms/components/workingHoursGraph.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:hrms/utils/Screens/attandanceScreen.dart';
@@ -97,54 +101,33 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
         centerTitle: true,
         title: Padding(
           padding: const EdgeInsets.only(top: 20),
-          child: Text(
-            'Document Archive',
-            style: HeaderFontStyle.style,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'HRMS',
+                style: HeaderFontStyle.style,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    // Add your notification icon click functionality here
+                  },
+                  child: SvgPicture.asset(
+                    'assets/images/Notifications.svg',
+                    width: 24.0,
+                    height: 24.0,
+                  )),
+            ],
           ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 40, left: 16, right: 16),
+        padding: const EdgeInsets.only(top: 20, left: 16, right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.blackShade,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                children: [
-                  const Icon(Icons.person,
-                      size: 50, color: AppColors.lightblue),
-                  const SizedBox(height: 8),
-                  Text(
-                    userName,
-                    style: const TextStyle(
-                        color: AppColors.lightblue,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    userEmail,
-                    style: docArchiveFontStyle.style,
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildStatItem('265', 'Attendance'),
-                      _buildStatItem('50', 'Credit Score'),
-                      _buildStatItem('13', 'Leave'),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
             //notice
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -219,18 +202,24 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
 
             const SizedBox(height: 16),
 
-            // Options List
-            Expanded(
-              child: ListView(
-                children: [
-                  _buildOptionTile('Offer Later'),
-                  const SizedBox(height: 10),
-                  _buildOptionTile('Account Statement'),
-                  const SizedBox(height: 10),
-                  _buildOptionTile('Documents'),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Flexible(
+                  flex: 4,
+                  child: DynamicDonutChart(),
+                ),
+                const SizedBox(width: 2),
+                const Flexible(
+                  flex: 2,
+                  child: LeaveDaysShow(),
+                ),
+              ],
             ),
+            const SizedBox(
+              height: 10,
+            ),
+            WorkingHoursGraph()
           ],
         ),
       ),
@@ -254,24 +243,6 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
           style: docArchiveFontStyle.style,
         ),
       ],
-    );
-  }
-
-  Widget _buildOptionTile(String title) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.blackShade,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
-        title: Text(
-          title,
-          style: docArchiveFontStyle.style,
-        ),
-        trailing: const Icon(Icons.visibility, color: AppColors.lightblue),
-        onTap: () {},
-      ),
     );
   }
 }

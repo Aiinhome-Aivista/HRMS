@@ -40,6 +40,7 @@ dependencies:
   shared_preferences: ^2.1.0
   slider_button: ^2.1.0
   carousel_slider: ^5.0.0
+  fl_chart: ^0.69.0
 
 
 dev_dependencies:

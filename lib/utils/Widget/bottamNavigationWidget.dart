@@ -51,7 +51,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
-                'assets/images/add_notes.svg',
+                'assets/images/HomeSvg.svg',
                 width: 24.0,
                 height: 24.0,
                 color: _currentPage == 0
@@ -82,14 +82,14 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
             // ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
-                'assets/images/more.svg',
+                'assets/images/LogoutSvg.svg',
                 width: 18.0,
                 height: 18.0,
                 color: _currentPage == 2
                     ? AppColors.selectedNavBarColor
                     : AppColors.unselectedNavBarColor,
               ),
-              label: 'More',
+              label: 'Logout',
             ),
           ],
           currentIndex: _currentPage,
