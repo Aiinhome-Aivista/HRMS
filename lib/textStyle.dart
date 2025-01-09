@@ -126,7 +126,7 @@ class donutChartNumStyle {
 class leaveDaysFontStyle {
   static TextStyle get style {
     return const TextStyle(
-      fontSize: 14.0,
+      fontSize: 13.0,
       fontFamily: 'Khula',
       fontWeight: FontWeight.w700,
       color: AppColors.lightblue,

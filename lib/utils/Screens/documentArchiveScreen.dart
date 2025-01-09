@@ -147,7 +147,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                         options: CarouselOptions(
                           height: 150,
                           enlargeCenterPage: true,
-                          autoPlay: false,
+                          autoPlay: true,
                           aspectRatio: 16 / 9,
                           autoPlayCurve: Curves.fastOutSlowIn,
                           enableInfiniteScroll: true,
@@ -161,18 +161,22 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                     else
                       CarouselSlider(
                         items: [
-                          Builder(
-                            builder: (BuildContext context) {
-                              return Container(
-                                  alignment: Alignment.center,
-                                  width: 370,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.unselectedNavBarColor,
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  child: const LoadingSpinner());
-                            },
-                          ),
+                         Builder(
+  builder: (BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only( left: 16, right: 16),
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: AppColors.unselectedNavBarColor,
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: const LoadingSpinner(),
+      ),
+    );
+  },
+),
+
                         ],
                         options: CarouselOptions(
                           height: 150.0,

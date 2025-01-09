@@ -51,7 +51,7 @@ class _MorewidgetState extends State<Morewidget> {
       body: Stack(
         children: [
           Positioned(
-            top: 60,
+            top: 80,
             left: 20,
             right: 20,
             child: Container(
