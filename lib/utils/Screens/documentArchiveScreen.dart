@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/CustomFloatingButton.dart';
 import 'package:hrms/components/TransparentPageRoute.dart';
@@ -11,7 +10,6 @@ import 'package:hrms/components/workingHoursGraph.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:hrms/utils/Screens/attandanceScreen.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -26,7 +24,6 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
   String userName = '';
   String userEmail = '';
   String empId = '';
-  bool _isLoading = false;
   List<dynamic> notices = [];
 
   @override
@@ -66,7 +63,6 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
     }
 
     setState(() {
-      _isLoading = true;
     });
 
     try {
@@ -74,7 +70,6 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
       Map<String, dynamic> response = await postApi.notice(empId);
 
       setState(() {
-        _isLoading = false;
       });
 
       if (response['status'] == true) {
@@ -86,7 +81,6 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
       }
     } catch (e) {
       setState(() {
-        _isLoading = false;
       });
       print('Error: $e');
     }

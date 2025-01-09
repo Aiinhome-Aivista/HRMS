@@ -33,12 +33,9 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
   String _selectedCity = '';
   String _selectedPincode = '';
 
-  bool _isLoading = false;
-
   @override
   void initState() {
     super.initState();
-    // Set the initial values of city and state in the respective controllers
     _cityController.text = widget.city;
     _stateController.text = widget.state;
 
@@ -62,9 +59,7 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
   }
 
   Future<void> sendLocation() async {
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() {});
 
     try {
       POST_API postApi = POST_API();
@@ -79,9 +74,7 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
 
       print('Locationnnnnnnnnnn $response');
 
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() {});
 
       if (response['status'] == true) {
         if (mounted) {
@@ -91,9 +84,7 @@ class _LocationfillscreenState extends State<Locationfillscreen> {
         // CustomToast.show(context, response['msg']);
       }
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() {});
       if (mounted) {
         CustomToast.show(context, 'Error: $e');
       }
