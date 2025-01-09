@@ -160,7 +160,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                       builder: (BuildContext context) {
                         return Container(
                             alignment: Alignment.center,
-                            width: 360,
+                            width: 370,
                             decoration: BoxDecoration(
                               color: AppColors.unselectedNavBarColor,
                               borderRadius: BorderRadius.circular(12.0),
