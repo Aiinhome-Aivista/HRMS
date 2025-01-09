@@ -138,7 +138,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                       return Padding(
                         padding: const EdgeInsets.all(0.0),
                         child: Card(
-                          color: AppColors.blackShade,
+                          color: AppColors.unselectedNavBarColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
