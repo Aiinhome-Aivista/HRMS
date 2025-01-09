@@ -59,26 +59,34 @@ class _MorewidgetState extends State<Morewidget> {
               height: MediaQuery.of(context).size.height * 0.10,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.blackShade,
+                color: AppColors.unselectedNavBarColor,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.person,
-                      size: 45, color: AppColors.lightblue),
-                  const SizedBox(width: 12),
+                  const CircleAvatar(
+                    backgroundColor: Color.fromRGBO(247, 244, 247, 1),
+                    radius: 20,
+                    child: Center(
+                      child: Icon(Icons.person,
+                          size: 35, color: AppColors.lightblue),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        userName,
+                        userName.isNotEmpty ? userName : 'No Username',
                         style: const TextStyle(
-                            color: AppColors.lightblue,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
+                          color: AppColors.lightblue,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                      const SizedBox(height: 6),
                       Text(
-                        userEmail,
+                        userEmail.isNotEmpty ? userEmail : 'No Email',
                         style: docArchiveFontStyle.style,
                       ),
                     ],
