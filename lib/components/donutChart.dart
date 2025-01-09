@@ -31,7 +31,7 @@ class _DynamicDonutChartState extends State<DynamicDonutChart> {
 
     return Container(
       width: double.infinity,
-      height: 200,
+      height: 190,
       child: Card(
         color: AppColors.unselectedNavBarColor,
         margin: const EdgeInsets.all(2),
@@ -43,6 +43,7 @@ class _DynamicDonutChartState extends State<DynamicDonutChart> {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Expanded(
                 flex: 2,
@@ -135,12 +136,15 @@ class Indicator extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-            color: color,
-            shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
+        Padding(
+          padding: const EdgeInsets.only(top: 3),
+          child: Container(
+            width: 11,
+            height: 11,
+            decoration: BoxDecoration(
+              color: color,
+              shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
+            ),
           ),
         ),
         const SizedBox(width: 4),

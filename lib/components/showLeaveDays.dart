@@ -16,7 +16,7 @@ class _LeaveDaysShowState extends State<LeaveDaysShow> {
 
     return Container(
       width: double.infinity,
-      height: 200,
+      height: 190,
       child: Card(
         color: AppColors.unselectedNavBarColor,
         margin: const EdgeInsets.all(2),

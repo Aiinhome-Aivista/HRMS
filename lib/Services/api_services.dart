@@ -96,7 +96,7 @@ class POST_API {
           'message': 'Failed with status code ${response.statusCode}',
         };
       }
-    } catch (e, stackTrace) {
+    } catch (e) {
       //print("Error during location API call: $e");
       //print("Stack Trace: $stackTrace");
       return {
@@ -147,7 +147,7 @@ class POST_API {
           'message': 'Failed with status code ${response.statusCode}',
         };
       }
-    } catch (e, stackTrace) {
+    } catch (e) {
       //print("Error during location API call: $e");
       //print("Stack Trace: $stackTrace");
       return {
@@ -256,7 +256,7 @@ class POST_API {
           'message': 'Failed with status code ${response.statusCode}',
         };
       }
-    } catch (e, stackTrace) {
+    } catch (e) {
       //print("Error during attendance API call: $e");
       //print("Stack Trace: $stackTrace");
       return {

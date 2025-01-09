@@ -91,7 +91,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Padding(
-          padding: const EdgeInsets.only(top: 20,bottom: 40),
+          padding: const EdgeInsets.only(top: 40,bottom: 40),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -124,20 +124,17 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
               if (notices.isNotEmpty)
                 CarouselSlider(
                   items: notices.map((notice) {
-                    return Padding(
-                      padding: const EdgeInsets.all(0.0),
-                      child: Card(
-                        color: AppColors.unselectedNavBarColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Text(
-                            notice,
-                            style: noticeFontStyle.style,
-                          ),
+                    return Card(
+                      color: AppColors.unselectedNavBarColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          notice,
+                          style: noticeFontStyle.style,
                         ),
                       ),
                     );
@@ -163,10 +160,9 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                       builder: (BuildContext context) {
                         return Container(
                             alignment: Alignment.center,
-                            width: MediaQuery.of(context).size.width,
-                            padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                            width: 360,
                             decoration: BoxDecoration(
-                              color: AppColors.blackShade,
+                              color: AppColors.unselectedNavBarColor,
                               borderRadius: BorderRadius.circular(12.0),
                             ),
                             child: const LoadingSpinner());
@@ -190,7 +186,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
           ),
 
           const Padding(
-            padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+            padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
             child: Column(
               children: [
                 Row(
@@ -208,7 +204,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                   ],
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 WorkingHoursGraph()
               ],

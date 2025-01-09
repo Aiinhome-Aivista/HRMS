@@ -69,6 +69,7 @@ class _MorewidgetState extends State<Morewidget> {
                   const SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         userName,
