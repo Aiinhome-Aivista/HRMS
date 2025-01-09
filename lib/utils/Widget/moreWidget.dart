@@ -53,38 +53,34 @@ class _MorewidgetState extends State<Morewidget> {
           Positioned(
             top: 60,
             left: 20,
-            right:20,
+            right: 20,
             child: Container(
               width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.25,
+              height: MediaQuery.of(context).size.height * 0.10,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.blackShade,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Column(
+              child: Row(
                 children: [
                   const Icon(Icons.person,
-                      size: 50, color: AppColors.lightblue),
-                  const SizedBox(height: 8),
-                  Text(
-                    userName,
-                    style: const TextStyle(
-                        color: AppColors.lightblue,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    userEmail,
-                    style: docArchiveFontStyle.style,
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      size: 45, color: AppColors.lightblue),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildStatItem('265', 'Attendance'),
-                      _buildStatItem('50', 'Credit Score'),
-                      _buildStatItem('13', 'Leave'),
+                      Text(
+                        userName,
+                        style: const TextStyle(
+                            color: AppColors.lightblue,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        userEmail,
+                        style: docArchiveFontStyle.style,
+                      ),
                     ],
                   ),
                 ],
@@ -103,7 +99,7 @@ class _MorewidgetState extends State<Morewidget> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => const LoginScreen()),
-                      (route) => false, // Removes all previous routes
+                      (route) => false,
                     );
                     return null;
                   },
@@ -120,8 +116,7 @@ class _MorewidgetState extends State<Morewidget> {
                       CupertinoIcons.power,
                       color: Colors.redAccent,
                       size: 30.0,
-                      semanticLabel:
-                          'Text to announce in accessibility modes',
+                      semanticLabel: 'Text to announce in accessibility modes',
                     ),
                   ),
                   boxShadow: BoxShadow(
@@ -134,18 +129,6 @@ class _MorewidgetState extends State<Morewidget> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildStatItem(String value, String label) {
-    return Column(
-      children: [
-        Text(value, style: docArchiveNumStyle.style),
-        Text(
-          label,
-          style: docArchiveFontStyle.style,
-        ),
-      ],
     );
   }
 }
