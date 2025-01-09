@@ -96,7 +96,7 @@ class noticeFontStyle {
       fontSize: 12.0,
       fontFamily: 'Khula',
       fontWeight: FontWeight.w700,
-      color: AppColors.greyShade2,
+       color: AppColors.lightblue,
     );
   }
 }

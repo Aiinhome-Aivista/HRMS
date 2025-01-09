@@ -42,7 +42,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   Future<void> _loadSavedCredentials() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? employeeId = prefs.getString('employeeId');
-    //print("empIddddddddddddddddddddddsssssssssd:$employeeId");
+    print("empIddddddddddddddddddddddsssssssssd:$employeeId");
     setState(() {
       empId = employeeId ?? '';
     });
@@ -61,11 +61,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       setState(() {
         _allAttendanceData = result['data'];
       });
-      //print('All Attendance Data: $_allAttendanceData');
+      print('All Attendance Data: $_allAttendanceData');
 
       final currentAttendance = filterTodayAttendance(result['data']);
       if (currentAttendance.isNotEmpty) {
-        //print('Todays Attendance Data: $currentAttendance');
+        print('Todays Attendance Data: $currentAttendance');
 
         setState(() {
           _currentAttendance = currentAttendance;
