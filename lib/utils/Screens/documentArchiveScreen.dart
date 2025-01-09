@@ -91,7 +91,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Padding(
-          padding: const EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 20,bottom: 40),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -114,105 +114,107 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 20, left: 16, right: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            //notice
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (notices.isNotEmpty)
-                  CarouselSlider(
-                    items: notices.map((notice) {
-                      return Padding(
-                        padding: const EdgeInsets.all(0.0),
-                        child: Card(
-                          color: AppColors.unselectedNavBarColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Text(
-                              notice,
-                              style: noticeFontStyle.style,
-                            ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          //notice
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (notices.isNotEmpty)
+                CarouselSlider(
+                  items: notices.map((notice) {
+                    return Padding(
+                      padding: const EdgeInsets.all(0.0),
+                      child: Card(
+                        color: AppColors.unselectedNavBarColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            notice,
+                            style: noticeFontStyle.style,
                           ),
                         ),
-                      );
-                    }).toList(),
-                    options: CarouselOptions(
-                      height: 150,
-                      enlargeCenterPage: true,
-                      autoPlay: false,
-                      aspectRatio: 16 / 9,
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      enableInfiniteScroll: true,
-                      autoPlayAnimationDuration:
-                          const Duration(milliseconds: 800),
-                      viewportFraction: 0.9,
-                      initialPage: 0,
-                      enlargeFactor: 0.1,
-                    ),
-                  )
-                else
-                  CarouselSlider(
-                    items: [
-                      Builder(
-                        builder: (BuildContext context) {
-                          return Container(
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width,
-                              padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                              decoration: BoxDecoration(
-                                color: AppColors.blackShade,
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: const LoadingSpinner());
-                        },
                       ),
-                    ],
-                    options: CarouselOptions(
-                      height: 150.0,
-                      enlargeCenterPage: true,
-                      autoPlay: false,
-                      aspectRatio: 16 / 9,
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      enableInfiniteScroll: true,
-                      autoPlayAnimationDuration:
-                          const Duration(milliseconds: 800),
-                      viewportFraction: 1.0,
-                      initialPage: 0,
-                    ),
+                    );
+                  }).toList(),
+                  options: CarouselOptions(
+                    height: 150,
+                    enlargeCenterPage: true,
+                    autoPlay: false,
+                    aspectRatio: 16 / 9,
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enableInfiniteScroll: true,
+                    autoPlayAnimationDuration:
+                        const Duration(milliseconds: 800),
+                    viewportFraction: 0.9,
+                    initialPage: 0,
+                    enlargeFactor: 0.1,
                   ),
-              ],
-            ),
+                )
+              else
+                CarouselSlider(
+                  items: [
+                    Builder(
+                      builder: (BuildContext context) {
+                        return Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                            decoration: BoxDecoration(
+                              color: AppColors.blackShade,
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: const LoadingSpinner());
+                      },
+                    ),
+                  ],
+                  options: CarouselOptions(
+                    height: 150.0,
+                    enlargeCenterPage: true,
+                    autoPlay: false,
+                    aspectRatio: 16 / 9,
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enableInfiniteScroll: true,
+                    autoPlayAnimationDuration:
+                        const Duration(milliseconds: 800),
+                    viewportFraction: 1.0,
+                    initialPage: 0,
+                  ),
+                ),
+            ],
+          ),
 
-            const SizedBox(height: 16),
-
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+          const Padding(
+            padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+            child: Column(
               children: [
-                Flexible(
-                  flex: 4,
-                  child: DynamicDonutChart(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      flex: 4,
+                      child: DynamicDonutChart(),
+                    ),
+                    SizedBox(width: 2),
+                    Flexible(
+                      flex: 2,
+                      child: LeaveDaysShow(),
+                    ),
+                  ],
                 ),
-                SizedBox(width: 2),
-                Flexible(
-                  flex: 2,
-                  child: LeaveDaysShow(),
+                SizedBox(
+                  height: 10,
                 ),
+                WorkingHoursGraph()
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            const WorkingHoursGraph()
-          ],
-        ),
+          )
+        ],
       ),
       floatingActionButton: CustomFloatingActionButton(
         onPressed: () {
