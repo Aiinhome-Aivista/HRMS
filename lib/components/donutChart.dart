@@ -28,7 +28,6 @@ class _DynamicDonutChartState extends State<DynamicDonutChart> {
   @override
   Widget build(BuildContext context) {
     double totalValue = chartData.fold(0, (sum, data) => sum + data['value']);
-
     return Container(
       width: double.infinity,
       height: 190,

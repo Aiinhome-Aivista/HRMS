@@ -190,7 +190,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(
                       flex: 4,
