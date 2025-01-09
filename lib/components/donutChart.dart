@@ -4,8 +4,9 @@ import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 
 class DynamicDonutChart extends StatefulWidget {
+  const DynamicDonutChart({super.key});
   @override
-  _DynamicDonutChartState createState() => _DynamicDonutChartState();
+  State<DynamicDonutChart> createState() => _DynamicDonutChartState();
 }
 
 class _DynamicDonutChartState extends State<DynamicDonutChart> {
@@ -122,12 +123,12 @@ class Indicator extends StatelessWidget {
   final bool isSquare;
 
   const Indicator({
-    Key? key,
+    super.key,
     required this.color,
     required this.text,
     required this.value,
     required this.isSquare,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

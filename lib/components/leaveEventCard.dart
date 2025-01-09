@@ -11,13 +11,13 @@ class LeaveEventCard extends StatelessWidget {
   final String leaveCause;
 
   const LeaveEventCard({
-    Key? key,
+    super.key,
     required this.leaveType,
     required this.startDate,
     required this.endDate,
     required this.leaveStatus,
     required this.leaveCause,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

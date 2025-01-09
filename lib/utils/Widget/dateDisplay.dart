@@ -41,7 +41,7 @@ class _DateDisplayState extends State<DateDisplay> {
       _highlightedDates = widget.attendanceData;
     });
 
-    print('get all attendance data: $_highlightedDates');
+    //print('get all attendance data: $_highlightedDates');
   }
 
   // Function to get the suffix for the day

@@ -162,7 +162,7 @@ class _LeavedetailsState extends State<Leavedetails> {
       floatingActionButton: CustomFloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
-            TransparentPageRoute.create(Leaveapplyscreen()),
+            TransparentPageRoute.create(const Leaveapplyscreen()),
           );
         },
         icon: Icons.add,
@@ -293,7 +293,6 @@ class _LeavedetailsState extends State<Leavedetails> {
           //       ),
           //     ),
           //   ),
-        
         ],
       ),
     );
@@ -317,7 +316,8 @@ class _LeavedetailsState extends State<Leavedetails> {
         return Theme(
           data: ThemeData.dark().copyWith(
             primaryColor: AppColors.lightblue,
-            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            buttonTheme:
+                const ButtonThemeData(textTheme: ButtonTextTheme.primary),
             scaffoldBackgroundColor:
                 AppColors.backgroundColor, // Background color of calendar
             dialogBackgroundColor:

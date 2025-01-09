@@ -39,11 +39,11 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
     final String? gateUserEmail = prefs.getString('SaveUserEmail');
     final String? employeeId = prefs.getString('employeeId');
 
-    print('Login Successful gateUserName: $gateUserName');
-    print('Login Successful gateUserEmail: $gateUserEmail');
-    print('Login Successful employeeId: $employeeId');
+    // //print('Login Successful gateUserName: $gateUserName');
+    // //print('Login Successful gateUserEmail: $gateUserEmail');
+    // //print('Login Successful employeeId: $employeeId');
 
-    print("empId:$employeeId");
+    // //print("empId:$employeeId");
 
     setState(() {
       userName = gateUserName ?? '';
@@ -58,31 +58,28 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
 // notice fetch
   Future<void> noticeFetch() async {
     if (empId.isEmpty) {
-      print('empId is empty');
+      // //print('empId is empty');
       return;
     }
 
-    setState(() {
-    });
+    setState(() {});
 
     try {
       POST_API postApi = POST_API();
       Map<String, dynamic> response = await postApi.notice(empId);
 
-      setState(() {
-      });
+      setState(() {});
 
       if (response['status'] == true) {
         notices = List<String>.from(response['data']);
-        print("notice data fetch:$notices");
+        // //print("notice data fetch:$notices");
         setState(() {}); // Update the UI
       } else {
-        print('Error: ${response['msg']}');
+        // //print('Error: ${response['msg']}');
       }
     } catch (e) {
-      setState(() {
-      });
-      print('Error: $e');
+      setState(() {});
+      // //print('Error: $e');
     }
   }
 
@@ -196,15 +193,15 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
 
             const SizedBox(height: 16),
 
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Flexible(
                   flex: 4,
                   child: DynamicDonutChart(),
                 ),
-                const SizedBox(width: 2),
-                const Flexible(
+                SizedBox(width: 2),
+                Flexible(
                   flex: 2,
                   child: LeaveDaysShow(),
                 ),
@@ -213,7 +210,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
             const SizedBox(
               height: 10,
             ),
-            WorkingHoursGraph()
+            const WorkingHoursGraph()
           ],
         ),
       ),
@@ -225,18 +222,6 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
         },
         icon: Icons.add,
       ),
-    );
-  }
-
-  Widget _buildStatItem(String value, String label) {
-    return Column(
-      children: [
-        Text(value, style: docArchiveNumStyle.style),
-        Text(
-          label,
-          style: docArchiveFontStyle.style,
-        ),
-      ],
     );
   }
 }
