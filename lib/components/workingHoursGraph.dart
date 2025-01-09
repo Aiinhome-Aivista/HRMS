@@ -41,8 +41,10 @@ class _WorkingHoursGraphState extends State<WorkingHoursGraph> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: List.generate(
                   workingHours.length,
-                  (index) => Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  (index) => Stack(
+                    alignment: Alignment.center,
+                    clipBehavior:
+                        Clip.none, // To allow the Positioned widget to overflow
                     children: [
                       // Bar for working hours
                       Container(
@@ -55,26 +57,28 @@ class _WorkingHoursGraphState extends State<WorkingHoursGraph> {
                             topRight: Radius.circular(15),
                           ),
                         ),
-                        // Circle with hours inside
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.lightblue,
-                              border: Border.all(
-                                color: AppColors.unselectedNavBarColor,
-                                width: 1,
-                              ),
+                      ),
+                      // Circle with hours inside
+                      Positioned(
+                        top: 4,
+                        child: Container(
+                          width: 15,
+                          height: 15,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.lightblue,
+                            border: Border.all(
+                              color: AppColors.unselectedNavBarColor,
+                              width: 1,
                             ),
-                            child: Center(
-                              child: Text(
-                                '${workingHours[index]}',
-                                style: const TextStyle(
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.unselectedNavBarColor,
-                                ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${workingHours[index]}',
+                              style: const TextStyle(
+                                fontSize: 8,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.unselectedNavBarColor,
                               ),
                             ),
                           ),
