@@ -34,17 +34,12 @@ class _AttendanceStartState extends State<AttendanceStart> {
   String currentBreakCompletionTime = '';
   String currentLogoutTime = '';
   String _swipeDirectionIS = '';
-  // bool _isBreakStart = false;
-  // bool _isBreakEnd = false;
-  // bool _isLoading = false;
-
   String employeeId = '';
   String attendanceId = '';
   String updateField = '';
   String dutyLocation = '';
   String latitude = '';
   String longitude = '';
-  // String empId = '';
   String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
   Timer? _timer;
   bool _isLocationUpdating = false;
@@ -55,6 +50,15 @@ class _AttendanceStartState extends State<AttendanceStart> {
     fetchAttendance();
     _loadSavedCredentials();
     fetchLocation();
+  }
+
+//get employeeId from local storage
+  Future<void> _loadSavedCredentials() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? Employee_Id = prefs.getString('employeeId');
+    setState(() {
+      employeeId = Employee_Id ?? '';
+    });
   }
 
 //fetch location
@@ -86,7 +90,6 @@ class _AttendanceStartState extends State<AttendanceStart> {
 //location update
   void updateLocation() async {
     await fetchLocation();
-    print("locationnnnnnnnnnnnnnnnnnnn");
     if (employeeId.isEmpty) {
       print("Error: Employee ID is missing.");
       return;
@@ -117,7 +120,6 @@ class _AttendanceStartState extends State<AttendanceStart> {
 //update location start
   void startUpdatingLocation() {
     if (!_isLocationUpdating) {
-      print("startUpdatingLocationnnnnnnnnnnnnnnnnnnnnn");
       _isLocationUpdating = true;
       _timer?.cancel();
       _timer = Timer.periodic(Duration(hours: 1), (timer) {
@@ -129,23 +131,15 @@ class _AttendanceStartState extends State<AttendanceStart> {
 
 //update location stop
   void stopUpdatingLocation() {
-    print("stopUpdatingLocationnnnnnnnnnn");
     _isLocationUpdating = false;
     _timer?.cancel();
     _timer = null;
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _timer?.cancel();
-  }
-
-  //fetch emp attendance
+//fetch employee attendance
   void fetchAttendance() async {
-    // await Future.delayed(Duration(seconds: 7));
     setState(() {
-      _currentAttendanceData = widget.currentAttendanceDetails ?? [];
+      _currentAttendanceData = widget.currentAttendanceDetails;
 
       if (_currentAttendanceData.isNotEmpty) {
         attendanceId = (_currentAttendanceData[0]['id'] ?? '').toString();
@@ -233,14 +227,6 @@ class _AttendanceStartState extends State<AttendanceStart> {
     });
   }
 
-  Future<void> _loadSavedCredentials() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? Employee_Id = prefs.getString('employeeId');
-    setState(() {
-      employeeId = Employee_Id ?? '';
-    });
-  }
-
   void submitAttendance() async {
     try {
       POST_API postApi = POST_API();
@@ -263,6 +249,12 @@ class _AttendanceStartState extends State<AttendanceStart> {
     } catch (e) {
       print("Error during attendance API call: $e");
     } finally {}
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer?.cancel();
   }
 
   @override
