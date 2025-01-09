@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hrms/styleColor.dart';
+import 'package:hrms/textStyle.dart';
 
 class LeaveDaysShow extends StatefulWidget {
   const LeaveDaysShow({super.key});
@@ -17,7 +18,7 @@ class _LeaveDaysShowState extends State<LeaveDaysShow> {
       width: double.infinity,
       height: 200,
       child: Card(
-        color: AppColors.greyShade,
+        color: AppColors.unselectedNavBarColor,
         margin: const EdgeInsets.all(2),
         elevation: 5,
         shape: RoundedRectangleBorder(
@@ -28,13 +29,9 @@ class _LeaveDaysShowState extends State<LeaveDaysShow> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Casual leave',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+                style: leaveDaysFontStyle.style,
               ),
               const SizedBox(height: 10),
               _buildLeaveInfo('Yearly', '13'),
@@ -55,19 +52,11 @@ class _LeaveDaysShowState extends State<LeaveDaysShow> {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.grey,
-          ),
+          style: donutChartFontStyle.style,
         ),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+          style: donutChartNumStyle.style,
         ),
       ],
     );
@@ -81,23 +70,15 @@ class _LeaveDaysShowState extends State<LeaveDaysShow> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             RichText(
-              text: const TextSpan(
+              text: TextSpan(
                 children: [
                   TextSpan(
                     text: '05',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.lightblue,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: donutChartNumStyle.style,
                   ),
                   TextSpan(
                     text: ' /13',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: donutChartFontStyle.style,
                   ),
                 ],
               ),

@@ -96,6 +96,39 @@ class noticeFontStyle {
       fontSize: 12.0,
       fontFamily: 'Khula',
       fontWeight: FontWeight.w700,
+      color: AppColors.greyShade2,
+    );
+  }
+}
+
+class donutChartFontStyle {
+  static TextStyle get style {
+    return const TextStyle(
+      fontSize: 12.0,
+      fontFamily: 'Khula',
+      fontWeight: FontWeight.w300,
+      color: AppColors.greyShade2,
+    );
+  }
+}
+
+class donutChartNumStyle {
+  static TextStyle get style {
+    return const TextStyle(
+      fontSize: 15.0,
+      fontFamily: 'Khula',
+      fontWeight: FontWeight.w700,
+      color: AppColors.lightblue,
+    );
+  }
+}
+
+class leaveDaysFontStyle {
+  static TextStyle get style {
+    return const TextStyle(
+      fontSize: 14.0,
+      fontFamily: 'Khula',
+      fontWeight: FontWeight.w700,
       color: AppColors.lightblue,
     );
   }

@@ -1,6 +1,7 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:hrms/styleColor.dart';
+import 'package:hrms/textStyle.dart';
 
 class DynamicDonutChart extends StatefulWidget {
   @override
@@ -26,13 +27,12 @@ class _DynamicDonutChartState extends State<DynamicDonutChart> {
   @override
   Widget build(BuildContext context) {
     double totalValue = chartData.fold(0, (sum, data) => sum + data['value']);
-    //double progress = totalValue > 0 ? totalValue / 1000 : 0;
 
     return Container(
       width: double.infinity,
       height: 200,
       child: Card(
-        color: AppColors.greyShade,
+        color: AppColors.unselectedNavBarColor,
         margin: const EdgeInsets.all(2),
         elevation: 5,
         shape: RoundedRectangleBorder(
@@ -50,17 +50,33 @@ class _DynamicDonutChartState extends State<DynamicDonutChart> {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      CustomPaint(
-                        painter: CircularProgressPainter(
-                            chartData), // Pass data to painter
-                        child: Center(
-                          child: Text(
-                            '${totalValue.toInt()} days',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
+                      PieChart(
+                        PieChartData(
+                          borderData: FlBorderData(show: false),
+                          sectionsSpace: 5,
+                          centerSpaceRadius: 28,
+                          sections: chartData.map((data) {
+                            return PieChartSectionData(
+                              color: getColorForLabel(data['label']),
+                              value: data['value'].toDouble(),
+                              title: '',
+                              radius: 20,
+                              showTitle: false,
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      Center(
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: '${totalValue.toInt()}',
+                                  style: donutChartNumStyle.style),
+                              TextSpan(
+                                  text: 'Days',
+                                  style: donutChartFontStyle.style),
+                            ],
                           ),
                         ),
                       ),
@@ -90,75 +106,13 @@ class _DynamicDonutChartState extends State<DynamicDonutChart> {
                     }).toList(),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
       ),
     );
   }
-}
-
-class CircularProgressPainter extends CustomPainter {
-  final List<dynamic> chartData;
-
-  CircularProgressPainter(this.chartData);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    double strokeWidth = 20.0;
-
-    Paint backgroundPaint = Paint()
-      ..color = Colors.grey[300]!
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth;
-
-    Paint foregroundPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
-
-    Offset center = Offset(size.width / 2, size.height / 2);
-    double radius = (size.width - strokeWidth) / 2;
-
-    canvas.drawCircle(center, radius, backgroundPaint);
-
-    double totalValue = chartData.fold(0, (sum, data) => sum + data['value']);
-    // double startAngle = -pi / 2;
-
-    //new implement
-    double totalAngle = 2 * math.pi; // 360 degrees in radians
-    double gapAngle = 10 * math.pi / 180; // Convert 10 degrees to radians
-
-    // Calculate the remaining angle available for the segments after considering the gaps
-    double totalGap = gapAngle * (chartData.length - 1); // Total gap angle
-    double availableAngle =
-        totalAngle - totalGap; // Angle available for segments
-
-    double startAngle = -math.pi / 2; // Start from the top of the circle
-
-    for (var data in chartData) {
-      // Calculate the sweep angle for each segment based on the available angle
-      double sweepAngle = (data['value'] / totalValue) * availableAngle;
-
-      //double sweepAngle = (data['value'] / totalValue) * 2 * pi;
-      foregroundPaint.color = getColorForLabel(data['label']);
-
-      canvas.drawArc(
-        Rect.fromCircle(center: center, radius: radius),
-        startAngle,
-        sweepAngle,
-        false,
-        foregroundPaint,
-      );
-      // startAngle += sweepAngle;
-      // Update start angle for the next segment, adding the gap after the segment
-      startAngle += sweepAngle + gapAngle; // Add gap between segments
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
 class Indicator extends StatelessWidget {
@@ -178,26 +132,32 @@ class Indicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-          width: 16,
-          height: 16,
+          width: 12,
+          height: 12,
           decoration: BoxDecoration(
             color: color,
             shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
           ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 4),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
               text,
-              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+              style: donutChartFontStyle.style,
             ),
-            Text(
-              '$value days',
-              style: const TextStyle(fontSize: 8),
+            const SizedBox(height: 4),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(text: '$value ', style: donutChartNumStyle.style),
+                  TextSpan(text: 'Days', style: donutChartFontStyle.style),
+                ],
+              ),
             ),
           ],
         ),
@@ -213,5 +173,5 @@ Color getColorForLabel(String label) {
     "Absolute Delay": const Color.fromRGBO(249, 190, 191, 0.5),
   };
 
-  return colorMap[label] ?? Colors.grey; // Fallback color
+  return colorMap[label] ?? Colors.grey;
 }
