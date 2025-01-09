@@ -161,22 +161,22 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                     else
                       CarouselSlider(
                         items: [
-                         Builder(
-  builder: (BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only( left: 16, right: 16),
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: AppColors.unselectedNavBarColor,
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: const LoadingSpinner(),
-      ),
-    );
-  },
-),
-
+                          Builder(
+                            builder: (BuildContext context) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 16, right: 16),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.unselectedNavBarColor,
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  child: const LoadingSpinner(),
+                                ),
+                              );
+                            },
+                          ),
                         ],
                         options: CarouselOptions(
                           height: 150.0,
