@@ -85,45 +85,47 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Padding(
-          padding: const EdgeInsets.only(top: 40, bottom: 40),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'HRMS',
-                style: HeaderFontStyle.style,
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: AppColors.backgroundColor,
+    appBar: AppBar(
+      automaticallyImplyLeading: false,
+      centerTitle: true,
+      title: Padding(
+        padding: const EdgeInsets.only(top: 40, bottom: 40),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'HRMS',
+              style: HeaderFontStyle.style,
+            ),
+            GestureDetector(
+              onTap: () {
+                // Add your notification icon click functionality here
+              },
+              child: SvgPicture.asset(
+                'assets/images/Notifications.svg',
+                width: 24.0,
+                height: 24.0,
               ),
-              GestureDetector(
-                  onTap: () {
-                    // Add your notification icon click functionality here
-                  },
-                  child: SvgPicture.asset(
-                    'assets/images/Notifications.svg',
-                    width: 24.0,
-                    height: 24.0,
-                  )),
-            ],
-          ),
+            ),
+          ],
         ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
       ),
-      body: _isLoading
-          ? const Center(
-              child: LoadingSpinner(),
-            )
-          : Column(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    ),
+    body: _isLoading
+        ? const Center(
+            child: LoadingSpinner(),
+          )
+        : SingleChildScrollView( // Added for scroll functionality
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                //notice
+                // Notice section
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -195,6 +197,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                   ],
                 ),
 
+                // Other sections
                 Padding(
                   padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
                   child: Column(
@@ -226,14 +229,16 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                 )
               ],
             ),
-      floatingActionButton: CustomFloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            TransparentPageRoute.create(const AttendanceScreen()),
-          );
-        },
-        icon: Icons.add,
-      ),
-    );
-  }
+          ),
+    floatingActionButton: CustomFloatingActionButton(
+      onPressed: () {
+        Navigator.of(context).push(
+          TransparentPageRoute.create(const AttendanceScreen()),
+        );
+      },
+      icon: Icons.add,
+    ),
+  );
+}
+
 }

@@ -9,24 +9,30 @@ class AddSkillsPage extends StatefulWidget {
 
 class _AddSkillsPageState extends State<AddSkillsPage> {
   final TextEditingController _controller = TextEditingController();
-  List<String> skills = [];
+  List<String> skills = [
+    'Flutter',
+    'React',
+    'Angular',
+    'Dart',
+    'Firebase',
+  ];
 
+  // Function to add a skill
   void _addSkill() {
     if (_controller.text.isNotEmpty) {
       setState(() {
         skills.add(_controller.text);
-        _controller.clear(); // Clear the input field
+        _controller.clear();
       });
     }
-    Navigator.pop(context); // Close the modal
+    Navigator.pop(context);
   }
 
   // Function to show the bottom modal where the skill is added
   void _showAddSkillModal() {
     showModalBottomSheet(
       context: context,
-      isScrollControlled:
-          true, // Allows the modal to take the entire height if needed
+      isScrollControlled: true,
       backgroundColor: AppColors.lightblue,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
@@ -41,19 +47,30 @@ class _AddSkillsPageState extends State<AddSkillsPage> {
                 'Add Your Skill',
                 style: TextStyle(
                   color: AppColors.backgroundColor,
-                  fontSize: 16,
+                  fontSize: 20,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: 20),
-              Container(
+              SizedBox(
                 height: 40.0,
                 child: TextField(
                   controller: _controller,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Enter your skill',
-                    border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.symmetric(vertical: 15.0),
+                    labelStyle: const TextStyle(color: Colors.grey),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: AppColors.leaveCardColor),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 10.0,
+                      horizontal: 10.0,
+                    ),
                   ),
                 ),
               ),
@@ -61,11 +78,9 @@ class _AddSkillsPageState extends State<AddSkillsPage> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.unselectedNavBarColor,
-                  minimumSize: Size(40, 30),
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                    right: 20,
-                  ),
+                  minimumSize: const Size(40, 30),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 ),
                 onPressed: _addSkill,
                 child: const Text(
@@ -91,6 +106,7 @@ class _AddSkillsPageState extends State<AddSkillsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Header Row with Settings Icon and Title
           Row(
             children: [
               SvgPicture.asset(
@@ -111,12 +127,14 @@ class _AddSkillsPageState extends State<AddSkillsPage> {
             ],
           ),
           const SizedBox(height: 7),
+
+          // Add Button
           SizedBox(
             width: 70,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.unselectedNavBarColor,
-                minimumSize: Size(40, 30),
+                minimumSize: const Size(40, 30),
                 padding: EdgeInsets.zero,
               ),
               onPressed: _showAddSkillModal,
@@ -142,6 +160,52 @@ class _AddSkillsPageState extends State<AddSkillsPage> {
               ),
             ),
           ),
+          const SizedBox(height: 10),
+
+          // Displaying Added Skills
+          skills.isEmpty
+              ? const Center(
+                  child: Text(
+                    'No skills added yet.',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.lightblue,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                )
+              : Wrap(
+                  spacing: 8.0,
+                  runSpacing: 4.0,
+                  children: skills
+                      .map(
+                        (skill) => Chip(
+                          label: Text(skill),
+                          backgroundColor: AppColors.leaveCardColor,
+                          labelStyle: const TextStyle(
+                            fontSize: 12,
+                            color: AppColors.unselectedNavBarColor,
+                          ),
+                          deleteIcon: const Icon(
+                            Icons.close,
+                            size: 16.0,
+                            color: AppColors.unselectedNavBarColor,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 0.0, vertical: 0.0),
+                          side: BorderSide.none,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          onDeleted: () {
+                            setState(() {
+                              skills.remove(skill);
+                            });
+                          },
+                        ),
+                      )
+                      .toList(),
+                ),
         ],
       ),
     );
