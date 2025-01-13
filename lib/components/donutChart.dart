@@ -25,6 +25,8 @@ class _DynamicDonutChartState extends State<DynamicDonutChart> {
     },
   ];
 
+  int touchedIndex = -1;
+
   @override
   Widget build(BuildContext context) {
     double totalValue = chartData.fold(0, (sum, data) => sum + data['value']);
@@ -56,17 +58,47 @@ class _DynamicDonutChartState extends State<DynamicDonutChart> {
                           borderData: FlBorderData(show: false),
                           sectionsSpace: 5,
                           centerSpaceRadius: 28,
-                          sections: chartData.map((data) {
+                          sections: chartData.asMap().entries.map((entry) {
+                            int index = entry.key;
+                            var data = entry.value;
+                            bool isTouched = index == touchedIndex;
                             return PieChartSectionData(
                               color: getColorForLabel(data['label']),
                               value: data['value'].toDouble(),
                               title: '',
-                              radius: 20,
+                              radius: isTouched ? 35 : 20,
                               showTitle: false,
                             );
                           }).toList(),
+                          pieTouchData: PieTouchData(
+                            touchCallback:
+                                (FlTouchEvent event, pieTouchResponse) {
+                              setState(() {
+                                if (!event.isInterestedForInteractions ||
+                                    pieTouchResponse == null ||
+                                    pieTouchResponse.touchedSection == null) {
+                                  touchedIndex = -1; // Reset when touch ends
+                                } else {
+                                  touchedIndex = pieTouchResponse
+                                      .touchedSection!.touchedSectionIndex;
+                                }
+                              });
+                            },
+                          ),
                         ),
                       ),
+                      if (touchedIndex != -1)
+                        Positioned(
+                          top: -8,
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            color: Colors.black.withOpacity(0.7),
+                            child: Text(
+                              chartData[touchedIndex]['label'],
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
                       Center(
                         child: RichText(
                           text: TextSpan(
