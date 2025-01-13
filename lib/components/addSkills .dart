@@ -44,7 +44,7 @@ class _AddSkillsPageState extends State<AddSkillsPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
-                'Add Your Skill',
+                'Add your skill',
                 style: TextStyle(
                   color: AppColors.backgroundColor,
                   fontSize: 20,
@@ -58,9 +58,9 @@ class _AddSkillsPageState extends State<AddSkillsPage> {
                   controller: _controller,
                   decoration: InputDecoration(
                     labelText: 'Enter your skill',
-                    labelStyle: const TextStyle(color: Colors.grey),
+                    labelStyle: const TextStyle(color: AppColors.leaveCardColor),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.blue),
+                      borderSide: const BorderSide(color: AppColors.unselectedNavBarColor),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -176,7 +176,6 @@ class _AddSkillsPageState extends State<AddSkillsPage> {
                 )
               : Wrap(
                   spacing: 8.0,
-                  runSpacing: 4.0,
                   children: skills
                       .map(
                         (skill) => Chip(

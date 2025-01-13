@@ -81,63 +81,66 @@ class _WorkingHoursGraphState extends State<WorkingHoursGraph>
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: List.generate(
-                      workingHours.length,
-                      (index) => AnimatedBuilder(
-                        animation: _animations[index],
-                        builder: (context, child) {
-                          double barHeight =
-                              (_animations[index].value / 10) * maxHeight;
-                          double animatedHeight = _controller.value * barHeight;
-
-                          return Stack(
-                            alignment: Alignment.center,
-                            clipBehavior: Clip.none,
-                            children: [
-                              Container(
-                                width: 20,
-                                height: animatedHeight,
-                                decoration: const BoxDecoration(
-                                  color: AppColors.lightblue,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(15),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: List.generate(
+                        workingHours.length,
+                        (index) => AnimatedBuilder(
+                          animation: _animations[index],
+                          builder: (context, child) {
+                            double barHeight =
+                                (_animations[index].value / 10) * maxHeight;
+                            double animatedHeight = _controller.value * barHeight;
+                    
+                            return Stack(
+                              alignment: Alignment.center,
+                              clipBehavior: Clip.none,
+                              children: [
+                                Container(
+                                  width: 20,
+                                  height: animatedHeight,
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.lightblue,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      topRight: Radius.circular(15),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              if (_controller.value >= 0.5)
-                                Positioned(
-                                  top: 5,
-                                  child: Container(
-                                    width: 15,
-                                    height: 15,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppColors.lightblue,
-                                      border: Border.all(
-                                        color: AppColors.unselectedNavBarColor,
-                                        width: 1,
+                                if (_controller.value >= 0.5)
+                                  Positioned(
+                                    top: 5,
+                                    child: Container(
+                                      width: 15,
+                                      height: 15,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppColors.lightblue,
+                                        border: Border.all(
+                                          color: AppColors.unselectedNavBarColor,
+                                          width: 1,
+                                        ),
                                       ),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        '${_animations[index].value.toStringAsFixed(0)}',
-                                        style: const TextStyle(
-                                          fontSize: 8,
-                                          fontWeight: FontWeight.w500,
-                                          color:
-                                              AppColors.unselectedNavBarColor,
+                                      child: Center(
+                                        child: Text(
+                                          '${_animations[index].value.toStringAsFixed(0)}',
+                                          style: const TextStyle(
+                                            fontSize: 8,
+                                            fontWeight: FontWeight.w500,
+                                            color:
+                                                AppColors.unselectedNavBarColor,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                            ],
-                          );
-                        },
+                              ],
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
