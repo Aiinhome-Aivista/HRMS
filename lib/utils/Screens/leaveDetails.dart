@@ -141,9 +141,9 @@ class _LeavedetailsState extends State<Leavedetails> {
         scrolledUnderElevation: 4,
         backgroundColor: AppColors.backgroundColor,
         elevation: 0,
-        title: Text('Manage Leave', style: HeaderFontStyle.style),
-        centerTitle: true,
-        titleSpacing: 5,
+        title: Text('Leave', style: HeaderFontStyle.style),
+        centerTitle: false,
+        titleSpacing: 20,
       ),
       backgroundColor: AppColors.backgroundColor,
       body: RefreshIndicator(

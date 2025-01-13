@@ -61,7 +61,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       setState(() {
         _allAttendanceData = result['data'];
       });
-      print('All Attendance Data: $_allAttendanceData');
+      // print('All Attendance Data: $_allAttendanceData');
 
       final currentAttendance = filterTodayAttendance(result['data']);
       if (currentAttendance.isNotEmpty) {

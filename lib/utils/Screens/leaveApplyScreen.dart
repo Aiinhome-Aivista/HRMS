@@ -53,7 +53,7 @@ class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
       backgroundColor: Colors.black.withOpacity(0.5),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 45, 16, 6),
+          padding: const EdgeInsets.fromLTRB(20, 45, 20, 6),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -71,7 +71,7 @@ class _LeaveapplyscreenState extends State<Leaveapplyscreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               _buildInputField(
                 icon: Icons.person,
                 hintText: userName,

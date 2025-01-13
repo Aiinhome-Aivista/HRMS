@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hrms/Services/api_services.dart';
@@ -21,13 +20,11 @@ class _AttendanceStartState extends State<AttendanceStart> {
   double _xOffset = 0;
   double _yOffset = 0;
   final double _swipeThreshold = 50.0;
-
   String? _swipeDirection;
   double _leftLimit = 0;
   double _rightLimit = 0;
   double _topLimit = 0;
   double _bottomLimit = 0;
-
   List<dynamic> _currentAttendanceData = [];
   String currentDateLoginTime = '';
   String currentBreakStartTime = '';
@@ -181,42 +178,48 @@ class _AttendanceStartState extends State<AttendanceStart> {
         setState(() {
           dutyLocation = _swipeDirectionIS;
           updateField = 'login_time';
-          currentDateLoginTime = 'skip';
         });
       } else if (currentDateLoginTime.isNotEmpty &&
           currentBreakStartTime.isEmpty) {
         _swipeDirectionIS = _xOffset > 0 ? 'skip_next' : 'break_start_time';
-        setState(() {
-          updateField = _swipeDirectionIS;
-          currentDateLoginTime = 'skip';
-          currentBreakStartTime = 'skip';
-        });
+        if (_swipeDirectionIS == 'break_start_time') {
+          setState(() {
+            updateField = _swipeDirectionIS;
+          });
+        } else {
+          setState(() {
+            updateField = _swipeDirectionIS;
+            currentDateLoginTime = 'skip';
+            currentBreakStartTime = 'skip';
+          });
+        }
       } else if (currentDateLoginTime.isNotEmpty &&
           currentBreakStartTime.isNotEmpty &&
           currentBreakCompletionTime.isEmpty) {
         _swipeDirectionIS =
             _xOffset > 0 ? 'skip_next' : 'break_completion_time';
-        setState(() {
-          updateField = _swipeDirectionIS;
-          currentDateLoginTime = 'skip';
-          currentBreakStartTime = 'skip';
-          currentBreakCompletionTime = 'skip';
-        });
+        if (_swipeDirectionIS == 'break_completion_time') {
+          setState(() {
+            updateField = _swipeDirectionIS;
+          });
+        } else {
+          setState(() {
+            updateField = _swipeDirectionIS;
+            currentDateLoginTime = 'skip';
+            currentBreakStartTime = 'skip';
+            currentBreakCompletionTime = 'skip';
+          });
+        }
       } else {
         _swipeDirectionIS = _yOffset > 0 ? 'logout_time' : '';
         setState(() {
           updateField = _swipeDirectionIS;
-          currentDateLoginTime = 'skip';
-          currentBreakStartTime = 'skip';
-          currentBreakCompletionTime = 'skip';
-          currentLogoutTime = 'skip';
         });
       }
 
       //print('Swipe Direction: $_swipeDirectionIS');
       //print('Duty Location: $dutyLocation');
     }
-    submitAttendance();
   }
 
   void _resetPosition() {
@@ -238,7 +241,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
         latitude: latitude,
         longitude: longitude,
       );
-      //print('Apiiiiiiiiii send item: $result');
+      print('Apiiiiiiiiii send item: $result');
 
       if (result['status'] == true) {
         //print("Attendance marked successfully: ${result['message']}");
@@ -251,6 +254,116 @@ class _AttendanceStartState extends State<AttendanceStart> {
     } finally {}
   }
 
+//==========================================================================
+  void _showBottomModalSheet(BuildContext context) {
+    if (currentDateLoginTime.isEmpty) {
+      showModal(
+        context,
+        "Your work location is $dutyLocation for today. Would you like to login now?",
+        () {
+          setState(() {
+            dutyLocation = _swipeDirectionIS;
+            updateField = 'login_time';
+            currentDateLoginTime = 'skip';
+          });
+        },
+      );
+    } else if (currentBreakStartTime.isEmpty) {
+      showModal(
+        context,
+        "You are logged in. Would you like to start a break?",
+        () {
+          setState(() {
+            updateField = _swipeDirectionIS;
+            currentDateLoginTime = 'skip';
+            currentBreakStartTime = 'skip';
+          });
+        },
+      );
+    } else if (currentBreakCompletionTime.isEmpty) {
+      showModal(
+        context,
+        "You are on a break. Would you like to end it?",
+        () {
+          setState(() {
+            updateField = _swipeDirectionIS;
+            currentDateLoginTime = 'skip';
+            currentBreakStartTime = 'skip';
+            currentBreakCompletionTime = 'skip';
+          });
+        },
+      );
+    } else if (currentLogoutTime.isEmpty) {
+      showModal(
+        context,
+        "You have completed your workday. Would you like to log out?",
+        () {
+          setState(() {
+            updateField = _swipeDirectionIS;
+            currentDateLoginTime = 'skip';
+            currentBreakStartTime = 'skip';
+            currentBreakCompletionTime = 'skip';
+            currentLogoutTime = 'skip';
+          });
+        },
+      );
+    } else {
+      showModal(
+          context, "No attendance actions are available at the moment.", null);
+    }
+  }
+
+  void showModal(
+      BuildContext context, String message, VoidCallback? onConfirm) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.lightblue,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 10.0),
+              Text(
+                message,
+                style: const TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.unselectedNavBarColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.selectedNavBarColor,
+                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                ),
+                onPressed: () {
+                  if (onConfirm != null) {
+                    onConfirm();
+                  }
+                  submitAttendance();
+                  Navigator.pop(context);
+                },
+                child: const Text("Confirm",
+                    style:
+                        TextStyle(fontSize: 16.0, color: AppColors.lightblue)),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+//===========================================================================
+
   @override
   void dispose() {
     super.dispose();
@@ -262,6 +375,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     const double buttonSize = 80.0;
+    const double dampeningFactor = 0.8;
 
     _leftLimit = -(screenWidth * 0.1 + buttonSize / 2);
     _rightLimit = screenWidth * 0.1 + buttonSize / 2;
@@ -277,35 +391,33 @@ class _AttendanceStartState extends State<AttendanceStart> {
 
           if (currentDateLoginTime.isEmpty) {
             if (_swipeDirection == 'horizontal') {
-              _xOffset += details.delta.dx;
+              _xOffset += details.delta.dx * dampeningFactor;
               _yOffset = 0;
-            } else if (_swipeDirection == 'vertical') {
-              _yOffset += details.delta.dy;
+            } else {
+              _yOffset += details.delta.dy * dampeningFactor;
               _xOffset = 0;
             }
-          } else if (currentBreakStartTime.isEmpty) {
+          } else if (currentBreakStartTime.isEmpty ||
+              currentBreakCompletionTime.isEmpty) {
             _yOffset = 0;
-            _xOffset += details.delta.dx;
-          } else if (currentBreakCompletionTime.isEmpty) {
-            _yOffset = 0;
-            _xOffset += details.delta.dx;
+            _xOffset += details.delta.dx * dampeningFactor;
           } else if (currentLogoutTime.isEmpty) {
-            _yOffset += details.delta.dy;
             _xOffset = 0;
+            _yOffset += details.delta.dy * dampeningFactor;
+
             if (_yOffset < 0) _yOffset = 0;
           } else {
             if (_swipeDirection == 'horizontal') {
-              _xOffset += details.delta.dx;
+              _xOffset += details.delta.dx * dampeningFactor;
               _yOffset = 0;
             } else {
-              _yOffset = 0;
+              _yOffset += details.delta.dy * dampeningFactor;
+              _xOffset = 0;
             }
           }
 
-          if (_xOffset < _leftLimit) _xOffset = _leftLimit;
-          if (_xOffset > _rightLimit) _xOffset = _rightLimit;
-          if (_yOffset < _topLimit) _yOffset = _topLimit;
-          if (_yOffset > _bottomLimit) _yOffset = _bottomLimit;
+          _xOffset = _xOffset.clamp(_leftLimit, _rightLimit);
+          _yOffset = _yOffset.clamp(_topLimit, _bottomLimit);
         });
       },
       onPanEnd: (details) async {
@@ -313,6 +425,15 @@ class _AttendanceStartState extends State<AttendanceStart> {
         _resetPosition();
         // await Future.delayed(const Duration(seconds: 1));
         // Navigator.pop(context);
+        if (_swipeDirectionIS == 'Client_site' ||
+            _swipeDirectionIS == 'pwc' ||
+            _swipeDirectionIS == 'Head_Office' ||
+            _swipeDirectionIS == 'Home' ||
+            _swipeDirectionIS == 'break_start_time' ||
+            _swipeDirectionIS == 'break_completion_time' ||
+            _swipeDirectionIS == 'logout_time') {
+          _showBottomModalSheet(context);
+        }
       },
       child: Stack(
         children: [
@@ -480,7 +601,8 @@ class _AttendanceStartState extends State<AttendanceStart> {
   }) {
     return ColorFiltered(
       colorFilter: ColorFilter.mode(
-        isHighlighted ? AppColors.greyShade2 : Colors.white,
+        // isHighlighted ? AppColors.greyShade2 : Colors.white,
+        isHighlighted ? Colors.white : Colors.white,
         BlendMode.srcIn,
       ),
       child: SvgPicture.asset(

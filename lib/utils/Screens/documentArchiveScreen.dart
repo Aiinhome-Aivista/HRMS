@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/CustomFloatingButton.dart';
 import 'package:hrms/components/TransparentPageRoute.dart';
+import 'package:hrms/components/addSkills%20.dart';
 import 'package:hrms/components/donutChart.dart';
 import 'package:hrms/components/loading_spinner.dart';
 import 'package:hrms/components/showLeaveDays.dart';
@@ -194,11 +195,11 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                   ],
                 ),
 
-                const Padding(
+                Padding(
                   padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
                   child: Column(
                     children: [
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Flexible(
@@ -212,10 +213,14 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
-                      WorkingHoursGraph()
+                      const WorkingHoursGraph(),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      AddSkillsPage(),
                     ],
                   ),
                 )
