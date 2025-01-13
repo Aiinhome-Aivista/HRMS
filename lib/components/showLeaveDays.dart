@@ -9,37 +9,73 @@ class LeaveDaysShow extends StatefulWidget {
   State<LeaveDaysShow> createState() => _LeaveDaysShowState();
 }
 
-class _LeaveDaysShowState extends State<LeaveDaysShow> {
+class _LeaveDaysShowState extends State<LeaveDaysShow>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _progressAnimation;
+
+  final int totalLeave = 13;
+  final int usedLeave = 05;
+
+  @override
+  void initState() {
+    super.initState();
+
+    double progress = usedLeave / totalLeave;
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+
+    // Define the animation from 0.0 to the dynamic progress value
+    _progressAnimation = Tween<double>(begin: 0.0, end: progress).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    double progress = 5 / 13;
-
-    return Container(
-      width: double.infinity,
-      height: 190,
-      child: Card(
-        color: AppColors.unselectedNavBarColor,
-        margin: const EdgeInsets.all(2),
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Casual leave',
-                style: leaveDaysFontStyle.style,
-              ),
-              const SizedBox(height: 10),
-              _buildLeaveInfo('Yearly', '13'),
-              const SizedBox(height: 8),
-              _buildLeaveInfo('Monthly', '01'),
-              const SizedBox(height: 10),
-              _buildProgressBar(progress),
-            ],
+    return SingleChildScrollView(
+      child: Container(
+        width: double.infinity,
+        height: 190,
+        child: Card(
+          color: AppColors.unselectedNavBarColor,
+          margin: const EdgeInsets.all(2),
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Casual leave',
+                  style: leaveDaysFontStyle.style,
+                ),
+                const SizedBox(height: 10),
+                _buildLeaveInfo('Yearly', totalLeave.toString()),
+                const SizedBox(height: 8),
+                _buildLeaveInfo('Monthly', '01'),
+                const SizedBox(height: 10),
+                AnimatedBuilder(
+                  animation: _progressAnimation,
+                  builder: (context, child) {
+                    return _buildProgressBar(_progressAnimation.value);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -73,11 +109,11 @@ class _LeaveDaysShowState extends State<LeaveDaysShow> {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: '05',
+                    text: usedLeave.toString(),
                     style: donutChartNumStyle.style,
                   ),
                   TextSpan(
-                    text: ' /13',
+                    text: ' /$totalLeave',
                     style: donutChartFontStyle.style,
                   ),
                 ],
