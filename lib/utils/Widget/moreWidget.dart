@@ -87,7 +87,7 @@ class _MorewidgetState extends State<Morewidget> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        userEmail.isNotEmpty ? userEmail : 'No Email',
+                        "Email : ${userEmail.isNotEmpty ? userEmail : 'No Email'}",
                         style: docArchiveFontStyle.style,
                       ),
                     ],

@@ -11,6 +11,7 @@ class WorkingHoursGraph extends StatefulWidget {
 class _WorkingHoursGraphState extends State<WorkingHoursGraph>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late List<Animation<double>> _animations;
 
   final List<int> workingHours = [6, 10, 6, 6, 10, 9, 6, 8, 7, 10];
   final double maxHeight = 100.0;
@@ -21,7 +22,15 @@ class _WorkingHoursGraphState extends State<WorkingHoursGraph>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
-    )..forward();
+    );
+
+    // Create a list of animations for the working hours values
+    _animations = List.generate(
+      workingHours.length,
+      (index) => Tween<double>(begin: 0, end: workingHours[index].toDouble())
+          .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut)),
+    );
+    _controller.forward();
   }
 
   @override
@@ -78,10 +87,10 @@ class _WorkingHoursGraphState extends State<WorkingHoursGraph>
                     children: List.generate(
                       workingHours.length,
                       (index) => AnimatedBuilder(
-                        animation: _controller,
+                        animation: _animations[index],
                         builder: (context, child) {
                           double barHeight =
-                              (workingHours[index] / 10) * maxHeight;
+                              (_animations[index].value / 10) * maxHeight;
                           double animatedHeight = _controller.value * barHeight;
 
                           return Stack(
@@ -99,31 +108,33 @@ class _WorkingHoursGraphState extends State<WorkingHoursGraph>
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                top: 5,
-                                child: Container(
-                                  width: 15,
-                                  height: 15,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppColors.lightblue,
-                                    border: Border.all(
-                                      color: AppColors.unselectedNavBarColor,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      '${workingHours[index]}',
-                                      style: const TextStyle(
-                                        fontSize: 8,
-                                        fontWeight: FontWeight.w500,
+                              if (_controller.value >= 0.5)
+                                Positioned(
+                                  top: 5,
+                                  child: Container(
+                                    width: 15,
+                                    height: 15,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppColors.lightblue,
+                                      border: Border.all(
                                         color: AppColors.unselectedNavBarColor,
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        '${_animations[index].value.toStringAsFixed(0)}',
+                                        style: const TextStyle(
+                                          fontSize: 8,
+                                          fontWeight: FontWeight.w500,
+                                          color:
+                                              AppColors.unselectedNavBarColor,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
                             ],
                           );
                         },
