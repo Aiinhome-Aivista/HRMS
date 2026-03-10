@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
+import 'package:hrms/utils/Screens/attandanceScreen.dart';
 import 'package:hrms/utils/Screens/documentArchiveScreen.dart';
 import 'package:hrms/utils/Screens/leaveDetails.dart';
 import 'package:hrms/utils/Widget/moreWidget.dart';
@@ -17,7 +18,6 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
   int _currentPage = 0;
   final List<Widget> _pages = [
     const Center(child: DocumentArchiveScreen()),
-    // const Center(child: Attandancescreen()),
     Center(
         child: Leavedetails(
       startDate: DateTime.now(),
@@ -25,6 +25,11 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
       selectedLeaveType: '',
       causes: '',
     )),
+
+    // temporarily for crash test (it was commented out earlier)
+    const Center(child: AttendanceScreen()),
+
+
     const Center(child: Morewidget()),
   ];
 
@@ -71,6 +76,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
               ),
               label: 'Activity',
             ),
+
             //    BottomNavigationBarItem(
             //   icon:  SvgPicture.asset(
             //     'assets/images/attendance.svg',
@@ -80,6 +86,16 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
             //   ),
             //   label: 'Document',
             // ),
+
+// ---------------------------
+            // temporarily making this as a crash reporting button for firebsae crashlytics
+               BottomNavigationBarItem(
+              icon:  Icon(Icons.bug_report),
+              label: 'Document',
+            ),
+// --------------------------------
+
+
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                 'assets/images/LogoutSvg.svg',

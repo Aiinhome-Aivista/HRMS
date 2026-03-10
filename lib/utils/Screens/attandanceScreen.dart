@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/loading_spinner.dart';
@@ -92,36 +93,50 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             )
           : Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 45, 16, 6),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 35),
-                              child: Center(
-                                child: Text('Attendance',
-                                    style: HeaderFontStyle.style),
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.close,
-                                color: AppColors.lightblue),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                      DateDisplay(
-                        selectedDay: _selectedDay,
-                        attendanceData: _allAttendanceData,
-                      ),
-                    ],
-                  ),
+
+                // commented just to try crashlytics----------------------temporarily
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(16, 45, 16, 6),
+                //   child: Column(
+                //     children: [
+                //       Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //         children: [
+                //           Expanded(
+                //             child: Padding(
+                //               padding: const EdgeInsets.only(left: 35),
+                //               child: Center(
+                //                 child: Text('Attendance',
+                //                     style: HeaderFontStyle.style),
+                //               ),
+                //             ),
+                //           ),
+                //           IconButton(
+                //             icon: const Icon(Icons.close,
+                //                 color: AppColors.lightblue),
+                //             onPressed: () => Navigator.pop(context),
+                //           ),
+                //         ],
+                //       ),
+                //       DateDisplay(
+                //         selectedDay: _selectedDay,
+                //         attendanceData: _allAttendanceData,
+                //       ),
+                //     ],
+                //   ),
+                // ),
+
+                // Temporarily testing for crashlytics
+                // -----------------------------------------
+                SizedBox(height: 100,),
+                ElevatedButton(
+                  onPressed: () {
+                    FirebaseCrashlytics.instance.crash();
+                  },
+                  child: const Text("Test Crash"),
                 ),
+
+                // --------------------------------------
                 Expanded(
                     child: AttendanceStart(
                   currentAttendanceDetails: _currentAttendance,
