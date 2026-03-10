@@ -93,50 +93,36 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             )
           : Column(
               children: [
-
-                // commented just to try crashlytics----------------------temporarily
-                // Padding(
-                //   padding: const EdgeInsets.fromLTRB(16, 45, 16, 6),
-                //   child: Column(
-                //     children: [
-                //       Row(
-                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //         children: [
-                //           Expanded(
-                //             child: Padding(
-                //               padding: const EdgeInsets.only(left: 35),
-                //               child: Center(
-                //                 child: Text('Attendance',
-                //                     style: HeaderFontStyle.style),
-                //               ),
-                //             ),
-                //           ),
-                //           IconButton(
-                //             icon: const Icon(Icons.close,
-                //                 color: AppColors.lightblue),
-                //             onPressed: () => Navigator.pop(context),
-                //           ),
-                //         ],
-                //       ),
-                //       DateDisplay(
-                //         selectedDay: _selectedDay,
-                //         attendanceData: _allAttendanceData,
-                //       ),
-                //     ],
-                //   ),
-                // ),
-
-                // Temporarily testing for crashlytics
-                // -----------------------------------------
-                SizedBox(height: 100,),
-                ElevatedButton(
-                  onPressed: () {
-                    FirebaseCrashlytics.instance.crash();
-                  },
-                  child: const Text("Test Crash"),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 45, 16, 6),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 35),
+                              child: Center(
+                                child: Text('Attendance',
+                                    style: HeaderFontStyle.style),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close,
+                                color: AppColors.lightblue),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ],
+                      ),
+                      DateDisplay(
+                        selectedDay: _selectedDay,
+                        attendanceData: _allAttendanceData,
+                      ),
+                    ],
+                  ),
                 ),
-
-                // --------------------------------------
                 Expanded(
                     child: AttendanceStart(
                   currentAttendanceDetails: _currentAttendance,

@@ -18,6 +18,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
   int _currentPage = 0;
   final List<Widget> _pages = [
     const Center(child: DocumentArchiveScreen()),
+      // const Center(child: AttendanceScreen()),
     Center(
         child: Leavedetails(
       startDate: DateTime.now(),
@@ -25,11 +26,6 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
       selectedLeaveType: '',
       causes: '',
     )),
-
-    // temporarily for crash test (it was commented out earlier)
-    const Center(child: AttendanceScreen()),
-
-
     const Center(child: Morewidget()),
   ];
 
@@ -51,69 +47,64 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
           topLeft: Radius.circular(20.0),
           topRight: Radius.circular(20.0),
         ),
-        child: BottomNavigationBar(
-          backgroundColor: AppColors.lightblue,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/images/HomeSvg.svg',
-                width: 24.0,
-                height: 24.0,
-                color: _currentPage == 0
-                    ? AppColors.selectedNavBarColor
-                    : AppColors.unselectedNavBarColor,
+        child: SizedBox(
+          height: 100,
+          child: BottomNavigationBar(
+            backgroundColor: AppColors.lightblue,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/images/HomeSvg.svg',
+                  width: 24.0,
+                  height: 24.0,
+                  color: _currentPage == 0
+                      ? AppColors.selectedNavBarColor
+                      : AppColors.unselectedNavBarColor,
+                ),
+                label: 'Home',
               ),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/images/account_balance_wallet.svg',
-                width: 24.0,
-                height: 24.0,
-                color: _currentPage == 1
-                    ? AppColors.selectedNavBarColor
-                    : AppColors.unselectedNavBarColor,
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/images/account_balance_wallet.svg',
+                  width: 24.0,
+                  height: 24.0,
+                  color: _currentPage == 1
+                      ? AppColors.selectedNavBarColor
+                      : AppColors.unselectedNavBarColor,
+                ),
+                label: 'Activity',
               ),
-              label: 'Activity',
-            ),
-
-            //    BottomNavigationBarItem(
-            //   icon:  SvgPicture.asset(
-            //     'assets/images/attendance.svg',
-            //     width: 24.0,
-            //     height: 24.0,
-            // color: _currentPage == 0 ? AppColors.selectedNavBarColor : AppColors.unselectedNavBarColor,
-            //   ),
-            //   label: 'Document',
-            // ),
-
-// ---------------------------
-            // temporarily making this as a crash reporting button for firebsae crashlytics
-               BottomNavigationBarItem(
-              icon:  Icon(Icons.bug_report),
-              label: 'Document',
-            ),
-// --------------------------------
-
-
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/images/LogoutSvg.svg',
-                width: 18.0,
-                height: 18.0,
-                color: _currentPage == 2
-                    ? AppColors.selectedNavBarColor
-                    : AppColors.unselectedNavBarColor,
+          
+              //    BottomNavigationBarItem(
+              //   icon:  SvgPicture.asset(
+              //     'assets/images/attendance.svg',
+              //     width: 24.0,
+              //     height: 24.0,
+              // color: _currentPage == 0 ? AppColors.selectedNavBarColor : AppColors.unselectedNavBarColor,
+              //   ),
+              //   label: 'Document',
+              // ),
+          
+          
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/images/LogoutSvg.svg',
+                  width: 18.0,
+                  height: 18.0,
+                  color: _currentPage == 2
+                      ? AppColors.selectedNavBarColor
+                      : AppColors.unselectedNavBarColor,
+                ),
+                label: 'Logout',
               ),
-              label: 'Logout',
-            ),
-          ],
-          currentIndex: _currentPage,
-          selectedItemColor: AppColors.selectedNavBarColor,
-          unselectedItemColor: AppColors.unselectedNavBarColor,
-          selectedLabelStyle: selectedNavBarTextStyle.style,
-          unselectedLabelStyle: unselectedNavBarTextStyle.style,
-          onTap: _onItemTapped,
+            ],
+            currentIndex: _currentPage,
+            selectedItemColor: AppColors.selectedNavBarColor,
+            unselectedItemColor: AppColors.unselectedNavBarColor,
+            selectedLabelStyle: selectedNavBarTextStyle.style,
+            unselectedLabelStyle: unselectedNavBarTextStyle.style,
+            onTap: _onItemTapped,
+          ),
         ),
       ),
     );
