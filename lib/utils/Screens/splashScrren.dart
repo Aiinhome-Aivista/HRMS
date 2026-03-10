@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hrms/Services/analytics_services.dart';
 import 'package:hrms/styleColor.dart';
 import 'dart:async';
 import 'package:hrms/utils/Screens/loginSreen.dart';
@@ -26,6 +27,9 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+
+    // Firebase Analytics initialized
+    AnalyticsService.logScreen("Splash Screen");
 
     _animationController = AnimationController(
       vsync: this,

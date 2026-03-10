@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hrms/Services/analytics_services.dart';
 import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/CustomButton.dart';
 import 'package:hrms/components/CustomTextField.dart';
@@ -36,6 +37,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+
+
+    // Firebase Analytics initialized
+    AnalyticsService.logScreen("Splash Screen");
+
+    
     _loadSavedCredentials();
     _updateButtonState();
   }
