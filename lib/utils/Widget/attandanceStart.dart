@@ -47,6 +47,8 @@ class _AttendanceStartState extends State<AttendanceStart> {
     fetchAttendance();
     _loadSavedCredentials();
     fetchLocation();
+    startUpdatingLocation();   // move here
+
   }
 
 //get employeeId from local storage
@@ -416,8 +418,15 @@ class _AttendanceStartState extends State<AttendanceStart> {
             }
           }
 
-          _xOffset = _xOffset.clamp(_leftLimit, _rightLimit);
-          _yOffset = _yOffset.clamp(_topLimit, _bottomLimit);
+_xOffset = _xOffset.clamp(
+  _leftLimit < _rightLimit ? _leftLimit : _rightLimit,
+  _leftLimit < _rightLimit ? _rightLimit : _leftLimit,
+);
+
+_yOffset = _yOffset.clamp(
+  _topLimit < _bottomLimit ? _topLimit : _bottomLimit,
+  _topLimit < _bottomLimit ? _bottomLimit : _topLimit,
+);
         });
       },
       onPanEnd: (details) async {
