@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/loading_spinner.dart';
 import 'package:hrms/utils/Widget/attandanceStart.dart';
@@ -83,6 +84,24 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     });
   }
 
+
+  // overlay func
+
+  Future<void> startOverlay() async {
+    bool? permission = await FlutterOverlayWindow.isPermissionGranted();
+
+    if (permission != true) {
+      await FlutterOverlayWindow.requestPermission();
+    }
+
+    await FlutterOverlayWindow.showOverlay(
+      height: 400,
+      width: 200,
+      enableDrag: true,
+      alignment: OverlayAlignment.center,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,36 +112,41 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             )
           : Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 45, 16, 6),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 35),
-                              child: Center(
-                                child: Text('Attendance',
-                                    style: HeaderFontStyle.style),
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.close,
-                                color: AppColors.lightblue),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                      DateDisplay(
-                        selectedDay: _selectedDay,
-                        attendanceData: _allAttendanceData,
-                      ),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(16, 45, 16, 6),
+                //   child: Column(
+                //     children: [
+                //       Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //         children: [
+                //           Expanded(
+                //             child: Padding(
+                //               padding: const EdgeInsets.only(left: 35),
+                //               child: Center(
+                //                 child: Text('Attendance',
+                //                     style: HeaderFontStyle.style),
+                //               ),
+                //             ),
+                //           ),
+                //           IconButton(
+                //             icon: const Icon(Icons.close,
+                //                 color: AppColors.lightblue),
+                //             onPressed: () => Navigator.pop(context),
+                //           ),
+                //         ],
+                //       ),
+                //       DateDisplay(
+                //         selectedDay: _selectedDay,
+                //         attendanceData: _allAttendanceData,
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                SizedBox(height: 100,),
+                ElevatedButton(
+            onPressed: startOverlay,
+            child: const Text("Start Floating Window"),
+          ),
                 Expanded(
                     child: AttendanceStart(
                   currentAttendanceDetails: _currentAttendance,

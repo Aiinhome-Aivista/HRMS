@@ -18,7 +18,6 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
   int _currentPage = 0;
   final List<Widget> _pages = [
     const Center(child: DocumentArchiveScreen()),
-      // const Center(child: AttendanceScreen()),
     Center(
         child: Leavedetails(
       startDate: DateTime.now(),
@@ -26,6 +25,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
       selectedLeaveType: '',
       causes: '',
     )),
+    const Center(child: AttendanceScreen()),
     const Center(child: Morewidget()),
   ];
 
@@ -84,6 +84,8 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
               //   ),
               //   label: 'Document',
               // ),
+              BottomNavigationBarItem(icon: Icon(Icons.bug_report),
+              label: "DOcument"),
           
           
               BottomNavigationBarItem(
