@@ -417,7 +417,7 @@ class _AttendanceStartState extends State<AttendanceStart> {
               _xOffset = 0;
             }
           }
-
+// --------------------------------------------------
 _xOffset = _xOffset.clamp(
   _leftLimit < _rightLimit ? _leftLimit : _rightLimit,
   _leftLimit < _rightLimit ? _rightLimit : _leftLimit,

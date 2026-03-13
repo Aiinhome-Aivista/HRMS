@@ -10,8 +10,8 @@ class OverlayScreen extends StatelessWidget {
       color: Colors.transparent,
       child: Center(
         child: Container(
-          padding: const EdgeInsets.all(16),
-          color: Colors.blue,
+          // padding: const EdgeInsets.all(16),
+          // color: Colors.blue,
           child: const OverlayAttendanceScreen()
         ),
       ),
@@ -32,12 +32,12 @@ class OverlayAttendanceScreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
       body: Center(
         child: Container(
-          height: 350,
+          height: 250,
           width: 350,
-          padding: const EdgeInsets.all(20),
+          // padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.black87,
-            borderRadius: BorderRadius.circular(20),
+            // borderRadius: BorderRadius.circular(20),
           ),
           child: AttendanceStart(
             currentAttendanceDetails: attendanceData,

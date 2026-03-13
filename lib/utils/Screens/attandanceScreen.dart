@@ -84,7 +84,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     });
   }
 
-
   // overlay func
 
   Future<void> startOverlay() async {
@@ -95,9 +94,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     }
 
     await FlutterOverlayWindow.showOverlay(
-      height: 1000,
-      width: 1000,
-      enableDrag: true,
+      height: 650,
+      width: 850,
+      // enableDrag: true,
       alignment: OverlayAlignment.center,
       flag: OverlayFlag.defaultFlag,
       overlayTitle: "Attendance",
@@ -145,11 +144,13 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 //     ],
                 //   ),
                 // ),
-                SizedBox(height: 100,),
+                SizedBox(
+                  height: 100,
+                ),
                 ElevatedButton(
-            onPressed: startOverlay,
-            child: const Text("Start Floating Window"),
-          ),
+                  onPressed: startOverlay,
+                  child: const Text("Floating Window"),
+                ),
                 Expanded(
                     child: AttendanceStart(
                   currentAttendanceDetails: _currentAttendance,
