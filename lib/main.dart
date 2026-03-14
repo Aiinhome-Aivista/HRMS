@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hrms/overlay/overlay_screen.dart';
@@ -8,10 +9,14 @@ import 'package:hrms/utils/Screens/splashScrren.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hrms/utils/Widget/attandanceStart.dart';
 
+
 void main() async {
   // FIrebase initialized
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  await AndroidAlarmManager.initialize();
+
 
   // Crashlytics initialized
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;

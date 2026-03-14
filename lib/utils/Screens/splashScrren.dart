@@ -1,10 +1,35 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:hrms/Services/analytics_services.dart';
 import 'package:hrms/styleColor.dart';
 import 'dart:async';
 import 'package:hrms/utils/Screens/loginSreen.dart';
 import 'package:hrms/utils/Widget/bottamNavigationWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+
+@pragma('vm:entry-point')
+Future<void> startOverlay() async {
+
+    WidgetsFlutterBinding.ensureInitialized();
+
+    bool? permission = await FlutterOverlayWindow.isPermissionGranted();
+
+    if (permission != true) {
+      await FlutterOverlayWindow.requestPermission();
+    }
+
+    await FlutterOverlayWindow.showOverlay(
+      height: 650,
+      width: 850,
+      // enableDrag: true,
+      alignment: OverlayAlignment.center,
+      flag: OverlayFlag.defaultFlag,
+      overlayTitle: "Attendance",
+      overlayContent: 'Overlay Active',
+    );
+  }
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,6 +52,8 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+
+    scheduleOverlay();
 
     // Firebase Analytics initialized
     AnalyticsService.logScreen("Splash Screen");
@@ -60,6 +87,37 @@ class _SplashScreenState extends State<SplashScreen>
     });
 
     _savedlatitudelongitude();
+  }
+
+// --------------
+  
+
+  // -------
+  Future<void> scheduleOverlay() async {
+    DateTime now = DateTime.now();
+
+    DateTime target = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      13,
+      37,
+    );
+
+    if (target.isBefore(now)) {
+      target = target.add(const Duration(days: 1));
+    }
+
+      print("Alarm scheduled for: $target");
+
+
+    await AndroidAlarmManager.oneShotAt(
+      target,
+      1, // alarm ID
+      startOverlay,
+      // exact: true,
+      wakeup: true,
+    );
   }
 
   // Get local storage data
