@@ -3,36 +3,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:hrms/Services/analytics_services.dart';
 import 'package:hrms/styleColor.dart';
+import 'package:hrms/utils/Screens/attandanceScreen.dart';
 import 'dart:async';
 import 'package:hrms/utils/Screens/loginSreen.dart';
 import 'package:hrms/utils/Widget/bottamNavigationWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// @pragma('vm:entry-point')
+// Future<void> startOverlay() async {
+//   WidgetsFlutterBinding.ensureInitialized();
 
-@pragma('vm:entry-point')
-Future<void> startOverlay() async {
+//   bool? permission = await FlutterOverlayWindow.isPermissionGranted();
 
-    WidgetsFlutterBinding.ensureInitialized();
-
-    bool? permission = await FlutterOverlayWindow.isPermissionGranted();
-
-    if (permission != true) {
-      await FlutterOverlayWindow.requestPermission();
-    }
-
-    await FlutterOverlayWindow.showOverlay(
-      height: 650,
-      width: 850,
-      // enableDrag: true,
-      alignment: OverlayAlignment.center,
-      flag: OverlayFlag.defaultFlag,
-      overlayTitle: "Attendance",
-      overlayContent: 'Overlay Active',
-    );
-  }
+//   await FlutterOverlayWindow.showOverlay(
+//     height: 650,
+//     width: 850,
+//     // enableDrag: true,
+//     alignment: OverlayAlignment.center,
+//     flag: OverlayFlag.defaultFlag,
+//     overlayTitle: "Attendance",
+//     overlayContent: 'Overlay Active',
+//   );
+// }
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+    final bool fromNotification;
+
+  const SplashScreen({super.key, this.fromNotification = false});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -53,7 +50,25 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
 
-    scheduleOverlay();
+    if (widget.fromNotification) {
+    // 🔥 Directly go to Attendance
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const AttendanceScreen(),
+        ),
+      );
+    });
+
+    return; // stop normal flow
+  }
+
+
+    // requestOverlayPermission(); // 👈 ADD THIS
+    // scheduleOverlay();
+
+
 
     // Firebase Analytics initialized
     AnalyticsService.logScreen("Splash Screen");
@@ -90,7 +105,14 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
 // --------------
-  
+
+  Future<void> requestOverlayPermission() async {
+    bool? permission = await FlutterOverlayWindow.isPermissionGranted();
+
+    if (permission != true) {
+      await FlutterOverlayWindow.requestPermission();
+    }
+  }
 
   // -------
   Future<void> scheduleOverlay() async {
@@ -100,28 +122,33 @@ class _SplashScreenState extends State<SplashScreen>
       now.year,
       now.month,
       now.day,
-      13,
-      37,
+      17,
+      20,
     );
 
     if (target.isBefore(now)) {
-      target = target.add(const Duration(days: 1));
+      target = target.add(const Duration(seconds: 10));
     }
 
-      print("Alarm scheduled for: $target");
+    print("Alarm scheduled for: $target");
 
-
-    await AndroidAlarmManager.oneShotAt(
-      target,
-      1, // alarm ID
-      startOverlay,
-      // exact: true,
-      wakeup: true,
-    );
+    // await AndroidAlarmManager.oneShotAt(
+    //   target,
+    //   1, // alarm ID
+    //   // startOverlay,
+    //   // exact: true,
+    //   wakeup: true,
+    // );
   }
 
   // Get local storage data
   Future<void> _savedlatitudelongitude() async {
+
+    if (widget.fromNotification) {
+  print("Opened from notification → skip splash navigation");
+  return;
+}
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? getlatitude = prefs.getString('Savelatitude');
     final String? getlongitude = prefs.getString('Savelongitude');

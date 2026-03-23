@@ -4,10 +4,17 @@ import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/loading_spinner.dart';
 import 'package:hrms/utils/Widget/attandanceStart.dart';
+import 'package:hrms/utils/Widget/bottamNavigationWidget.dart';
 import 'package:hrms/utils/Widget/dateDisplay.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:hrms/styleColor.dart';
+import 'package:hrms/utils/Widget/reminderWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hrms/services/alarm_service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 class AttendanceScreen extends StatefulWidget {
   const AttendanceScreen({super.key});
@@ -106,57 +113,83 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black.withOpacity(0.5),
-      body: _isLoading
-          ? const Center(
-              child: LoadingSpinner(),
-            )
-          : Column(
-              children: [
-                // Padding(
-                //   padding: const EdgeInsets.fromLTRB(16, 45, 16, 6),
-                //   child: Column(
-                //     children: [
-                //       Row(
-                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //         children: [
-                //           Expanded(
-                //             child: Padding(
-                //               padding: const EdgeInsets.only(left: 35),
-                //               child: Center(
-                //                 child: Text('Attendance',
-                //                     style: HeaderFontStyle.style),
-                //               ),
-                //             ),
-                //           ),
-                //           IconButton(
-                //             icon: const Icon(Icons.close,
-                //                 color: AppColors.lightblue),
-                //             onPressed: () => Navigator.pop(context),
-                //           ),
-                //         ],
-                //       ),
-                //       DateDisplay(
-                //         selectedDay: _selectedDay,
-                //         attendanceData: _allAttendanceData,
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                SizedBox(
-                  height: 100,
-                ),
-                ElevatedButton(
-                  onPressed: startOverlay,
-                  child: const Text("Floating Window"),
-                ),
-                Expanded(
-                    child: AttendanceStart(
-                  currentAttendanceDetails: _currentAttendance,
-                )),
-              ],
+    return PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          if (didPop) return;
+
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const BottamnavigationBar(),
             ),
-    );
+            (route) => false,
+          );
+        },
+        child: Scaffold(
+          backgroundColor: Colors.black.withOpacity(0.5),
+          body: _isLoading
+              ? const Center(
+                  child: LoadingSpinner(),
+                )
+              : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 45, 16, 6),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 35),
+                                  child: Center(
+                                    child: Text('Attendance',
+                                        style: HeaderFontStyle.style),
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.close,
+                                    color: AppColors.lightblue),
+                                onPressed: () {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          const BottamnavigationBar(),
+                                    ),
+                                    (route) => false,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                          DateDisplay(
+                            selectedDay: _selectedDay,
+                            attendanceData: _allAttendanceData,
+                          ),
+                        ],
+                      ),
+                    ),
+                    // SizedBox(
+                    //   height: 100,
+                    // ),
+                    // ElevatedButton(
+                    //   onPressed: startOverlay,
+                    //   child: const Text("Floating Window"),
+                    // ),
+                    // SizedBox(
+                    //   height: 100,
+                    // ),
+                    // ReminderWidget(),
+                    Expanded(
+                        child: AttendanceStart(
+                      currentAttendanceDetails: _currentAttendance,
+                    )),
+                  ],
+                ),
+        ));
   }
 }

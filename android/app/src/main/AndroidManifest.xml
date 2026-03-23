@@ -14,6 +14,9 @@
 <!-- For apps with targetSDK 31 (Android 12) and newer -->
 <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
 
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+
     <application
         android:label="Hrms"
         android:name="${applicationName}"

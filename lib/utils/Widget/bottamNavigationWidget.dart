@@ -5,6 +5,7 @@ import 'package:hrms/textStyle.dart';
 import 'package:hrms/utils/Screens/attandanceScreen.dart';
 import 'package:hrms/utils/Screens/documentArchiveScreen.dart';
 import 'package:hrms/utils/Screens/leaveDetails.dart';
+import 'package:hrms/utils/Screens/settingScreen.dart';
 import 'package:hrms/utils/Widget/moreWidget.dart';
 
 class BottamnavigationBar extends StatefulWidget {
@@ -25,7 +26,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
       selectedLeaveType: '',
       causes: '',
     )),
-    const Center(child: AttendanceScreen()),
+    const Center(child: SettingScreen()),
     const Center(child: Morewidget()),
   ];
 
@@ -74,7 +75,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
                 ),
                 label: 'Activity',
               ),
-          
+
               //    BottomNavigationBarItem(
               //   icon:  SvgPicture.asset(
               //     'assets/images/attendance.svg',
@@ -84,10 +85,10 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
               //   ),
               //   label: 'Document',
               // ),
-              BottomNavigationBarItem(icon: Icon(Icons.bug_report),
-              label: "DOcument"),
-          
-          
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.how_to_reg,
+                  ), label: "Setting"),
+
               BottomNavigationBarItem(
                 icon: SvgPicture.asset(
                   'assets/images/LogoutSvg.svg',

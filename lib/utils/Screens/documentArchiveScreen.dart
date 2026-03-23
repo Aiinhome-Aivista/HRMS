@@ -81,7 +81,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
       }
     } catch (e) {
       setState(() {});
-      // //print('Error: $e');
+      print('Error: $e');
     }
   }
 
