@@ -9,6 +9,6 @@ class AppColors {
   static const Color selectedNavBarColor = Color.fromRGBO(28, 27, 31, 1);
   static const Color unselectedNavBarColor = Color.fromRGBO(66, 85, 122, 1);
   static const Color leaveCardColor = Color.fromRGBO(66, 85, 122, 0.31);
-
+  static const Color card = Color.fromRGBO(66, 85, 122, 0.150);
   AppColors(da);
 }

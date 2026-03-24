@@ -44,7 +44,7 @@ class _WorkingHoursGraphState extends State<WorkingHoursGraph>
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.unselectedNavBarColor,
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Padding(

@@ -21,6 +21,7 @@ class _ReminderWidgetState extends State<ReminderWidget> {
     final minute = prefs.getInt('reminder_minute');
 
     if (hour != null && minute != null) {
+      if (!mounted) return; // ✅ ADD THIS
       setState(() {
         selectedTime = TimeOfDay(hour: hour, minute: minute);
       });
@@ -85,13 +86,12 @@ class _ReminderWidgetState extends State<ReminderWidget> {
                 selectedTime = picked;
               });
 
-              await saveTime(picked);              // ✅ SAVE
-              await scheduleDailyAlarm(picked);    // ✅ SCHEDULE
+              await saveTime(picked); // ✅ SAVE
+              await scheduleDailyAlarm(picked); // ✅ SCHEDULE
 
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content:
-                      Text("Reminder set for ${picked.format(context)}"),
+                  content: Text("Reminder set for ${picked.format(context)}"),
                 ),
               );
             }

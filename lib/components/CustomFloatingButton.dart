@@ -11,7 +11,7 @@ class CustomFloatingActionButton extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.icon,
-    this.backgroundColor = AppColors.blackShade, // Default color
+    this.backgroundColor = AppColors.lightblue, // Default color
     this.size = 56.0, // Default size
   });
 
@@ -22,7 +22,7 @@ class CustomFloatingActionButton extends StatelessWidget {
       backgroundColor: backgroundColor,
       elevation: 6.0,
       shape: const CircleBorder(),
-      child: Icon(icon, color: AppColors.lightblue, size: size * 0.6),
+      child: Icon(icon, color: AppColors.blackShade, size: size * 0.6),
     );
   }
 }

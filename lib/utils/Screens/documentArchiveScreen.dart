@@ -46,6 +46,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
     // //print('Login Successful employeeId: $employeeId');
 
     // //print("empId:$employeeId");
+    if (!mounted) return; // 🔥 ADD THIS
 
     setState(() {
       userName = gateUserName ?? '';
@@ -85,160 +86,161 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
     }
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: AppColors.backgroundColor,
-    appBar: AppBar(
-      automaticallyImplyLeading: false,
-      centerTitle: true,
-      title: Padding(
-        padding: const EdgeInsets.only(top: 40, bottom: 40),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'HRMS',
-              style: HeaderFontStyle.style,
-            ),
-            GestureDetector(
-              onTap: () {
-                // Add your notification icon click functionality here
-              },
-              child: SvgPicture.asset(
-                'assets/images/Notifications.svg',
-                width: 24.0,
-                height: 24.0,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.backgroundColor,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Padding(
+          padding: const EdgeInsets.only(top: 40, bottom: 40),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'HRMS',
+                style: HeaderFontStyle.style,
               ),
-            ),
-          ],
-        ),
-      ),
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-    ),
-    body: _isLoading
-        ? const Center(
-            child: LoadingSpinner(),
-          )
-        : SingleChildScrollView( // Added for scroll functionality
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Notice section
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (notices.isNotEmpty)
-                      CarouselSlider(
-                        items: notices.map((notice) {
-                          return Card(
-                            color: AppColors.unselectedNavBarColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            elevation: 4,
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Text(
-                                notice,
-                                style: noticeFontStyle.style,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                        options: CarouselOptions(
-                          height: 150,
-                          enlargeCenterPage: true,
-                          autoPlay: true,
-                          aspectRatio: 16 / 9,
-                          autoPlayCurve: Curves.fastOutSlowIn,
-                          enableInfiniteScroll: true,
-                          autoPlayAnimationDuration:
-                              const Duration(milliseconds: 800),
-                          viewportFraction: 0.9,
-                          initialPage: 0,
-                          enlargeFactor: 0.1,
-                        ),
-                      )
-                    else
-                      CarouselSlider(
-                        items: [
-                          Builder(
-                            builder: (BuildContext context) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 16, right: 16),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.unselectedNavBarColor,
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  child: const LoadingSpinner(),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                        options: CarouselOptions(
-                          height: 150.0,
-                          enlargeCenterPage: true,
-                          autoPlay: false,
-                          aspectRatio: 16 / 9,
-                          autoPlayCurve: Curves.fastOutSlowIn,
-                          enableInfiniteScroll: true,
-                          autoPlayAnimationDuration:
-                              const Duration(milliseconds: 800),
-                          viewportFraction: 1.0,
-                          initialPage: 0,
-                        ),
-                      ),
-                  ],
+              GestureDetector(
+                onTap: () {
+                  // Add your notification icon click functionality here
+                },
+                child: SvgPicture.asset(
+                  'assets/images/Notifications.svg',
+                  width: 24.0,
+                  height: 24.0,
                 ),
-
-                // Other sections
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
-                  child: Column(
+              ),
+            ],
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: _isLoading
+          ? const Center(
+              child: LoadingSpinner(),
+            )
+          : SingleChildScrollView(
+              // Added for scroll functionality
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Notice section
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            flex: 4,
-                            child: DynamicDonutChart(),
+                      if (notices.isNotEmpty)
+                        CarouselSlider(
+                          items: notices.map((notice) {
+                            return Card(
+                              color: AppColors.card,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 4,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Text(
+                                  notice,
+                                  style: noticeFontStyle.style,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          options: CarouselOptions(
+                            height: 150,
+                            enlargeCenterPage: true,
+                            autoPlay: true,
+                            aspectRatio: 16 / 9,
+                            autoPlayCurve: Curves.fastOutSlowIn,
+                            enableInfiniteScroll: true,
+                            autoPlayAnimationDuration:
+                                const Duration(milliseconds: 800),
+                            viewportFraction: 0.9,
+                            initialPage: 0,
+                            enlargeFactor: 0.1,
                           ),
-                          SizedBox(width: 2),
-                          Flexible(
-                            flex: 2,
-                            child: LeaveDaysShow(),
+                        )
+                      else
+                        CarouselSlider(
+                          items: [
+                            Builder(
+                              builder: (BuildContext context) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 16, right: 16),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.unselectedNavBarColor,
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                    child: const LoadingSpinner(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                          options: CarouselOptions(
+                            height: 150.0,
+                            enlargeCenterPage: true,
+                            autoPlay: false,
+                            aspectRatio: 16 / 9,
+                            autoPlayCurve: Curves.fastOutSlowIn,
+                            enableInfiniteScroll: true,
+                            autoPlayAnimationDuration:
+                                const Duration(milliseconds: 800),
+                            viewportFraction: 1.0,
+                            initialPage: 0,
                           ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const WorkingHoursGraph(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      AddSkillsPage(),
+                        ),
                     ],
                   ),
-                )
-              ],
-            ),
-          ),
-    floatingActionButton: CustomFloatingActionButton(
-      onPressed: () {
-        Navigator.of(context).push(
-          TransparentPageRoute.create(const AttendanceScreen()),
-        );
-      },
-      icon: Icons.add,
-    ),
-  );
-}
 
+                  // Other sections
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 20, left: 15, right: 15),
+                    child: Column(
+                      children: [
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              flex: 4,
+                              child: DynamicDonutChart(),
+                            ),
+                            SizedBox(width: 2),
+                            Flexible(
+                              flex: 2,
+                              child: LeaveDaysShow(),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const WorkingHoursGraph(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        AddSkillsPage(),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+      floatingActionButton: CustomFloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            TransparentPageRoute.create(const AttendanceScreen()),
+          );
+        },
+        icon: Icons.add,
+      ),
+    );
+  }
 }
