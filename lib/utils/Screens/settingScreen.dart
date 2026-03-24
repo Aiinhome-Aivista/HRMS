@@ -9,14 +9,9 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black.withValues(alpha: 0.5),
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 75),
-            ReminderWidget(),
-          ],
-        ),
+      body: Padding(
+        padding: const EdgeInsets.only(top:50),
+        child: ReminderWidget(),
       ),
     );
   }

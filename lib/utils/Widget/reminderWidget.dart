@@ -23,12 +23,10 @@ class _ReminderWidgetState extends State<ReminderWidget> {
     final minute = prefs.getInt('reminder_minute');
 
     if (hour != null && minute != null) {
-      if (!mounted) return; // ✅ ADD THIS
+      if (!mounted) return;
       setState(() {
         selectedTime = TimeOfDay(hour: hour, minute: minute);
       });
-
-      print("Loaded reminder: $selectedTime");
     }
   }
 
@@ -40,7 +38,7 @@ class _ReminderWidgetState extends State<ReminderWidget> {
     await prefs.setInt('reminder_minute', time.minute);
   }
 
-  // ✅ CLEAR reminder (optional but useful)
+  // ✅ CLEAR reminder
   Future<void> clearReminder() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -61,36 +59,34 @@ class _ReminderWidgetState extends State<ReminderWidget> {
   @override
   void initState() {
     super.initState();
-    loadSavedTime(); // 👈 restore on startup
+    loadSavedTime();
   }
 
   void _showReminderModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.black87,
-      isScrollControlled: true, // 👈 IMPORTANT
-
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (_) {
         return FractionallySizedBox(
-          heightFactor: 0.5, // 👈 50% of screen height (adjust this)
-
+          heightFactor: 0.5,
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
                   "Reminder Settings",
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
-
                 const SizedBox(height: 20),
 
                 // ✅ SET TIME
                 ListTile(
+                  contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.access_time, color: Colors.white),
                   title: const Text(
                     "Set Time",
@@ -122,9 +118,10 @@ class _ReminderWidgetState extends State<ReminderWidget> {
                   },
                 ),
 
-                // ✅ DELETE REMINDER
+                // ✅ DELETE
                 if (selectedTime != null)
                   ListTile(
+                    contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.delete, color: Colors.red),
                     title: const Text(
                       "Delete Reminder",
@@ -135,8 +132,6 @@ class _ReminderWidgetState extends State<ReminderWidget> {
                       await clearReminder();
                     },
                   ),
-
-                const SizedBox(height: 10),
               ],
             ),
           ),
@@ -148,36 +143,72 @@ class _ReminderWidgetState extends State<ReminderWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(11.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, // ✅ KEY FIX
         children: [
-          Text(
-            "Daily Reminder",
-            style: HeaderFontStyle.style,
-          ),
-          const SizedBox(height: 20),
+          /// 🔥 HEADER (like HRMS)
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                selectedTime != null
-                    ? "Reminder at ${selectedTime!.format(context)}"
-                    : "Reminder is OFF",
-                style: TextStyle(color: AppColors.lightblue, fontSize: 20),
-              ),
-              Switch(
-                value: selectedTime != null,
-                activeColor: AppColors.greyShade,
-                onChanged: (value) async {
-                  if (value) {
-                    _showReminderModal(context); // 👉 ONLY switch triggers this
-                  } else {
-                    await clearReminder();
-                  }
-                },
-              ),
-            ],
-          )
+  children: [
+    Text(
+      "Daily Reminder",
+      style: HeaderFontStyle.style,
+    ),
+  ],
+),
+
+          const SizedBox(height: 25),
+
+          /// 🔥 REMINDER ROW
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            decoration: BoxDecoration(
+              color: AppColors.card, // 👈 matches HRMS cards
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                /// TEXT
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Reminder",
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      selectedTime != null
+                          ? selectedTime!.format(context)
+                          : "OFF",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+
+                /// SWITCH
+                Switch(
+                  value: selectedTime != null,
+                  activeColor: AppColors.greyShade,
+                  onChanged: (value) async {
+                    if (value) {
+                      _showReminderModal(context);
+                    } else {
+                      await clearReminder();
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
