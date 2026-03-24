@@ -17,6 +17,11 @@ void alarmCallback() async {
 
   final now = DateTime.now();
 
+  if (now.weekday == DateTime.sunday) {
+    debugPrint("Sunday Notification Skipped");
+    return;
+  }
+
   print("ALARM TRIGGERED 🚀, ${now}");
 
   final FlutterLocalNotificationsPlugin notifications =
@@ -93,11 +98,10 @@ void main() async {
     onDidReceiveNotificationResponse: (response) async {
       if (response.payload == "open_attendance") {
         navigatorKey.currentState?.pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (_) => const AttendanceScreen(),
-          ),
-          (route) => false
-        );
+            MaterialPageRoute(
+              builder: (_) => const AttendanceScreen(),
+            ),
+            (route) => false);
       }
     },
   );
@@ -121,7 +125,7 @@ void main() async {
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
   runZonedGuarded(() {
-    runApp( MyApp(
+    runApp(MyApp(
       launchDetails: launchDetails,
     ));
   }, (error, stack) {
@@ -143,25 +147,25 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     handleNotificationLaunch();
-  //   });
-  // }
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     handleNotificationLaunch();
+    //   });
+    // }
 
-  // void handleNotificationLaunch() {
-  //   final details = widget.launchDetails;
+    // void handleNotificationLaunch() {
+    //   final details = widget.launchDetails;
 
-  //   if (details != null && details.didNotificationLaunchApp == true) {
-  //     final payload = details.notificationResponse?.payload;
+    //   if (details != null && details.didNotificationLaunchApp == true) {
+    //     final payload = details.notificationResponse?.payload;
 
-  //     if (payload == "open_attendance") {
-  //       navigatorKey.currentState?.push(
-  //         MaterialPageRoute(
-  //           builder: (_) => const AttendanceScreen(),
-  //         ),
-  //       );
-  //     }
-  //   }
+    //     if (payload == "open_attendance") {
+    //       navigatorKey.currentState?.push(
+    //         MaterialPageRoute(
+    //           builder: (_) => const AttendanceScreen(),
+    //         ),
+    //       );
+    //     }
+    //   }
   }
 
   @override
@@ -170,7 +174,7 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: navigatorKey,
       home: SplashScreen(
         fromNotification:
-      widget.launchDetails?.didNotificationLaunchApp ?? false,
+            widget.launchDetails?.didNotificationLaunchApp ?? false,
       ),
       debugShowCheckedModeBanner: false,
     );

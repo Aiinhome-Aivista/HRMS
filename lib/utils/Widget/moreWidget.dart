@@ -37,6 +37,9 @@ class _MorewidgetState extends State<Morewidget> {
 
     print("empId:$employeeId");
 
+    if (!mounted) return;
+
+
     setState(() {
       userName = gateUserName ?? '';
       userEmail = gateUserEmail ?? '';
