@@ -1,6 +1,8 @@
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:hrms/Services/alarm_service.dart';
+import 'package:hrms/styleColor.dart';
+import 'package:hrms/textStyle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ReminderWidget extends StatefulWidget {
@@ -62,68 +64,122 @@ class _ReminderWidgetState extends State<ReminderWidget> {
     loadSavedTime(); // 👈 restore on startup
   }
 
+  void _showReminderModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.black87,
+      isScrollControlled: true, // 👈 IMPORTANT
+
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        return FractionallySizedBox(
+          heightFactor: 0.5, // 👈 50% of screen height (adjust this)
+
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Reminder Settings",
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+
+                const SizedBox(height: 20),
+
+                // ✅ SET TIME
+                ListTile(
+                  leading: const Icon(Icons.access_time, color: Colors.white),
+                  title: const Text(
+                    "Set Time",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onTap: () async {
+                    Navigator.pop(context);
+
+                    final picked = await showTimePicker(
+                      context: context,
+                      initialTime: selectedTime ?? TimeOfDay.now(),
+                    );
+
+                    if (picked != null) {
+                      setState(() {
+                        selectedTime = picked;
+                      });
+
+                      await saveTime(picked);
+                      await scheduleDailyAlarm(picked);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              "Reminder set for ${picked.format(context)}"),
+                        ),
+                      );
+                    }
+                  },
+                ),
+
+                // ✅ DELETE REMINDER
+                if (selectedTime != null)
+                  ListTile(
+                    leading: const Icon(Icons.delete, color: Colors.red),
+                    title: const Text(
+                      "Delete Reminder",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      await clearReminder();
+                    },
+                  ),
+
+                const SizedBox(height: 10),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Text(
-          "Set Daily Reminder",
-          style: TextStyle(color: Colors.white),
-        ),
-
-        const SizedBox(height: 30),
-
-        // ✅ PICK TIME BUTTON
-        ElevatedButton(
-          onPressed: () async {
-            final picked = await showTimePicker(
-              context: context,
-              initialTime: selectedTime ?? TimeOfDay.now(),
-            );
-
-            if (picked != null) {
-              setState(() {
-                selectedTime = picked;
-              });
-
-              await saveTime(picked); // ✅ SAVE
-              await scheduleDailyAlarm(picked); // ✅ SCHEDULE
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text("Reminder set for ${picked.format(context)}"),
-                ),
-              );
-            }
-          },
-          child: const Text("Pick Time"),
-        ),
-
-        const SizedBox(height: 30),
-
-        // ✅ DISPLAY STATUS
-        selectedTime != null
-            ? Text(
-                "Reminder set at: ${selectedTime!.format(context)}",
-                style: const TextStyle(color: Colors.white),
-              )
-            : const Text(
-                "Reminder is not set",
-                style: TextStyle(color: Colors.white),
-              ),
-
-        const SizedBox(height: 20),
-
-        // ✅ CLEAR BUTTON (optional but recommended)
-        if (selectedTime != null)
-          ElevatedButton(
-            onPressed: clearReminder,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-            ),
-            child: const Text("Clear Reminder"),
+    return Padding(
+      padding: const EdgeInsets.all(11.0),
+      child: Column(
+        children: [
+          Text(
+            "Daily Reminder",
+            style: HeaderFontStyle.style,
           ),
-      ],
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                selectedTime != null
+                    ? "Reminder at ${selectedTime!.format(context)}"
+                    : "Reminder is OFF",
+                style: TextStyle(color: AppColors.lightblue, fontSize: 20),
+              ),
+              Switch(
+                value: selectedTime != null,
+                activeColor: AppColors.greyShade,
+                onChanged: (value) async {
+                  if (value) {
+                    _showReminderModal(context); // 👉 ONLY switch triggers this
+                  } else {
+                    await clearReminder();
+                  }
+                },
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

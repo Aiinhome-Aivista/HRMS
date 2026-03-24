@@ -81,6 +81,8 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
         // //print('Error: ${response['msg']}');
       }
     } catch (e) {
+          if (!mounted) return; // 🔥 ADD THIS
+
       setState(() {});
       print('Error: $e');
     }

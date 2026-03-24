@@ -11,9 +11,9 @@ class SettingScreen extends StatelessWidget {
       backgroundColor: Colors.black.withValues(alpha: 0.5),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, 
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            SizedBox(height: 75),
             ReminderWidget(),
           ],
         ),

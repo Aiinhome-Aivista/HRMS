@@ -52,6 +52,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
           height: 100,
           child: BottomNavigationBar(
             backgroundColor: AppColors.lightblue,
+            type: BottomNavigationBarType.fixed,
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: SvgPicture.asset(
@@ -94,7 +95,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
                   'assets/images/LogoutSvg.svg',
                   width: 18.0,
                   height: 18.0,
-                  color: _currentPage == 2
+                  color: _currentPage == 3
                       ? AppColors.selectedNavBarColor
                       : AppColors.unselectedNavBarColor,
                 ),
