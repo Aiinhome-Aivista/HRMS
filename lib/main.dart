@@ -84,6 +84,7 @@ void main() async {
 
   await AndroidAlarmManager.initialize();
 
+
   // Crashlytics initialized
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 

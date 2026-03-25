@@ -95,7 +95,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
                   'assets/images/LogoutSvg.svg',
                   width: 18.0,
                   height: 18.0,
-                  color: _currentPage == 3
+                  color: _currentPage == 2
                       ? AppColors.selectedNavBarColor
                       : AppColors.unselectedNavBarColor,
                 ),
