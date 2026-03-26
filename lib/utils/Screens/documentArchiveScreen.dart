@@ -16,7 +16,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:firebase_app_installations/firebase_app_installations.dart';
 
-
 class DocumentArchiveScreen extends StatefulWidget {
   const DocumentArchiveScreen({super.key});
 
@@ -35,7 +34,11 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
   void initState() {
     super.initState();
     _loadSavedCredentials();
-    FirebaseInAppMessaging.instance.triggerEvent("open_attendance");
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FirebaseInAppMessaging.instance.triggerEvent("attendance_opened");
+    });
+
     printInstallationId();
   }
 

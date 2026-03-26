@@ -27,7 +27,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
       causes: '',
     )),
     const Center(child: SettingScreen()),
-    const Center(child: Morewidget()),
+    // const Center(child: Morewidget()),
   ];
 
   void _onItemTapped(int index) {
@@ -66,14 +66,7 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/images/account_balance_wallet.svg',
-                  width: 24.0,
-                  height: 24.0,
-                  color: _currentPage == 1
-                      ? AppColors.selectedNavBarColor
-                      : AppColors.unselectedNavBarColor,
-                ),
+                icon: Icon(Icons.calendar_month),
                 label: 'Activity',
               ),
 
@@ -87,20 +80,20 @@ class _BottamnavigationBarState extends State<BottamnavigationBar> {
               //   label: 'Document',
               // ),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.how_to_reg,
+                  icon: Icon(Icons.admin_panel_settings,
                   ), label: "Setting"),
 
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/images/LogoutSvg.svg',
-                  width: 18.0,
-                  height: 18.0,
-                  color: _currentPage == 2
-                      ? AppColors.selectedNavBarColor
-                      : AppColors.unselectedNavBarColor,
-                ),
-                label: 'Logout',
-              ),
+              // BottomNavigationBarItem(
+              //   icon: SvgPicture.asset(
+              //     'assets/images/LogoutSvg.svg',
+              //     width: 18.0,
+              //     height: 18.0,
+              //     color: _currentPage == 2
+              //         ? AppColors.selectedNavBarColor
+              //         : AppColors.unselectedNavBarColor,
+              //   ),
+              //   label: 'Logout',
+              // ),
             ],
             currentIndex: _currentPage,
             selectedItemColor: AppColors.selectedNavBarColor,

@@ -1,4 +1,5 @@
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:hrms/Services/analytics_services.dart';
@@ -165,6 +166,8 @@ class _SplashScreenState extends State<SplashScreen>
     // After checking if latitude and longitude are available, navigate accordingly
     if (latitude.isNotEmpty && longitude.isNotEmpty && empID.isNotEmpty) {
       Timer(const Duration(seconds: 4), () {
+          FirebaseInAppMessaging.instance.setMessagesSuppressed(false);
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const BottamnavigationBar()),

@@ -147,18 +147,6 @@ class _ReminderWidgetState extends State<ReminderWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start, // ✅ KEY FIX
         children: [
-          /// 🔥 HEADER (like HRMS)
-          Row(
-  children: [
-    Text(
-      "Daily Reminder",
-      style: HeaderFontStyle.style,
-    ),
-  ],
-),
-
-          const SizedBox(height: 25),
-
           /// 🔥 REMINDER ROW
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),

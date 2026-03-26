@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
@@ -10,6 +11,7 @@ import 'package:hrms/utils/Screens/attandanceScreen.dart';
 import 'package:hrms/utils/Screens/splashScrren.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hrms/utils/Widget/attandanceStart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 @pragma('vm:entry-point')
 void alarmCallback() async {
@@ -17,54 +19,82 @@ void alarmCallback() async {
 
   final now = DateTime.now();
 
-  if (now.weekday == DateTime.sunday) {
-    debugPrint("Sunday Notification Skipped");
+  // load saved reminder time
+  final prefs = await SharedPreferences.getInstance();
+  final hour = prefs.getInt('reminder_hour');
+  final minute = prefs.getInt('reminder_minute');
+
+  // if no reminder is saved, stop here
+  if (hour == null || minute == null) {
+    debugPrint("No saved reminder time found");
     return;
   }
 
-  print("ALARM TRIGGERED 🚀, ${now}");
+  // Monday to Saturday only
+  if (now.weekday != DateTime.sunday) {
+    debugPrint("ALARM TRIGGERED 🚀, $now");
 
-  final FlutterLocalNotificationsPlugin notifications =
-      FlutterLocalNotificationsPlugin();
+    final FlutterLocalNotificationsPlugin notifications =
+        FlutterLocalNotificationsPlugin();
 
-  const AndroidInitializationSettings androidSettings =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
+    const AndroidInitializationSettings androidSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
-  const InitializationSettings initSettings =
-      InitializationSettings(android: androidSettings);
+    const InitializationSettings initSettings =
+        InitializationSettings(android: androidSettings);
 
-  await notifications.initialize(settings: initSettings);
+    await notifications.initialize(settings: initSettings);
 
-  // 👇 CREATE CHANNEL (CRITICAL for background)
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'daily_reminder_channel',
-    'Daily Reminder',
-    description: 'Daily attendance reminder',
-    importance: Importance.max,
-  );
+    const AndroidNotificationChannel channel = AndroidNotificationChannel(
+      'daily_reminder_channel',
+      'Daily Reminder',
+      description: 'Daily attendance reminder',
+      importance: Importance.max,
+    );
 
-  final androidPlugin = notifications.resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>();
+    final androidPlugin = notifications.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
 
-  await androidPlugin?.createNotificationChannel(channel);
+    await androidPlugin?.createNotificationChannel(channel);
 
-  // 👇 SHOW NOTIFICATION
-  await notifications.show(
-    id: 0,
-    title: "Reminder",
-    body: "Time to mark your attendance!",
-    payload: "open_attendance", // 👈 IMPORTANT
-    notificationDetails: const NotificationDetails(
-      android: AndroidNotificationDetails(
-        'daily_reminder_channel',
-        'Daily Reminder',
-        channelDescription: 'Daily attendance reminder',
-        importance: Importance.max,
-        priority: Priority.high,
+    await notifications.show(
+      id: 0,
+      title: "Reminder",
+      body: "Time to mark your attendance!",
+      payload: "open_attendance",
+      notificationDetails: const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'daily_reminder_channel',
+          'Daily Reminder',
+          channelDescription: 'Daily attendance reminder',
+          importance: Importance.max,
+          priority: Priority.high,
+        ),
       ),
-    ),
+    );
+  } else {
+    debugPrint("Sunday notification skipped");
+  }
+
+  // schedule next day at the ORIGINAL saved time
+  DateTime nextScheduledTime = DateTime(
+    now.year,
+    now.month,
+    now.day,
+    hour,
+    minute,
+  ).add(const Duration(days: 1));
+
+  await AndroidAlarmManager.oneShotAt(
+    nextScheduledTime,
+    1,
+    alarmCallback,
+    wakeup: true,
   );
+
+  debugPrint("Next alarm scheduled for: $nextScheduledTime");
 }
+
 
 // overlay entry point
 @pragma("vm:entry-point")
@@ -83,6 +113,8 @@ void main() async {
   await Firebase.initializeApp();
 
   await AndroidAlarmManager.initialize();
+
+  await FirebaseInAppMessaging.instance.setMessagesSuppressed(true);
 
 
   // Crashlytics initialized
