@@ -114,8 +114,6 @@ void main() async {
 
   await AndroidAlarmManager.initialize();
 
-  await FirebaseInAppMessaging.instance.setMessagesSuppressed(true);
-
 
   // Crashlytics initialized
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;

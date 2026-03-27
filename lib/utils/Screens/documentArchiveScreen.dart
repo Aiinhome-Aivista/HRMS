@@ -1,4 +1,10 @@
+import 'dart:async';
+
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_app_installations/firebase_app_installations.dart';
+import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hrms/Services/api_services.dart';
 import 'package:hrms/components/CustomFloatingButton.dart';
@@ -12,9 +18,6 @@ import 'package:hrms/styleColor.dart';
 import 'package:hrms/textStyle.dart';
 import 'package:hrms/utils/Screens/attandanceScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
-import 'package:firebase_app_installations/firebase_app_installations.dart';
 
 class DocumentArchiveScreen extends StatefulWidget {
   const DocumentArchiveScreen({super.key});
@@ -34,11 +37,7 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
   void initState() {
     super.initState();
     _loadSavedCredentials();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      FirebaseInAppMessaging.instance.triggerEvent("attendance_opened");
-    });
-
+    _triggerFiam();
     printInstallationId();
   }
 
@@ -47,55 +46,67 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
     print("🔥 Installation ID: $id");
   }
 
-  // Get local storage data
+  Future<void> _triggerFiam() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+
+      await FirebaseInAppMessaging.instance.triggerEvent("fiam_init");
+    });
+  }
+
   Future<void> _loadSavedCredentials() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? gateUserName = prefs.getString('SaveUserName');
     final String? gateUserEmail = prefs.getString('SaveUserEmail');
     final String? employeeId = prefs.getString('employeeId');
 
-    // //print('Login Successful gateUserName: $gateUserName');
-    // //print('Login Successful gateUserEmail: $gateUserEmail');
-    // //print('Login Successful employeeId: $employeeId');
-
-    // //print("empId:$employeeId");
-    if (!mounted) return; // 🔥 ADD THIS
+    if (!mounted) return;
 
     setState(() {
       userName = gateUserName ?? '';
       userEmail = gateUserEmail ?? '';
       empId = employeeId ?? '';
     });
+
     if (empId.isNotEmpty) {
       await noticeFetch();
     }
   }
 
-// notice fetch
-  Future<void> noticeFetch() async {
-    if (empId.isEmpty) {
-      // //print('empId is empty');
-      return;
-    }
+  Future<void> _initFiam() async {
+    final fiam = FirebaseInAppMessaging.instance;
 
-    setState(() {});
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(const Duration(seconds: 1));
+
+      if (!mounted) return;
+
+      // Then trigger the event again
+      await fiam.triggerEvent('attendance_opened');
+    });
+  }
+
+  Future<void> noticeFetch() async {
+    if (empId.isEmpty) return;
+
+    if (mounted) setState(() {});
 
     try {
       POST_API postApi = POST_API();
       Map<String, dynamic> response = await postApi.notice(empId);
 
+      if (!mounted) return;
+
       setState(() {});
 
       if (response['status'] == true) {
         notices = List<String>.from(response['data']);
-        // //print("notice data fetch:$notices");
-        setState(() {}); // Update the UI
+        setState(() {});
       } else {
-        // //print('Error: ${response['msg']}');
+        print('Error: ${response['msg']}');
       }
     } catch (e) {
-      if (!mounted) return; // 🔥 ADD THIS
-
+      if (!mounted) return;
       setState(() {});
       print('Error: $e');
     }
@@ -113,18 +124,13 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'HRMS',
-                style: HeaderFontStyle.style,
-              ),
+              Text('HRMS', style: HeaderFontStyle.style),
               GestureDetector(
-                onTap: () {
-                  // Add your notification icon click functionality here
-                },
+                onTap: () {},
                 child: SvgPicture.asset(
                   'assets/images/Notifications.svg',
-                  width: 24.0,
-                  height: 24.0,
+                  width: 24,
+                  height: 24,
                 ),
               ),
             ],
@@ -134,15 +140,11 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
         elevation: 0,
       ),
       body: _isLoading
-          ? const Center(
-              child: LoadingSpinner(),
-            )
+          ? const Center(child: LoadingSpinner())
           : SingleChildScrollView(
-              // Added for scroll functionality
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Notice section
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -168,83 +170,34 @@ class _DocumentArchiveScreenState extends State<DocumentArchiveScreen> {
                             height: 150,
                             enlargeCenterPage: true,
                             autoPlay: true,
-                            aspectRatio: 16 / 9,
-                            autoPlayCurve: Curves.fastOutSlowIn,
-                            enableInfiniteScroll: true,
-                            autoPlayAnimationDuration:
-                                const Duration(milliseconds: 800),
-                            viewportFraction: 0.9,
-                            initialPage: 0,
-                            enlargeFactor: 0.1,
                           ),
                         )
                       else
-                        CarouselSlider(
-                          items: [
-                            Builder(
-                              builder: (BuildContext context) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 16, right: 16),
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.unselectedNavBarColor,
-                                      borderRadius: BorderRadius.circular(12.0),
-                                    ),
-                                    child: const LoadingSpinner(),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                          options: CarouselOptions(
-                            height: 150.0,
-                            enlargeCenterPage: true,
-                            autoPlay: false,
-                            aspectRatio: 16 / 9,
-                            autoPlayCurve: Curves.fastOutSlowIn,
-                            enableInfiniteScroll: true,
-                            autoPlayAnimationDuration:
-                                const Duration(milliseconds: 800),
-                            viewportFraction: 1.0,
-                            initialPage: 0,
-                          ),
+                        const SizedBox(
+                          height: 150,
+                          child: Center(child: LoadingSpinner()),
                         ),
                     ],
                   ),
-
-                  // Other sections
                   Padding(
-                    padding:
-                        const EdgeInsets.only(top: 20, left: 15, right: 15),
+                    padding: const EdgeInsets.all(15),
                     child: Column(
                       children: [
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Flexible(
-                              flex: 4,
-                              child: DynamicDonutChart(),
-                            ),
+                            Flexible(flex: 4, child: DynamicDonutChart()),
                             SizedBox(width: 2),
-                            Flexible(
-                              flex: 2,
-                              child: LeaveDaysShow(),
-                            ),
+                            Flexible(flex: 2, child: LeaveDaysShow()),
                           ],
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const WorkingHoursGraph(),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        SizedBox(height: 20),
+                        WorkingHoursGraph(),
+                        SizedBox(height: 20),
                         AddSkillsPage(),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
