@@ -138,10 +138,16 @@ class _SettingScreenState extends State<SettingScreen> {
 
               const SizedBox(height: 24),
 
-              // 🔔 REMINDER
-              const ReminderWidget(),
+              // 🔔 REMINDER — wrapped to apply background color
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.unselectedNavBarColor, // ← match profile card color
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const ReminderWidget(),
+              ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 24),
 
               // 🔥 LOGOUT BUTTON
               SizedBox(
@@ -149,9 +155,11 @@ class _SettingScreenState extends State<SettingScreen> {
                 height: 50,
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
+                    backgroundColor: Colors.redAccent, // ← changed from redAccent
+                    foregroundColor: Colors.white,                // ← icon & text in red
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
+                      side: const BorderSide(color: Colors.redAccent), // ← red border outline
                     ),
                   ),
                   onPressed: _showLogoutDialog,

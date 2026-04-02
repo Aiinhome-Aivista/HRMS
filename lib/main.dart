@@ -2,15 +2,12 @@ import 'dart:async';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:hrms/overlay/overlay_screen.dart';
 import 'package:hrms/utils/Screens/attandanceScreen.dart';
 import 'package:hrms/utils/Screens/splashScrren.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:hrms/utils/Widget/attandanceStart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @pragma('vm:entry-point')

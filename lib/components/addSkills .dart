@@ -180,7 +180,7 @@ class _AddSkillsPageState extends State<AddSkillsPage> {
                       .map(
                         (skill) => Chip(
                           label: Text(skill),
-                          backgroundColor: AppColors.leaveCardColor,
+                          backgroundColor: AppColors.lightblue,
                           labelStyle: const TextStyle(
                             fontSize: 12,
                             color: AppColors.unselectedNavBarColor,

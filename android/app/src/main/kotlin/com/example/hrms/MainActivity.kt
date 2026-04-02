@@ -28,11 +28,13 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        FirebaseInAppMessaging.getInstance().addImpressionListener { _: InAppMessage ->
-            runOnUiThread {
-                showNativeConfetti()
-            }
-        }
+FirebaseInAppMessaging.getInstance().addImpressionListener { _: InAppMessage ->
+    runOnUiThread {
+        window?.decorView?.postDelayed({
+            showNativeConfetti()
+        }, 220L)
+    }
+}
 
         FirebaseInAppMessaging.getInstance().addDismissListener { _: InAppMessage ->
             runOnUiThread {
